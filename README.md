@@ -34,6 +34,8 @@ Make sure you have:
 
 
 
+<pre> src/ ├── App.jsx ├── components/ │ └── Navbar.jsx ├── pages/ │ ├── CreatePlanPage.jsx │ ├── ComparePlansPage.jsx │ ├── PlanDetailsPage.jsx │ ├── Dashboard/ │ │ ├── DashboardPage.jsx │ │ ├── AddSavingPage.jsx │ │ └── AddSpendingPage.jsx │ └── Onboarding/ │ ├── OnboardingIntro.jsx │ ├── CategorySelection.jsx │ └── SummaryPage.jsx </pre>
+
 src/
 ├── App.jsx
 ├── components/
