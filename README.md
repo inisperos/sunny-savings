@@ -32,18 +32,14 @@ Make sure you have:
 ### 4. Run app
 - npm run dev
 
-
-
-<pre> src/ ├── App.jsx ├── components/ │ └── Navbar.jsx ├── pages/ │ ├── CreatePlanPage.jsx │ ├── ComparePlansPage.jsx │ ├── PlanDetailsPage.jsx │ ├── Dashboard/ │ │ ├── DashboardPage.jsx │ │ ├── AddSavingPage.jsx │ │ └── AddSpendingPage.jsx │ └── Onboarding/ │ ├── OnboardingIntro.jsx │ ├── CategorySelection.jsx │ └── SummaryPage.jsx </pre>
-
 src/
 ├── App.jsx
 ├── components/
-│   ├── Navbar.jsx
+│   └── Navbar.jsx
 ├── pages/
 │   ├── CreatePlanPage.jsx
 │   ├── ComparePlansPage.jsx
-|   |-- PlanDetailsPage.jsx
+│   ├── PlanDetailsPage.jsx
 │   ├── Dashboard/
 │   │   ├── DashboardPage.jsx
 │   │   ├── AddSavingPage.jsx
@@ -52,3 +48,6 @@ src/
 │       ├── OnboardingIntro.jsx
 │       ├── CategorySelection.jsx
 │       └── SummaryPage.jsx
+
+<img width="414" height="456" alt="image" src="https://github.com/user-attachments/assets/1cff5dee-272e-47ca-9940-76c89cc475de" />
+
