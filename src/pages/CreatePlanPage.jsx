@@ -3,60 +3,165 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function CreatePlanPage({ addPlan }) {
-  const [nameInput, setNameInput] = useState("");
-  const [salaryInput, setSalaryInput] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Offer details
+  const [company, setCompany] = useState("");
+  const [salary, setSalary] = useState("");
+  const [salaryFrequency, setSalaryFrequency] = useState("annually");
+  const [weeks, setWeeks] = useState("");
 
-    if (nameInput.trim() !== "" && salaryInput.trim() !== "") {
-      const newPlan = {
-        name: nameInput,
-        salary: salaryInput,
-      };
-      addPlan(newPlan);
-      navigate("/");
+  // Location info
+  const [location, setLocation] = useState("");
+  const [rent, setRent] = useState("");
+  const [rentFrequency, setRentFrequency] = useState("monthly");
+  const [transportation, setTransportation] = useState("");
+  const [transportFrequency, setTransportFrequency] = useState("monthly");
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (
+      company.trim() === "" ||
+      salary.trim() === "" ||
+      weeks.trim() === "" ||
+      location.trim() === "" ||
+      rent.trim() === "" ||
+      transportation.trim() === ""
+    ) {
+      alert("Please fill out all required fields.");
+      return;
     }
+  
+    const newPlan = {
+      company,
+      salary: parseFloat(salary),
+      salaryFrequency,
+      weeks: parseInt(weeks),
+      location,
+      rent: parseFloat(rent),
+      rentFrequency,
+      transportation: parseFloat(transportation),
+      transportFrequency,
+    };
+  
+    addPlan(newPlan);
+    navigate("/goals");
+  };
+
+  const inputStyle = {
+    padding: "0.5rem",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    width: "220px",
+    margin: "0.5rem",
+  };
+
+  const sectionHeader = {
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+    marginTop: "2rem",
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "4rem" }}>
+    <div style={{ textAlign: "center", marginTop: "3rem" }}>
       <h1>Create Plan Page 📝</h1>
-      <p>Enter a name and salary for your new plan:</p>
+      <form onSubmit={handleNext}>
+        {/* Offer Details */}
+        <p style={sectionHeader}>Add Offer Details:</p>
 
-      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Enter plan name"
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            width: "200px",
-            margin: "0.5rem",
-          }}
+          placeholder="Company"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          style={inputStyle}
         />
+        <br />
+
         <input
           type="number"
-          placeholder="Enter salary"
-          value={salaryInput}
-          onChange={(e) => setSalaryInput(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            width: "200px",
-            margin: "0.5rem",
-          }}
+          placeholder="Salary"
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+          style={inputStyle}
         />
+        <select
+          value={salaryFrequency}
+          onChange={(e) => setSalaryFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="hourly">Hourly</option>
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Biweekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="annually">Annually</option>
+        </select>
+        <br />
+
+        <input
+          type="number"
+          placeholder="Number of weeks"
+          value={weeks}
+          onChange={(e) => setWeeks(e.target.value)}
+          style={inputStyle}
+        />
+
+        {/* Location Info */}
+        <p style={sectionHeader}>Add Location Info:</p>
+
+        <input
+          type="text"
+          placeholder="Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <br />
+
+        <input
+          type="number"
+          placeholder="Rent"
+          value={rent}
+          onChange={(e) => setRent(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={rentFrequency}
+          onChange={(e) => setRentFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <br />
+
+        <input
+          type="number"
+          placeholder="Transportation Cost"
+          value={transportation}
+          onChange={(e) => setTransportation(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={transportFrequency}
+          onChange={(e) => setTransportFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+
         <br />
         <button
           type="submit"
+          onClick={handleNext}
           style={{
-            marginTop: "1rem",
+            marginTop: "1.5rem",
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
@@ -65,7 +170,7 @@ export default function CreatePlanPage({ addPlan }) {
             cursor: "pointer",
           }}
         >
-          Save Plan
+          Next →
         </button>
       </form>
 
