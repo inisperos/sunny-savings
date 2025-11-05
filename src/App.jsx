@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,6 +10,10 @@ import {
 import CreatePlanPage from "./pages/CreatePlanPage";
 import AddSavingsGoals from "./pages/AddGoalsPage";
 import AddFeesPage from "./pages/AddFeesPage";
+import ComparePlansPage from "./pages/ComparePlansPage";
+
+
+
 
 
 // 🏠 Home Page
@@ -90,6 +94,27 @@ function Home({ plans, deletePlan }) {
           }}
         >
           Create New Plan
+        </button>
+        <button
+          onClick={() => navigate("/compare")}
+          disabled={plans.length < 2}
+          title={
+            plans.length < 2
+              ? "Create at least 2 plans to compare"
+              : "Compare two plans"
+          }
+          style={{
+            marginTop: "0.75rem",
+            padding: "0.75rem 1.25rem",
+            borderRadius: "8px",
+            border: "none",
+            backgroundColor: plans.length < 2 ? "#9ca3af" : "#007bff",
+            color: "white",
+            cursor: plans.length < 2 ? "not-allowed" : "pointer",
+            fontSize: "1rem",
+          }}
+        >
+          Compare Plans
         </button>
       </div>
     </div>
@@ -325,9 +350,47 @@ function PlanDetails({ plans }) {
 
 
 // 🌞 Main App Component
-function App() {
-  const [plans, setPlans] = useState([]);
 
+
+//  localStorage  plans
+function loadPlansFromStorage() {
+  try {
+    const raw = localStorage.getItem("sunny_plans");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(normalizePlan);
+  } catch {
+    return [];
+  }
+}
+
+function normalizePlan(p = {}) {
+  return {
+    ...p,
+    id: Number(p.id) || Date.now(),
+    salary: num(p.salary),
+    weeks: num(p.weeks),
+    stipends: Array.isArray(p.stipends)
+      ? p.stipends.map(x => ({ type: (x?.type ?? "").toString(), amount: num(x?.amount) }))
+      : [],
+    fees: Array.isArray(p.fees)
+      ? p.fees.map(x => ({ type: (x?.type ?? "").toString(), amount: num(x?.amount) }))
+      : [],
+  };
+}
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+// === REVERT: function App (no localStorage / no useEffect) ===
+function App() {
+  const [plans, setPlans] = useState(() => loadPlansFromStorage());
+  useEffect(() => {
+    localStorage.setItem("sunny_plans", JSON.stringify(plans));
+  }, [plans]);
   const addPlan = (newPlan) => {
     const id = Date.now();
     setPlans((prevPlans) => [...prevPlans, { id, ...newPlan }]);
@@ -344,17 +407,30 @@ function App() {
           path="/"
           element={<Home plans={plans} deletePlan={deletePlan} />}
         />
-        <Route path="/create" element={<CreatePlanPage addPlan={addPlan} />} />
+        <Route
+          path="/create"
+          element={<CreatePlanPage addPlan={addPlan} />}
+        />
         <Route
           path="/goals"
           element={<AddSavingsGoals plans={plans} setPlans={setPlans} />}
         />
-        <Route path="/plan/:id" element={<PlanDetails plans={plans} />} />
-        <Route path="/fees" element={<AddFeesPage plans={plans} setPlans={setPlans} />} />
-
+        <Route
+          path="/plan/:id"
+          element={<PlanDetails plans={plans} />}
+        />
+        <Route
+          path="/fees"
+          element={<AddFeesPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/compare"
+          element={<ComparePlansPage plans={plans} />}
+        />
       </Routes>
     </Router>
   );
 }
+
 
 export default App;
