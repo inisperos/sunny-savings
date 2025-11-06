@@ -8,8 +8,10 @@ function calculateTotalEarnings(plan) {
 
   // Convert to weekly based on frequency
   if (plan.salaryFrequency === "hourly") {
-    // Assuming 40 hours per week
-    salaryPerWeek = plan.salary * 40;
+    // Use hoursPerDay if available, otherwise default to 8 hours/day (40 hours/week)
+    const hoursPerDay = plan.hoursPerDay || 8;
+    const hoursPerWeek = hoursPerDay * 5; // Assuming 5 working days per week
+    salaryPerWeek = plan.salary * hoursPerWeek;
   } else if (plan.salaryFrequency === "weekly") {
     salaryPerWeek = plan.salary;
   } else if (plan.salaryFrequency === "biweekly") {

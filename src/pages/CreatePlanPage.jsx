@@ -8,8 +8,9 @@ export default function CreatePlanPage({ addPlan }) {
   // Offer details
   const [company, setCompany] = useState("");
   const [salary, setSalary] = useState("");
-  const [salaryFrequency, setSalaryFrequency] = useState("annually");
+  const [salaryFrequency, setSalaryFrequency] = useState("monthly");
   const [weeks, setWeeks] = useState("");
+  const [hoursPerDay, setHoursPerDay] = useState("8");
 
   // Location info
   const [location, setLocation] = useState("");
@@ -31,17 +32,55 @@ export default function CreatePlanPage({ addPlan }) {
       alert("Please fill out all required fields.");
       return;
     }
+
+    // Validate salary
+    const salaryValue = parseFloat(salary);
+    if (isNaN(salaryValue) || salaryValue <= 0) {
+      alert("Please enter a valid positive salary amount.");
+      return;
+    }
+
+    // Validate weeks
+    const weeksValue = parseInt(weeks);
+    if (isNaN(weeksValue) || weeksValue <= 0 || !Number.isInteger(weeksValue)) {
+      alert("Please enter a valid positive number of weeks (whole number).");
+      return;
+    }
+
+    // Validate hours per day if hourly
+    if (salaryFrequency === "hourly") {
+      const hoursPerDayValue = parseFloat(hoursPerDay);
+      if (isNaN(hoursPerDayValue) || hoursPerDayValue <= 0 || hoursPerDayValue > 24) {
+        alert("Please enter valid hours per day (between 1 and 24) for hourly salary.");
+        return;
+      }
+    }
+
+    // Validate rent
+    const rentValue = parseFloat(rent);
+    if (isNaN(rentValue) || rentValue < 0) {
+      alert("Please enter a valid rent amount (0 or positive).");
+      return;
+    }
+
+    // Validate transportation
+    const transportationValue = parseFloat(transportation);
+    if (isNaN(transportationValue) || transportationValue < 0) {
+      alert("Please enter a valid transportation cost (0 or positive).");
+      return;
+    }
   
     const newPlan = {
       company,
-      salary: parseFloat(salary),
+      salary: salaryValue,
       salaryFrequency,
-      weeks: parseInt(weeks),
+      weeks: weeksValue,
       location,
-      rent: parseFloat(rent),
+      rent: rentValue,
       rentFrequency,
-      transportation: parseFloat(transportation),
+      transportation: transportationValue,
       transportFrequency,
+      ...(salaryFrequency === "hourly" && { hoursPerDay: parseFloat(hoursPerDay) }),
     };
   
     addPlan(newPlan);
@@ -94,7 +133,6 @@ export default function CreatePlanPage({ addPlan }) {
           <option value="weekly">Weekly</option>
           <option value="biweekly">Biweekly</option>
           <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
         </select>
         <br />
 
@@ -105,6 +143,27 @@ export default function CreatePlanPage({ addPlan }) {
           onChange={(e) => setWeeks(e.target.value)}
           style={inputStyle}
         />
+        <br />
+
+        {/* Show hours per day input only when hourly is selected */}
+        {salaryFrequency === "hourly" && (
+          <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+              <input
+                type="number"
+                placeholder="Hours per day"
+                value={hoursPerDay}
+                onChange={(e) => setHoursPerDay(e.target.value)}
+                style={inputStyle}
+                min="1"
+                max="24"
+                step="0.5"
+              />
+              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/workday</span>
+            </div>
+            <br />
+          </>
+        )}
 
         {/* Location Info */}
         <p style={sectionHeader}>Add Location Info:</p>

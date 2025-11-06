@@ -134,6 +134,31 @@ export default function ComparePlansPage({ plans }) {
 }
 
 
+// Calculate total earnings with proper salary frequency conversion
+function calculateTotalEarnings(plan) {
+  if (!plan || !plan.salary || !plan.weeks) return 0;
+  
+  let salaryPerWeek = plan.salary;
+  
+  // Convert to weekly based on frequency
+  if (plan.salaryFrequency === "hourly") {
+    // Use hoursPerDay if available, otherwise default to 8 hours/day (40 hours/week)
+    const hoursPerDay = plan.hoursPerDay || 8;
+    const hoursPerWeek = hoursPerDay * 5; // Assuming 5 working days per week
+    salaryPerWeek = plan.salary * hoursPerWeek;
+  } else if (plan.salaryFrequency === "weekly") {
+    salaryPerWeek = plan.salary;
+  } else if (plan.salaryFrequency === "biweekly") {
+    salaryPerWeek = plan.salary / 2;
+  } else if (plan.salaryFrequency === "monthly") {
+    salaryPerWeek = plan.salary / 4;
+  } else if (plan.salaryFrequency === "annually") {
+    salaryPerWeek = plan.salary / 52;
+  }
+  
+  return salaryPerWeek * plan.weeks;
+}
+
 function MidChart({ left, right }) {
   const sumAmount = (arr) => {
     if (!Array.isArray(arr)) return 0;
@@ -144,8 +169,6 @@ function MidChart({ left, right }) {
       return s + Number(x.amount ?? x.value ?? x.price ?? 0);
     }, 0);
   };
-
-  const totalSalary = (p) => Number(p?.salary ?? 0) * Number(p?.weeks ?? 0);
 
   const lStip = sumAmount(
     left?.stipends ?? left?.reimbursements ?? left?.allowances ?? []
@@ -158,7 +181,7 @@ function MidChart({ left, right }) {
   const rFees = sumAmount(right?.fees ?? right?.costs ?? right?.expenses ?? []);
 
   const data = [
-    { name: "Salary",   A: totalSalary(left),  B: totalSalary(right) },
+    { name: "Salary",   A: calculateTotalEarnings(left),  B: calculateTotalEarnings(right) },
     { name: "Stipends", A: lStip,              B: rStip },
     { name: "Fees",     A: lFees,              B: rFees },
   ];
@@ -198,10 +221,8 @@ function Column({ title, plan }) {
   const companyLabel =
     plan.company ?? plan.companyName ?? plan.name ?? plan.title ?? "—";
 
-  // Total salary (only shows salary * weeks)
-  const salary = Number(plan.salary ?? 0);
-  const weeks = Number(plan.weeks ?? 0);
-  const totalSalary = Number.isFinite(salary * weeks) ? salary * weeks : null;
+  // Calculate total salary with proper frequency conversion
+  const totalSalary = calculateTotalEarnings(plan);
 
   // Normalize stipend list
   let rawStipends =
