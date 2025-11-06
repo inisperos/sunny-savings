@@ -45,7 +45,7 @@ export default function CreatePlanPage({ addPlan }) {
     };
   
     addPlan(newPlan);
-    navigate("/goals");
+    navigate("/categories");
   };
 
   const inputStyle = {

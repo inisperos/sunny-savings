@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddGoalsPage({ plans, setPlans }) {
+export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
 
-  const [selectedGoals, setSelectedGoals] = useState([]);
-  const [customGoals, setCustomGoals] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [customCategories, setCustomCategories] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [newGoalName, setNewGoalName] = useState("");
+  const [newCategoryName, setNewCategoryName] = useState("");
 
-  const defaultGoals = [
+  const defaultCategories = [
     "Travel",
     "Emergency",
     "Utilities",
@@ -18,39 +18,39 @@ export default function AddGoalsPage({ plans, setPlans }) {
     "Entertainment",
   ];
 
-  // Toggle a goal selection
-  const toggleGoal = (goal) => {
-    setSelectedGoals((prev) =>
-      prev.includes(goal)
-        ? prev.filter((g) => g !== goal)
-        : [...prev, goal]
+  // Toggle a category selection
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
     );
   };
 
-  // Add custom goal
-  const handleAddCustomGoal = () => {
-    if (newGoalName.trim() === "") {
-      alert("Goal name cannot be empty!");
+  // Add custom category
+  const handleAddCustomCategory = () => {
+    if (newCategoryName.trim() === "") {
+      alert("Category name cannot be empty!");
       return;
     }
-    setCustomGoals([...customGoals, newGoalName]);
+    setCustomCategories([...customCategories, newCategoryName]);
     setShowPopup(false);
-    setNewGoalName("");
+    setNewCategoryName("");
   };
 
-  // ✅ Save all goals and move to Fees page
+  // ✅ Save all categories and move to Fees page
   const handleNext = () => {
     if (plans.length > 0) {
       const updatedPlans = [...plans];
 
-      // 🧠 Combine and deduplicate all goals
-      const allGoals = Array.from(
-        new Set([...selectedGoals, ...customGoals].filter(Boolean))
+      // 🧠 Combine and deduplicate all categories
+      const allCategories = Array.from(
+        new Set([...selectedCategories, ...customCategories].filter(Boolean))
       );
 
       updatedPlans[updatedPlans.length - 1] = {
         ...updatedPlans[updatedPlans.length - 1],
-        goals: allGoals,
+        categories: allCategories,
       };
 
       setPlans(updatedPlans);
@@ -59,11 +59,11 @@ export default function AddGoalsPage({ plans, setPlans }) {
     navigate("/fees");
   };
 
-  const circleStyle = (goal, isCustom = false) => ({
+  const circleStyle = (category, isCustom = false) => ({
     width: "120px",
     height: "120px",
     borderRadius: "50%",
-    backgroundColor: selectedGoals.includes(goal)
+    backgroundColor: selectedCategories.includes(category)
       ? "#4caf50"
       : "#ddd",
     display: "flex",
@@ -92,22 +92,22 @@ export default function AddGoalsPage({ plans, setPlans }) {
           marginInline: "auto",
         }}
       >
-        {defaultGoals.map((goal) => (
+        {defaultCategories.map((category) => (
           <div
-            key={goal}
-            onClick={() => toggleGoal(goal)}
-            style={circleStyle(goal)}
+            key={category}
+            onClick={() => toggleCategory(category)}
+            style={circleStyle(category)}
           >
-            {goal}
+            {category}
           </div>
         ))}
-        {customGoals.map((goal) => (
+        {customCategories.map((category) => (
           <div
-            key={goal}
-            onClick={() => toggleGoal(goal)}
-            style={circleStyle(goal, true)}
+            key={category}
+            onClick={() => toggleCategory(category)}
+            style={circleStyle(category, true)}
           >
-            {goal}
+            {category}
           </div>
         ))}
       </div>
@@ -151,12 +151,12 @@ export default function AddGoalsPage({ plans, setPlans }) {
               width: "300px",
             }}
           >
-            <h3>Add Custom Goal</h3>
+            <h3>Add Custom Category</h3>
             <input
               type="text"
               placeholder="Enter category name"
-              value={newGoalName}
-              onChange={(e) => setNewGoalName(e.target.value)}
+              value={newCategoryName}
+              onChange={(e) => setNewCategoryName(e.target.value)}
               style={{
                 padding: "0.5rem",
                 width: "90%",
@@ -167,7 +167,7 @@ export default function AddGoalsPage({ plans, setPlans }) {
             />
             <div style={{ marginTop: "1rem" }}>
               <button
-                onClick={handleAddCustomGoal}
+                onClick={handleAddCustomCategory}
                 style={{
                   padding: "0.5rem 1rem",
                   marginRight: "1rem",

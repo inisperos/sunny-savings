@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import CreatePlanPage from "./pages/CreatePlanPage";
-import AddSavingsGoals from "./pages/AddGoalsPage";
+import SelectBudgetCategories from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
 
@@ -412,8 +412,8 @@ function App() {
           element={<CreatePlanPage addPlan={addPlan} />}
         />
         <Route
-          path="/goals"
-          element={<AddSavingsGoals plans={plans} setPlans={setPlans} />}
+          path="/categories"
+          element={<SelectBudgetCategories plans={plans} setPlans={setPlans} />}
         />
         <Route
           path="/plan/:id"
