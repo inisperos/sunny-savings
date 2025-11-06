@@ -16,11 +16,11 @@ import {
 export default function ComparePlansPage({ plans }) {
   const navigate = useNavigate();
 
-  // 防御：plans 可能是 undefined
+  // Defense: plans might be undefined
   const safePlans = Array.isArray(plans) ? plans : [];
   const [selectedIds, setSelectedIds] = useState([]);
 
-  // 勾选最多 2 个
+  // Select at most 2 plans
   const toggle = (id) => {
     setSelectedIds((prev) => {
       if (prev.includes(id)) return prev.filter((x) => x !== id);
@@ -29,7 +29,7 @@ export default function ComparePlansPage({ plans }) {
     });
   };
 
-  // 取两个被选中的 plan（左右）
+  // Get the two selected plans (left and right)
   const [leftPlan, rightPlan] = useMemo(() => {
     const chosen = selectedIds
       .map((id) => safePlans.find((p) => p.id === id))
@@ -44,7 +44,7 @@ export default function ComparePlansPage({ plans }) {
         Select <strong>two</strong> plans to compare Salary, Stipends, and Fees.
       </p>
 
-      {/* 选择器 */}
+      {/* Plan selector */}
       <div
         style={{
           marginTop: 16,
@@ -96,14 +96,14 @@ export default function ComparePlansPage({ plans }) {
           style={{
             marginTop: 20,
             display: "grid",
-            gridTemplateColumns: "1fr 1.4fr 1fr", // 中间更宽放图表
+            gridTemplateColumns: "1fr 1.4fr 1fr", // Middle column wider for chart
             gap: 16,
             alignItems: "stretch",
           }}
         >
           <Column title={leftPlan.company || leftPlan.name || "Plan A"} plan={leftPlan} />
 
-          {/* 中间柱状图：Salary / Stipends / Fees 的总和 */}
+          {/* Middle bar chart: Total of Salary / Stipends / Fees */}
           <MidChart left={leftPlan} right={rightPlan} />
 
           <Column title={rightPlan.company || rightPlan.name || "Plan B"} plan={rightPlan} />
@@ -198,12 +198,12 @@ function Column({ title, plan }) {
   const companyLabel =
     plan.company ?? plan.companyName ?? plan.name ?? plan.title ?? "—";
 
-  // 总工资（只显示 salary * weeks）
+  // Total salary (only shows salary * weeks)
   const salary = Number(plan.salary ?? 0);
   const weeks = Number(plan.weeks ?? 0);
   const totalSalary = Number.isFinite(salary * weeks) ? salary * weeks : null;
 
-  // 规范化 stipend 列表
+  // Normalize stipend list
   let rawStipends =
     plan.stipends ?? plan.reimbursements ?? plan.allowances ?? plan.stipend ?? [];
   if (!Array.isArray(rawStipends)) rawStipends = [rawStipends];
@@ -219,7 +219,7 @@ function Column({ title, plan }) {
     })
     .filter(Boolean);
 
-  // 规范化 fee 列表
+  // Normalize fee list
   let rawFees = plan.fees ?? plan.costs ?? plan.expenses ?? plan.charges ?? [];
   if (!Array.isArray(rawFees)) rawFees = [rawFees];
 
@@ -234,7 +234,7 @@ function Column({ title, plan }) {
     })
     .filter(Boolean);
 
-  // 总计
+  // Total
   const stipendsTotal = stipendItems.reduce((s, x) => s + Number(x.amount || 0), 0);
   const feesTotal     = feeItems.reduce((s, x) => s + Number(x.amount || 0), 0);
 
@@ -255,7 +255,7 @@ function Column({ title, plan }) {
         {totalSalary != null ? `$${totalSalary.toLocaleString()}` : "—"}
       </Row>
 
-      {/* Stipends 区块 */}
+      {/* Stipends section */}
       <h4 style={{ marginTop: "1rem" }}>Reimbursements / Stipends</h4>
       {stipendItems.length > 0 ? (
         <table
@@ -293,12 +293,12 @@ function Column({ title, plan }) {
           No reimbursements / stipends
         </div>
       )}
-      {/* Stipends 总计 */}
+      {/* Stipends total */}
       <div style={{ marginTop: 6, textAlign: "right", fontWeight: 600 }}>
         Total Stipends: ${stipendsTotal.toLocaleString()}
       </div>
 
-      {/* Fees 区块 */}
+      {/* Fees section */}
       <h4 style={{ marginTop: "1rem" }}>Fees</h4>
       {feeItems.length > 0 ? (
         <table
@@ -334,7 +334,7 @@ function Column({ title, plan }) {
       ) : (
         <div style={{ color: "#6b7280", marginTop: 4 }}>No fees</div>
       )}
-      {/* Fees 总计 */}
+      {/* Fees total */}
       <div style={{ marginTop: 6, textAlign: "right", fontWeight: 600 }}>
         Total Fees: ${feesTotal.toLocaleString()}
       </div>
@@ -342,7 +342,7 @@ function Column({ title, plan }) {
   );
 }
 
-/** 小组件：一行左右布局 */
+/** Small component: left-right row layout */
 function Row({ label, children }) {
   return (
     <div
