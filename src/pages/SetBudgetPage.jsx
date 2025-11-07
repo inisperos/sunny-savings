@@ -58,13 +58,14 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const [newCategory, setNewCategory] = useState("");
 
   useEffect(() => {
-    // initialize amounts for categories that don't yet have a value
-    const initial = {};
-    categories.forEach((c) => {
-      initial[c] = amounts[c] !== undefined ? amounts[c] : "";
+    setAmounts((prev) => {
+      const next = { ...prev };
+      categories.forEach((c) => {
+        if (next[c] === undefined) next[c] = "";
+      });
+      return next;
     });
-    setAmounts((prev) => ({ ...initial, ...prev }));
-  }, [categories, amounts]);
+  }, [categories]);
 
   const handleAmountChange = (category, value) => {
     // allow only numeric input (empty or number)
@@ -98,9 +99,8 @@ export default function SetBudgetPage({ plans, setPlans }) {
   };
 
   const handleNext = () => {
-    const updatedPlans = [...plans];
-
     if (plans.length > 0) {
+      const updatedPlans = [...plans];
       updatedPlans[updatedPlans.length - 1] = {
         ...updatedPlans[updatedPlans.length - 1],
         budgets: Object.keys(amounts).map((c) => ({
@@ -123,23 +123,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
         income.
       </p>
 
-      {categories.length === 0 ? (
-        <div style={{ marginTop: "2rem" }}>
-          <p>No categories selected yet.</p>
-          <button
-            onClick={() => navigate("/categories")}
-            style={{
-              padding: "0.6rem 1rem",
-              border: "2px dashed #000",
-              borderRadius: "8px",
-              background: "none",
-              cursor: "pointer",
-            }}
-          >
-            Select Categories
-          </button>
-        </div>
-      ) : (
         <div style={{ marginTop: "1.5rem" }}>
           {categories.map((c) => (
             <BudgetCard
@@ -228,7 +211,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
             </div>
           }
         </div>
-      )}
     </div>
   );
 }
