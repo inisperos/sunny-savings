@@ -111,13 +111,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
       setPlans(updatedPlans);
     }
 
-    const currentPlanId = updatedPlans[updatedPlans.length - 1]?.id;
-    if (currentPlanId) {
-      navigate(`/plan/${currentPlanId}`);
-    } else {
-      // fallback if plan ID missing
-      navigate("/");
-    }
+    navigate("/");
   };
 
   return (
