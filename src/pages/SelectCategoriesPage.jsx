@@ -20,11 +20,15 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
 
   // Toggle a category selection
   const toggleCategory = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+    setSelectedCategories((prev) => {
+      if (prev.includes(category)) {
+        // Remove the category
+        return prev.filter((c) => c !== category);
+      } else {
+        // Add the category
+        return [...prev, category];
+      }
+    });
   };
 
   // Add custom category
@@ -38,12 +42,12 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     setNewCategoryName("");
   };
 
-  // ✅ Save all categories and move to Fees page
+  // Save all categories and move to Fees page
   const handleNext = () => {
     if (plans.length > 0) {
       const updatedPlans = [...plans];
 
-      // 🧠 Combine and deduplicate all categories
+      // Combine and deduplicate all categories
       const allCategories = Array.from(
         new Set([...selectedCategories, ...customCategories].filter(Boolean))
       );
@@ -56,7 +60,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       setPlans(updatedPlans);
     }
 
-    navigate("/fees");
+    navigate("/set-budget");
   };
 
   const circleStyle = (category, isCustom = false) => ({
