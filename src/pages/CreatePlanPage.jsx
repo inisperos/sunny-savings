@@ -84,7 +84,7 @@ export default function CreatePlanPage({ addPlan }) {
     };
   
     addPlan(newPlan);
-    navigate("/goals");
+    navigate("/fees");
   };
 
   const inputStyle = {
@@ -224,7 +224,7 @@ export default function CreatePlanPage({ addPlan }) {
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#28a745",
+            backgroundColor: "#28a745ff",
             color: "white",
             cursor: "pointer",
           }}

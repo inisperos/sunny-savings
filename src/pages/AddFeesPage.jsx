@@ -60,7 +60,7 @@ export default function AddFeesPage({ plans, setPlans }) {
       setPlans(updatedPlans);
     }
 
-    navigate("/"); // ✅ Next route (back to summary/home)
+    navigate("/categories");
   };
 
   const inputStyle = {
@@ -181,14 +181,14 @@ export default function AddFeesPage({ plans, setPlans }) {
         style={{
           marginTop: "2rem",
           padding: "0.6rem 1.2rem",
-          backgroundColor: "#007bff",
+          backgroundColor: "#28a745ff",
           color: "white",
           border: "none",
           borderRadius: "8px",
           cursor: "pointer",
         }}
       >
-        Finish
+        Next
       </button>
     </div>
   );

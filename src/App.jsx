@@ -8,8 +8,9 @@ import {
 } from "react-router-dom";
 
 import CreatePlanPage from "./pages/CreatePlanPage";
-import AddSavingsGoals from "./pages/AddGoalsPage";
+import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
+import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
 
 
@@ -609,8 +610,12 @@ function App() {
           element={<CreatePlanPage addPlan={addPlan} />}
         />
         <Route
-          path="/goals"
-          element={<AddSavingsGoals plans={plans} setPlans={setPlans} />}
+          path="/categories"
+          element={<SelectBudgetCategoriesPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/set-budget"
+          element={<SetBudgetPage plans={plans} setPlans={setPlans} />}
         />
         <Route
           path="/plan/:id"
