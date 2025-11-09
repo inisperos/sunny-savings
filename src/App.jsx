@@ -129,6 +129,19 @@ function PlanDetails({ plans }) {
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
 
+  const getHoursPerWeek = (p) => {
+    if (!p) return 40;
+    const hoursWeek = parseFloat(p.hoursPerWeek);
+    if (!Number.isNaN(hoursWeek) && hoursWeek > 0) {
+      return hoursWeek;
+    }
+    const hoursDay = parseFloat(p.hoursPerDay);
+    if (!Number.isNaN(hoursDay) && hoursDay > 0) {
+      return hoursDay * 5;
+    }
+    return 40;
+  };
+
   if (!plan) {
     return (
       <div style={{ textAlign: "center", marginTop: "4rem" }}>
@@ -157,9 +170,7 @@ function PlanDetails({ plans }) {
   // Validate and convert to weekly based on frequency
   if (plan.salary && plan.weeks && plan.salary > 0 && plan.weeks > 0) {
     if (plan.salaryFrequency === "hourly") {
-      // Use hoursPerDay if available, otherwise default to 8 hours/day (40 hours/week)
-      const hoursPerDay = plan.hoursPerDay || 8;
-      const hoursPerWeek = hoursPerDay * 5; // Assuming 5 working days per week
+      const hoursPerWeek = getHoursPerWeek(plan);
       salaryPerWeek = plan.salary * hoursPerWeek;
     } else if (plan.salaryFrequency === "weekly") {
       salaryPerWeek = plan.salary;
@@ -174,21 +185,54 @@ function PlanDetails({ plans }) {
   
   const salaryTotal = salaryPerWeek * (plan.weeks || 0);
 
-  const totalReimbursements = plan.stipends && Array.isArray(plan.stipends)
-    ? plan.stipends.reduce((sum, s) => {
-        const amount = s && typeof s === 'object' ? (s.amount || 0) : 0;
-        return sum + (isNaN(amount) || amount < 0 ? 0 : amount);
-      }, 0)
-    : 0;
+  const totalReimbursements =
+    plan.stipends && Array.isArray(plan.stipends)
+      ? plan.stipends.reduce((sum, s) => {
+          const amount = s && typeof s === "object" ? Number(s.amount) || 0 : 0;
+          return amount > 0 ? sum + amount : sum;
+        }, 0)
+      : 0;
 
-  const totalFees = plan.fees && Array.isArray(plan.fees)
-    ? plan.fees.reduce((sum, f) => {
-        const amount = f && typeof f === 'object' ? (f.amount || 0) : 0;
-        return sum + (isNaN(amount) || amount < 0 ? 0 : amount);
-      }, 0)
-    : 0;
+  const totalFees =
+    plan.fees && Array.isArray(plan.fees)
+      ? plan.fees.reduce((sum, f) => {
+          const amount = f && typeof f === "object" ? Number(f.amount) || 0 : 0;
+          return amount > 0 ? sum + amount : sum;
+        }, 0)
+      : 0;
 
-  const totalDisposableIncome = salaryTotal + totalReimbursements - totalFees;
+  const weeks = Number(plan.weeks) || 0;
+
+  const weeklyCostFromFrequency = (amount, frequency) => {
+    const cost = Number(amount) || 0;
+    if (cost <= 0) return 0;
+    const freq = (frequency || "").toLowerCase();
+    switch (freq) {
+      case "daily":
+        return cost * 7;
+      case "weekly":
+        return cost;
+      case "biweekly":
+        return cost / 2;
+      case "monthly":
+        return (cost * 12) / 52;
+      case "annually":
+        return cost / 52;
+      default:
+        return cost;
+    }
+  };
+
+  const totalRentCost = weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
+  const totalTransportationCost =
+    weeks * weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
+
+  const totalDisposableIncome =
+    salaryTotal +
+    totalReimbursements -
+    totalFees -
+    totalRentCost -
+    totalTransportationCost;
 
   const numGoals = plan.goals ? plan.goals.length : 0;
   const suggestedPerGoal =
@@ -225,9 +269,10 @@ function PlanDetails({ plans }) {
             <strong>Salary:</strong> {formatCurrency(plan.salary)} (
             {plan.salaryFrequency})
           </div>
-          {plan.salaryFrequency === "hourly" && plan.hoursPerDay && (
+          {plan.salaryFrequency === "hourly" && (
             <div>
-              <strong>Hours per Day:</strong> {plan.hoursPerDay}
+              <strong>Hours per Week:</strong> {getHoursPerWeek(plan)}
+              {plan.hoursPerWeek ? "" : " (assumed)"}
             </div>
           )}
           <div>
@@ -480,15 +525,19 @@ function PlanDetails({ plans }) {
             <strong>Total Earnings:</strong> {formatCurrency(salaryTotal)}
           </div>
           <div>
-            <strong>Total Reimbursements:</strong>{" "}
-            {formatCurrency(totalReimbursements)}
+            <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
           </div>
           <div>
             <strong>Total Fees:</strong> {formatCurrency(totalFees)}
           </div>
+          <div>
+            <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
+          </div>
+          <div>
+            <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
+          </div>
           <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
-            <strong>Total Disposable Income:</strong>{" "}
-            {formatCurrency(totalDisposableIncome)}
+            <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
           </div>
         </div>
 
