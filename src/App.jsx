@@ -7,15 +7,18 @@ import {
   useParams,
 } from "react-router-dom";
 
+// Import pages
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
 import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
-import PlansList from "./components/PlansList";
 
-
-
+// Import components
+import PlansList from "./components/Home/PlansList";
+import CreateNewPlanButton from "./components/Home/CreateNewPlanButton";
+import ComparePlansButton from "./components/Home/ComparePlansButton";
+import PlanNotFound from "./components/PlanDetails/PlanNotFound";
 
 
 // 🏠 Home Page
@@ -43,48 +46,15 @@ function Home({ plans, deletePlan }) {
           <PlansList plans={plans} navigate={navigate} deletePlan={deletePlan} />
         )}
 
-        <button
-          onClick={() => navigate("/create")}
-          style={{
-            marginTop: "2rem",
-            padding: "0.75rem 1.25rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "#007bff",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "1rem",
-          }}
-        >
-          Create New Plan
-        </button>
-        <button
-          onClick={() => navigate("/compare")}
-          disabled={plans.length < 2}
-          title={
-            plans.length < 2
-              ? "Create at least 2 plans to compare"
-              : "Compare two plans"
-          }
-          style={{
-            marginTop: "0.75rem",
-            padding: "0.75rem 1.25rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: plans.length < 2 ? "#9ca3af" : "#007bff",
-            color: "white",
-            cursor: plans.length < 2 ? "not-allowed" : "pointer",
-            fontSize: "1rem",
-          }}
-        >
-          Compare Plans
-        </button>
+        <CreateNewPlanButton onClick={() => navigate("/create")} />
+
+        <ComparePlansButton onClick={() => navigate("/compare")} disabled={plans.length < 2} />
+        
       </div>
     </div>
   );
 }
 
-// 📊 Plan Details Page
 // 📊 Plan Details Page
 function PlanDetails({ plans }) {
   const { id } = useParams();
@@ -92,25 +62,7 @@ function PlanDetails({ plans }) {
   const plan = plans.find((p) => p.id === parseInt(id));
 
   if (!plan) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "4rem" }}>
-        <h2>Plan not found</h2>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            marginTop: "1rem",
-            padding: "0.5rem 1rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "#6c757d",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Back Home
-        </button>
-      </div>
-    );
+    return <PlanNotFound />;
   }
 
   // Calculate totals with proper salary frequency conversion
