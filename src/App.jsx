@@ -12,6 +12,7 @@ import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
 import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
+import PlansList from "./components/PlansList";
 
 
 
@@ -39,46 +40,7 @@ function Home({ plans, deletePlan }) {
         {plans.length === 0 ? (
           <p>No plans created yet.</p>
         ) : (
-          plans.map((plan) => (
-            <div
-              key={plan.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <button
-                onClick={() => navigate(`/plan/${plan.id}`)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#007bff",
-                  cursor: "pointer",
-                  fontSize: "1.1rem",
-                  textDecoration: "underline",
-                }}
-              >
-                {plan.company}
-              </button>
-
-              <button
-                onClick={() => deletePlan(plan.id)}
-                style={{
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  padding: "0.3rem 0.6rem",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          ))
+          <PlansList plans={plans} navigate={navigate} deletePlan={deletePlan} />
         )}
 
         <button
