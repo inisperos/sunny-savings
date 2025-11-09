@@ -1,6 +1,7 @@
 // src/pages/CreatePlanPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NextButton from "../components/NextButton";
 
 export default function CreatePlanPage({ addPlan }) {
   const navigate = useNavigate();
@@ -216,21 +217,8 @@ export default function CreatePlanPage({ addPlan }) {
         </select>
 
         <br />
-        <button
-          type="submit"
-          onClick={handleNext}
-          style={{
-            marginTop: "1.5rem",
-            padding: "0.5rem 1rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "#28a745ff",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Next →
-        </button>
+        <NextButton onClick={handleNext}
+        />
       </form>
 
       <button

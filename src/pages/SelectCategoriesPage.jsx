@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NextButton from "../components/NextButton";
 
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
@@ -201,20 +202,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       )}
 
       {/* Next button */}
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: "2rem",
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "#28a745",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        Next →
-      </button>
+      <NextButton onClick={handleNext} />
     </div>
   );
 }

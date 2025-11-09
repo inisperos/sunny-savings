@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import NextButton from "../components/NextButton";
 
 function BudgetCard({ category, value, onChange }) {
   const cardStyle = {
@@ -49,8 +50,9 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const navigate = useNavigate();
 
   // derive categories from last plan
-  const categories =
-    plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+  const categories = useMemo(() => {
+    return plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+  }, [plans]);
 
   // local state for amounts keyed by category name
   const [amounts, setAmounts] = useState({});
@@ -195,19 +197,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 textAlign: "right",
               }}
             >
-              <button
-                onClick={handleNext}
-                style={{
-                  padding: "0.75rem 1.25rem",
-                  borderRadius: "12px",
-                  border: "none",
-                  background: "#007bffff",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                }}
-              >
-                Finish
-              </button>
+              <NextButton onClick={handleNext} />
             </div>
           }
         </div>
