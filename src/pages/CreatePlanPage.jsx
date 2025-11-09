@@ -8,9 +8,9 @@ export default function CreatePlanPage({ addPlan }) {
   // Offer details
   const [company, setCompany] = useState("");
   const [salary, setSalary] = useState("");
-  const [salaryFrequency, setSalaryFrequency] = useState("monthly");
+  const [salaryFrequency, setSalaryFrequency] = useState("annually");
   const [weeks, setWeeks] = useState("");
-  const [hoursPerDay, setHoursPerDay] = useState("8");
+  const [hoursPerWeek, setHoursPerWeek] = useState("40");
 
   // Location info
   const [location, setLocation] = useState("");
@@ -47,11 +47,15 @@ export default function CreatePlanPage({ addPlan }) {
       return;
     }
 
-    // Validate hours per day if hourly
+    let hoursPerWeekValue;
     if (salaryFrequency === "hourly") {
-      const hoursPerDayValue = parseFloat(hoursPerDay);
-      if (isNaN(hoursPerDayValue) || hoursPerDayValue <= 0 || hoursPerDayValue > 24) {
-        alert("Please enter valid hours per day (between 1 and 24) for hourly salary.");
+      hoursPerWeekValue = parseFloat(hoursPerWeek);
+      if (
+        isNaN(hoursPerWeekValue) ||
+        hoursPerWeekValue <= 0 ||
+        hoursPerWeekValue > 168
+      ) {
+        alert("Please enter valid hours per week (between 1 and 168) for hourly salary.");
         return;
       }
     }
@@ -80,11 +84,13 @@ export default function CreatePlanPage({ addPlan }) {
       rentFrequency,
       transportation: transportationValue,
       transportFrequency,
-      ...(salaryFrequency === "hourly" && { hoursPerDay: parseFloat(hoursPerDay) }),
+      ...(salaryFrequency === "hourly" && {
+        hoursPerWeek: hoursPerWeekValue,
+      }),
     };
   
     addPlan(newPlan);
-    navigate("/fees");
+    navigate("/goals");
   };
 
   const inputStyle = {
@@ -133,6 +139,7 @@ export default function CreatePlanPage({ addPlan }) {
           <option value="weekly">Weekly</option>
           <option value="biweekly">Biweekly</option>
           <option value="monthly">Monthly</option>
+          <option value="annually">Annually</option>
         </select>
         <br />
 
@@ -145,21 +152,28 @@ export default function CreatePlanPage({ addPlan }) {
         />
         <br />
 
-        {/* Show hours per day input only when hourly is selected */}
+        {/* Show hours per week input only when hourly is selected */}
         {salaryFrequency === "hourly" && (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+              }}
+            >
               <input
                 type="number"
-                placeholder="Hours per day"
-                value={hoursPerDay}
-                onChange={(e) => setHoursPerDay(e.target.value)}
+                placeholder="Hours per week"
+                value={hoursPerWeek}
+                onChange={(e) => setHoursPerWeek(e.target.value)}
                 style={inputStyle}
                 min="1"
-                max="24"
-                step="0.5"
+                max="168"
+                step="1"
               />
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/workday</span>
+              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
             </div>
             <br />
           </>
