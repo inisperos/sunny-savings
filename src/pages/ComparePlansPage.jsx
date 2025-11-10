@@ -1,6 +1,7 @@
 // src/ComparePlansPage.jsx
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import AppTooltip from "../components/Tooltip";
 
 import {
   BarChart,
@@ -58,34 +59,40 @@ export default function ComparePlansPage({ plans }) {
           const checked = selectedIds.includes(p.id);
           const disabled = !checked && selectedIds.length >= 2;
           const label = p.company || p.name || "Untitled";
+          const tooltipContent = disabled && !checked
+            ? "You can only compare two plans at a time"
+            : checked
+            ? "Click to remove this plan from the comparison"
+            : "Click to include this plan in the comparison";
           return (
-            <label
-              key={p.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "6px 10px",
-                border: "1px solid #e5e7eb",
-                borderRadius: 8,
-                background: checked ? "#eef5ff" : "white",
-                opacity: disabled ? 0.6 : 1,
-                cursor: disabled ? "not-allowed" : "pointer",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={checked}
-                onChange={() => toggle(p.id)}
-                disabled={disabled}
-              />
-              <span style={{ color: "#2563eb", textDecoration: "underline" }}>
-                {label}
-              </span>
-              <span style={{ fontSize: 12, color: "#6b7280" }}>
-                (salary: ${num(p.salary)})
-              </span>
-            </label>
+            <AppTooltip key={p.id} content={tooltipContent}>
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 10px",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 8,
+                  background: checked ? "#eef5ff" : "white",
+                  opacity: disabled ? 0.6 : 1,
+                  cursor: disabled ? "not-allowed" : "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggle(p.id)}
+                  disabled={disabled}
+                />
+                <span style={{ color: "#2563eb", textDecoration: "underline" }}>
+                  {label}
+                </span>
+                <span style={{ fontSize: 12, color: "#6b7280" }}>
+                  (salary: ${num(p.salary)})
+                </span>
+              </label>
+            </AppTooltip>
           );
         })}
       </div>
@@ -115,19 +122,21 @@ export default function ComparePlansPage({ plans }) {
       )}
 
       <div style={{ textAlign: "center", marginTop: 24 }}>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            padding: "8px 14px",
-            borderRadius: 8,
-            border: "none",
-            background: "#6b7280",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Back Home
-        </button>
+        <AppTooltip content="Return to the dashboard">
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              padding: "8px 14px",
+              borderRadius: 8,
+              border: "none",
+              background: "#6b7280",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            Back Home
+          </button>
+        </AppTooltip>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AppTooltip from "../components/Tooltip";
 
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
@@ -96,40 +97,56 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
           marginInline: "auto",
         }}
       >
-        {defaultCategories.map((category) => (
-          <div
-            key={category}
-            onClick={() => toggleCategory(category)}
-            style={circleStyle(category)}
-          >
-            {category}
-          </div>
-        ))}
-        {customCategories.map((category) => (
-          <div
-            key={category}
-            onClick={() => toggleCategory(category)}
-            style={circleStyle(category, true)}
-          >
-            {category}
-          </div>
-        ))}
+        {defaultCategories.map((category) => {
+          const isSelected = selectedCategories.includes(category);
+          const tooltipText = isSelected
+            ? `Remove ${category} from your savings goals`
+            : `Add ${category} to your savings goals`;
+
+          return (
+            <AppTooltip key={category} content={tooltipText}>
+              <div
+                onClick={() => toggleCategory(category)}
+                style={circleStyle(category)}
+              >
+                {category}
+              </div>
+            </AppTooltip>
+          );
+        })}
+        {customCategories.map((category) => {
+          const customTooltip = selectedCategories.includes(category)
+            ? `Remove ${category} from your savings goals`
+            : `Add ${category} to your savings goals`;
+          return (
+            <AppTooltip key={category} content={customTooltip}>
+              <div
+                onClick={() => toggleCategory(category)}
+                style={circleStyle(category, true)}
+              >
+                {category}
+              </div>
+            </AppTooltip>
+          );
+        })}
       </div>
 
       {/* Add custom category */}
-      <button
-        onClick={() => setShowPopup(true)}
-        style={{
-          marginTop: "2rem",
-          padding: "0.75rem 1.25rem",
-          border: "2px dashed #000",
-          borderRadius: "10px",
-          background: "none",
-          cursor: "pointer",
-        }}
-      >
-        Add Custom Category +
-      </button>
+      <AppTooltip content="Create a new custom category to add to your list">
+        <button
+          onClick={() => setShowPopup(true)}
+          style={{
+            marginTop: "2rem",
+            padding: "0.75rem 1.25rem",
+            border: "2px dashed #000",
+            borderRadius: "10px",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          Add Custom Category +
+        </button>
+      </AppTooltip>
 
       {/* Popup modal */}
       {showPopup && (
@@ -156,65 +173,73 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
             }}
           >
             <h3>Add Custom Category</h3>
-            <input
-              type="text"
-              placeholder="Enter category name"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              style={{
-                padding: "0.5rem",
-                width: "90%",
-                marginTop: "1rem",
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-              }}
-            />
+            <AppTooltip content="Name your custom savings category">
+              <input
+                type="text"
+                placeholder="Enter category name"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                style={{
+                  padding: "0.5rem",
+                  width: "90%",
+                  marginTop: "1rem",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                }}
+              />
+            </AppTooltip>
             <div style={{ marginTop: "1rem" }}>
-              <button
-                onClick={handleAddCustomCategory}
-                style={{
-                  padding: "0.5rem 1rem",
-                  marginRight: "1rem",
-                  backgroundColor: "#4caf50",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                }}
-              >
-                Add
-              </button>
-              <button
-                onClick={() => setShowPopup(false)}
-                style={{
-                  padding: "0.5rem 1rem",
-                  backgroundColor: "#6c757d",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                }}
-              >
-                Cancel
-              </button>
+              <AppTooltip content="Save this custom category">
+                <button
+                  onClick={handleAddCustomCategory}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    marginRight: "1rem",
+                    backgroundColor: "#4caf50",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                  }}
+                >
+                  Add
+                </button>
+              </AppTooltip>
+              <AppTooltip content="Close without adding a custom category">
+                <button
+                  onClick={() => setShowPopup(false)}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#6c757d",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                  }}
+                >
+                  Cancel
+                </button>
+              </AppTooltip>
             </div>
           </div>
         </div>
       )}
 
       {/* Next button */}
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: "2rem",
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "#28a745",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        Next →
-      </button>
+      <AppTooltip content="Save categories and continue to set your budget">
+        <button
+          onClick={handleNext}
+          style={{
+            marginTop: "2rem",
+            padding: "0.6rem 1.2rem",
+            backgroundColor: "#28a745",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Next →
+        </button>
+      </AppTooltip>
     </div>
   );
 }

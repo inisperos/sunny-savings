@@ -12,9 +12,7 @@ import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
 import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
-
-
-
+import AppTooltip from "./components/Tooltip";
 
 
 // 🏠 Home Page
@@ -49,6 +47,7 @@ function Home({ plans, deletePlan }) {
                 marginBottom: "0.5rem",
               }}
             >
+              <AppTooltip content="Open this plan's detailed budget summary">
               <button
                 onClick={() => navigate(`/plan/${plan.id}`)}
                 style={{
@@ -62,7 +61,9 @@ function Home({ plans, deletePlan }) {
               >
                 {plan.company}
               </button>
+              </AppTooltip>
 
+              <AppTooltip content="Remove this plan from your saved list">
               <button
                 onClick={() => deletePlan(plan.id)}
                 style={{
@@ -77,10 +78,12 @@ function Home({ plans, deletePlan }) {
               >
                 Delete
               </button>
+              </AppTooltip>
             </div>
           ))
         )}
 
+        <AppTooltip content="Start building a new internship or job plan">
         <button
           onClick={() => navigate("/create")}
           style={{
@@ -96,14 +99,17 @@ function Home({ plans, deletePlan }) {
         >
           Create New Plan
         </button>
-        <button
-          onClick={() => navigate("/compare")}
-          disabled={plans.length < 2}
-          title={
+        </AppTooltip>
+        <AppTooltip
+          content={
             plans.length < 2
-              ? "Create at least 2 plans to compare"
-              : "Compare two plans"
+              ? "Add at least two plans before comparing them"
+              : "View a side-by-side comparison of two plans"
           }
+        >
+          <button
+            onClick={() => navigate("/compare")}
+            disabled={plans.length < 2}
           style={{
             marginTop: "0.75rem",
             padding: "0.75rem 1.25rem",
@@ -117,6 +123,7 @@ function Home({ plans, deletePlan }) {
         >
           Compare Plans
         </button>
+        </AppTooltip>
       </div>
     </div>
   );
@@ -146,6 +153,7 @@ function PlanDetails({ plans }) {
     return (
       <div style={{ textAlign: "center", marginTop: "4rem" }}>
         <h2>Plan not found</h2>
+        <AppTooltip content="Head back to the dashboard">
         <button
           onClick={() => navigate("/")}
           style={{
@@ -160,6 +168,7 @@ function PlanDetails({ plans }) {
         >
           Back Home
         </button>
+        </AppTooltip>
       </div>
     );
   }
@@ -575,6 +584,7 @@ function PlanDetails({ plans }) {
 
       {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <AppTooltip content="Return to the main dashboard">
         <button
           onClick={() => navigate("/")}
           style={{
@@ -590,6 +600,7 @@ function PlanDetails({ plans }) {
         >
           ← Back Home
         </button>
+        </AppTooltip>
       </div>
     </div>
   );

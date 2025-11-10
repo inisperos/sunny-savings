@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AppTooltip from "../components/Tooltip";
 
 function BudgetCard({ category, value, onChange }) {
   const cardStyle = {
@@ -33,14 +34,16 @@ function BudgetCard({ category, value, onChange }) {
   return (
     <div style={cardStyle}>
       <div style={leftStyle}>{category}</div>
-      <input
-        type="number"
-        placeholder="$0"
-        value={value}
-        onChange={(e) => onChange(category, e.target.value)}
-        style={inputStyle}
-        min="0"
-      />
+      <AppTooltip content={`Enter how much you plan to save for ${category}`}>
+        <input
+          type="number"
+          placeholder="$0"
+          value={value}
+          onChange={(e) => onChange(category, e.target.value)}
+          style={inputStyle}
+          min="0"
+        />
+      </AppTooltip>
     </div>
   );
 }
@@ -136,20 +139,22 @@ export default function SetBudgetPage({ plans, setPlans }) {
           {/* Add new category dashed button */}
           <div style={{ maxWidth: "760px", margin: "1.25rem auto" }}>
             {!showAdd ? (
-              <button
-                onClick={() => setShowAdd(true)}
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  border: "4px dashed #000",
-                  borderRadius: "16px",
-                  background: "#f3f3f3",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                }}
-              >
-                Add New Category +
-              </button>
+              <AppTooltip content="Add another savings goal category to track">
+                <button
+                  onClick={() => setShowAdd(true)}
+                  style={{
+                    width: "100%",
+                    padding: "1rem",
+                    border: "4px dashed #000",
+                    borderRadius: "16px",
+                    background: "#f3f3f3",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Add New Category +
+                </button>
+              </AppTooltip>
             ) : (
               <div
                 style={{
@@ -158,30 +163,36 @@ export default function SetBudgetPage({ plans, setPlans }) {
                   alignItems: "center",
                 }}
               >
-                <input
-                  type="text"
-                  placeholder="New category name"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "0.75rem",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                <button
-                  onClick={handleAddCategory}
-                  style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
-                >
-                  Add
-                </button>
-                <button
-                  onClick={() => setShowAdd(false)}
-                  style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
-                >
-                  Cancel
-                </button>
+                <AppTooltip content="Name the new savings category you want to track">
+                  <input
+                    type="text"
+                    placeholder="New category name"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    style={{
+                      flex: 1,
+                      padding: "0.75rem",
+                      borderRadius: "8px",
+                      border: "1px solid #ccc",
+                    }}
+                  />
+                </AppTooltip>
+                <AppTooltip content="Save this category and include it in the plan">
+                  <button
+                    onClick={handleAddCategory}
+                    style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
+                  >
+                    Add
+                  </button>
+                </AppTooltip>
+                <AppTooltip content="Close without adding a new category">
+                  <button
+                    onClick={() => setShowAdd(false)}
+                    style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
+                  >
+                    Cancel
+                  </button>
+                </AppTooltip>
               </div>
             )}
           </div>
@@ -195,19 +206,21 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 textAlign: "right",
               }}
             >
-              <button
-                onClick={handleNext}
-                style={{
-                  padding: "0.75rem 1.25rem",
-                  borderRadius: "12px",
-                  border: "none",
-                  background: "#007bffff",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                }}
-              >
-                Finish
-              </button>
+              <AppTooltip content="Save budget amounts and return to the dashboard">
+                <button
+                  onClick={handleNext}
+                  style={{
+                    padding: "0.75rem 1.25rem",
+                    borderRadius: "12px",
+                    border: "none",
+                    background: "#007bffff",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Finish
+                </button>
+              </AppTooltip>
             </div>
           }
         </div>

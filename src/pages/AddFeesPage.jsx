@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AppTooltip from "../components/Tooltip";
 
 export default function AddFeesPage({ plans, setPlans }) {
   const navigate = useNavigate();
@@ -89,34 +90,40 @@ export default function AddFeesPage({ plans, setPlans }) {
         <h3>Reimbursements / Stipends</h3>
 
         <div style={boxStyle}>
-          <input
-            type="text"
-            placeholder="Type (e.g., Housing, Travel)"
-            value={stipendType}
-            onChange={(e) => setStipendType(e.target.value)}
-            style={inputStyle}
-          />
-          <input
-            type="number"
-            placeholder="$ Amount"
-            value={stipendAmount}
-            onChange={(e) => setStipendAmount(e.target.value)}
-            style={inputStyle}
-          />
+          <AppTooltip content="Label this reimbursement or stipend">
+            <input
+              type="text"
+              placeholder="Type (e.g., Housing, Travel)"
+              value={stipendType}
+              onChange={(e) => setStipendType(e.target.value)}
+              style={inputStyle}
+            />
+          </AppTooltip>
+          <AppTooltip content="Enter the amount you expect to receive">
+            <input
+              type="number"
+              placeholder="$ Amount"
+              value={stipendAmount}
+              onChange={(e) => setStipendAmount(e.target.value)}
+              style={inputStyle}
+            />
+          </AppTooltip>
           <br />
-          <button
-            onClick={addStipend}
-            style={{
-              marginTop: "0.5rem",
-              padding: "0.5rem 1rem",
-              border: "2px dashed #000",
-              borderRadius: "8px",
-              background: "none",
-              cursor: "pointer",
-            }}
-          >
-            Add +
-          </button>
+          <AppTooltip content="Add this stipend to the plan">
+            <button
+              onClick={addStipend}
+              style={{
+                marginTop: "0.5rem",
+                padding: "0.5rem 1rem",
+                border: "2px dashed #000",
+                borderRadius: "8px",
+                background: "none",
+                cursor: "pointer",
+              }}
+            >
+              Add +
+            </button>
+          </AppTooltip>
         </div>
 
         {stipends.length > 0 && (
@@ -134,34 +141,40 @@ export default function AddFeesPage({ plans, setPlans }) {
       <div style={{ marginTop: "2rem" }}>
         <h2>Add any one-time fees for this period.</h2>
         <div style={boxStyle}>
-          <input
-            type="text"
-            placeholder="Type (e.g., Relocation, Deposit)"
-            value={feeType}
-            onChange={(e) => setFeeType(e.target.value)}
-            style={inputStyle}
-          />
-          <input
-            type="number"
-            placeholder="$ Amount"
-            value={feeAmount}
-            onChange={(e) => setFeeAmount(e.target.value)}
-            style={inputStyle}
-          />
+          <AppTooltip content="Label this one-time fee">
+            <input
+              type="text"
+              placeholder="Type (e.g., Relocation, Deposit)"
+              value={feeType}
+              onChange={(e) => setFeeType(e.target.value)}
+              style={inputStyle}
+            />
+          </AppTooltip>
+          <AppTooltip content="Enter how much this fee will cost">
+            <input
+              type="number"
+              placeholder="$ Amount"
+              value={feeAmount}
+              onChange={(e) => setFeeAmount(e.target.value)}
+              style={inputStyle}
+            />
+          </AppTooltip>
           <br />
-          <button
-            onClick={addFee}
-            style={{
-              marginTop: "0.5rem",
-              padding: "0.5rem 1rem",
-              border: "2px dashed #000",
-              borderRadius: "8px",
-              background: "none",
-              cursor: "pointer",
-            }}
-          >
-            Add +
-          </button>
+          <AppTooltip content="Add this fee to the plan">
+            <button
+              onClick={addFee}
+              style={{
+                marginTop: "0.5rem",
+                padding: "0.5rem 1rem",
+                border: "2px dashed #000",
+                borderRadius: "8px",
+                background: "none",
+                cursor: "pointer",
+              }}
+            >
+              Add +
+            </button>
+          </AppTooltip>
         </div>
 
         {fees.length > 0 && (
@@ -176,20 +189,22 @@ export default function AddFeesPage({ plans, setPlans }) {
       </div>
 
       {/* Navigation */}
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: "2rem",
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "#28a745ff",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        Next
-      </button>
+      <AppTooltip content="Save stipends and fees, then move to category selection">
+        <button
+          onClick={handleNext}
+          style={{
+            marginTop: "2rem",
+            padding: "0.6rem 1.2rem",
+            backgroundColor: "#28a745ff",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Next
+        </button>
+      </AppTooltip>
     </div>
   );
 }

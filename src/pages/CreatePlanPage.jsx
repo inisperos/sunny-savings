@@ -1,6 +1,7 @@
 // src/pages/CreatePlanPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AppTooltip from "../components/Tooltip";
 
 export default function CreatePlanPage({ addPlan }) {
   const navigate = useNavigate();
@@ -114,42 +115,50 @@ export default function CreatePlanPage({ addPlan }) {
         {/* Offer Details */}
         <p style={sectionHeader}>Add Offer Details:</p>
 
-        <input
-          type="text"
-          placeholder="Company"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          style={inputStyle}
-        />
+        <AppTooltip content="Enter the company or program this plan is for">
+          <input
+            type="text"
+            placeholder="Company"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            style={inputStyle}
+          />
+        </AppTooltip>
         <br />
 
-        <input
-          type="number"
-          placeholder="Salary"
-          value={salary}
-          onChange={(e) => setSalary(e.target.value)}
-          style={inputStyle}
-        />
-        <select
-          value={salaryFrequency}
-          onChange={(e) => setSalaryFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="hourly">Hourly</option>
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Biweekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
-        </select>
+        <AppTooltip content="Enter the salary amount for this offer">
+          <input
+            type="number"
+            placeholder="Salary"
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+            style={inputStyle}
+          />
+        </AppTooltip>
+        <AppTooltip content="Choose how often the salary is paid">
+          <select
+            value={salaryFrequency}
+            onChange={(e) => setSalaryFrequency(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="hourly">Hourly</option>
+            <option value="weekly">Weekly</option>
+            <option value="biweekly">Biweekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+          </select>
+        </AppTooltip>
         <br />
 
-        <input
-          type="number"
-          placeholder="Number of weeks"
-          value={weeks}
-          onChange={(e) => setWeeks(e.target.value)}
-          style={inputStyle}
-        />
+        <AppTooltip content="How many weeks this plan will run">
+          <input
+            type="number"
+            placeholder="Number of weeks"
+            value={weeks}
+            onChange={(e) => setWeeks(e.target.value)}
+            style={inputStyle}
+          />
+        </AppTooltip>
         <br />
 
         {/* Show hours per week input only when hourly is selected */}
@@ -163,16 +172,18 @@ export default function CreatePlanPage({ addPlan }) {
                 gap: "0.5rem",
               }}
             >
-              <input
-                type="number"
-                placeholder="Hours per week"
-                value={hoursPerWeek}
-                onChange={(e) => setHoursPerWeek(e.target.value)}
-                style={inputStyle}
-                min="1"
-                max="168"
-                step="1"
-              />
+              <AppTooltip content="Set expected working hours per week">
+                <input
+                  type="number"
+                  placeholder="Hours per week"
+                  value={hoursPerWeek}
+                  onChange={(e) => setHoursPerWeek(e.target.value)}
+                  style={inputStyle}
+                  min="1"
+                  max="168"
+                  step="1"
+                />
+              </AppTooltip>
               <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
             </div>
             <br />
@@ -182,85 +193,99 @@ export default function CreatePlanPage({ addPlan }) {
         {/* Location Info */}
         <p style={sectionHeader}>Add Location Info:</p>
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          style={inputStyle}
-          required
-        />
+        <AppTooltip content="Specify the city or region for the plan">
+          <input
+            type="text"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            style={inputStyle}
+            required
+          />
+        </AppTooltip>
         <br />
 
-        <input
-          type="number"
-          placeholder="Rent"
-          value={rent}
-          onChange={(e) => setRent(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={rentFrequency}
-          onChange={(e) => setRentFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
+        <AppTooltip content="Enter your expected rent for this location">
+          <input
+            type="number"
+            placeholder="Rent"
+            value={rent}
+            onChange={(e) => setRent(e.target.value)}
+            style={inputStyle}
+            required
+          />
+        </AppTooltip>
+        <AppTooltip content="Choose how often you pay rent">
+          <select
+            value={rentFrequency}
+            onChange={(e) => setRentFrequency(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </AppTooltip>
         <br />
 
-        <input
-          type="number"
-          placeholder="Transportation Cost"
-          value={transportation}
-          onChange={(e) => setTransportation(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={transportFrequency}
-          onChange={(e) => setTransportFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
+        <AppTooltip content="Add your expected transportation costs">
+          <input
+            type="number"
+            placeholder="Transportation Cost"
+            value={transportation}
+            onChange={(e) => setTransportation(e.target.value)}
+            style={inputStyle}
+            required
+          />
+        </AppTooltip>
+        <AppTooltip content="Choose how often you pay transportation costs">
+          <select
+            value={transportFrequency}
+            onChange={(e) => setTransportFrequency(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </AppTooltip>
 
         <br />
+        <AppTooltip content="Save these details and move to goal selection">
+          <button
+            type="submit"
+            onClick={handleNext}
+            style={{
+              marginTop: "1.5rem",
+              padding: "0.5rem 1rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "#28a745ff",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            Next →
+          </button>
+        </AppTooltip>
+      </form>
+
+      <AppTooltip content="Return to the dashboard without saving changes">
         <button
-          type="submit"
-          onClick={handleNext}
+          onClick={() => navigate("/")}
           style={{
-            marginTop: "1.5rem",
+            marginTop: "1rem",
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#28a745ff",
+            backgroundColor: "#6c757d",
             color: "white",
             cursor: "pointer",
           }}
         >
-          Next →
+          Go Back Home
         </button>
-      </form>
-
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          marginTop: "1rem",
-          padding: "0.5rem 1rem",
-          borderRadius: "8px",
-          border: "none",
-          backgroundColor: "#6c757d",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Go Back Home
-      </button>
+      </AppTooltip>
     </div>
   );
 }
