@@ -90,7 +90,7 @@ export default function CreatePlanPage({ addPlan }) {
     };
   
     addPlan(newPlan);
-    navigate("/goals");
+    navigate("/fees");
   };
 
   const inputStyle = {
