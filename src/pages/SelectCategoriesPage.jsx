@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../App.css'
 
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
@@ -206,7 +207,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         style={{
           marginTop: "2rem",
           padding: "0.6rem 1.2rem",
-          backgroundColor: "#28a745",
+          backgroundColor: "var(--color-accent-light)",
           color: "white",
           border: "none",
           borderRadius: "8px",

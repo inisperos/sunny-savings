@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../App.css'
 
 function BudgetCard({ category, value, onChange }) {
   const cardStyle = {
@@ -201,9 +202,10 @@ export default function SetBudgetPage({ plans, setPlans }) {
                   padding: "0.75rem 1.25rem",
                   borderRadius: "12px",
                   border: "none",
-                  background: "#007bffff",
+                  background: "var(--color-accent-dark)",
                   cursor: "pointer",
                   fontSize: "1rem",
+                  color: "#fff"
                 }}
               >
                 Finish

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
+import '../App.css'
 
 // Calculate total earnings for a plan
 function calculateTotalEarnings(plan) {
@@ -69,7 +70,7 @@ export default function ComparePlansResult({ plans }) {
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#6c757d",
+            backgroundColor: "var(--color-dark-grey)",
             color: "white",
             cursor: "pointer",
           }}
@@ -147,9 +148,9 @@ export default function ComparePlansResult({ plans }) {
           gap: "0.5rem",
           padding: "0.5rem 1rem",
           borderRadius: "8px",
-          border: "1px solid #6c757d",
+          border: "1px solid var(--color-dark-grey)",
           backgroundColor: "#fff",
-          color: "#6c757d",
+          color: "var(--color-dark-grey)",
           cursor: "pointer",
           fontSize: "1rem",
           marginBottom: "2rem",
@@ -216,7 +217,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-lght-grey)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -233,7 +234,7 @@ export default function ComparePlansResult({ plans }) {
                   fontSize: "0.9rem",
                   fontWeight: "500",
                   marginBottom: "0.5rem",
-                  color: "#666",
+                  color: "var(--color-dark-grey)",
                 }}
               >
                 Total Disposable Income
@@ -243,7 +244,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-light-grey)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -260,7 +261,7 @@ export default function ComparePlansResult({ plans }) {
                   fontSize: "0.9rem",
                   fontWeight: "500",
                   marginBottom: "0.5rem",
-                  color: "#666",
+                  color: "var(--color-dark-grey)",
                 }}
               >
                 Total Reimbursement
@@ -270,7 +271,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-light-grey)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -287,7 +288,7 @@ export default function ComparePlansResult({ plans }) {
                   fontSize: "0.9rem",
                   fontWeight: "500",
                   marginBottom: "0.5rem",
-                  color: "#666",
+                  color: "var(--color-dark-grey)",
                 }}
               >
                 Total One-time Fees
@@ -297,7 +298,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-light-grey)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -403,7 +404,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-background-accent)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -430,7 +431,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-background-accent)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -457,7 +458,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-background-accent)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",
@@ -484,7 +485,7 @@ export default function ComparePlansResult({ plans }) {
                   padding: "1rem",
                   border: "2px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: "var(--color-background-accent)",
                   fontSize: "1.2rem",
                   fontWeight: "600",
                   textAlign: "center",

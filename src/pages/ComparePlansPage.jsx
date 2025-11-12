@@ -1,6 +1,7 @@
 // src/ComparePlansPage.jsx
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import '../App.css'
 
 import {
   BarChart,
@@ -66,9 +67,9 @@ export default function ComparePlansPage({ plans }) {
                 alignItems: "center",
                 gap: 8,
                 padding: "6px 10px",
-                border: "1px solid #e5e7eb",
+                border: "1px solid var(--color-border)",
                 borderRadius: 8,
-                background: checked ? "#eef5ff" : "white",
+                background: checked ? "var(--color-background-accent)" : "white",
                 opacity: disabled ? 0.6 : 1,
                 cursor: disabled ? "not-allowed" : "pointer",
               }}
@@ -79,7 +80,7 @@ export default function ComparePlansPage({ plans }) {
                 onChange={() => toggle(p.id)}
                 disabled={disabled}
               />
-              <span style={{ color: "#2563eb", textDecoration: "underline" }}>
+              <span style={{ color: "var(--color-dark-accent)", textDecoration: "underline" }}>
                 {label}
               </span>
               <span style={{ fontSize: 12, color: "#6b7280" }}>
@@ -109,7 +110,7 @@ export default function ComparePlansPage({ plans }) {
           <Column title={rightPlan.company || rightPlan.name || "Plan B"} plan={rightPlan} />
         </div>
       ) : (
-        <div style={{ textAlign: "center", marginTop: 20, color: "#0e5bf7ff" }}>
+        <div style={{ textAlign: "center", marginTop: 20, color: "var(--color-light-text)" }}>
           (Pick two plans to show comparison)
         </div>
       )}
@@ -121,7 +122,7 @@ export default function ComparePlansPage({ plans }) {
             padding: "8px 14px",
             borderRadius: 8,
             border: "none",
-            background: "#6b7280",
+            background: "var(--color-accent-dark)",
             color: "white",
             cursor: "pointer",
           }}
@@ -189,7 +190,7 @@ function MidChart({ left, right }) {
   return (
     <div
       style={{
-        border: "1px solid #e5e7eb",
+        border: "1px solid var(--color-border)",
         borderRadius: 10,
         padding: "0.75rem",
         background: "white",
@@ -262,7 +263,7 @@ function Column({ title, plan }) {
   return (
     <div
       style={{
-        border: "1px solid #e5e7eb",
+        border: "1px solid var(--color-border)",
         borderRadius: 10,
         padding: "1rem",
         background: "white",
@@ -287,11 +288,11 @@ function Column({ title, plan }) {
           }}
         >
           <thead>
-            <tr style={{ background: "#f8f9fa" }}>
-              <th style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+            <tr style={{ background: "var(--color-background-accent)" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                 Type
               </th>
-              <th style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                 Amount
               </th>
             </tr>
@@ -299,10 +300,10 @@ function Column({ title, plan }) {
           <tbody>
             {stipendItems.map((s, i) => (
               <tr key={i}>
-                <td style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                   {s.type}
                 </td>
-                <td style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                   ${Number(s.amount || 0).toLocaleString()}
                 </td>
               </tr>
@@ -330,11 +331,11 @@ function Column({ title, plan }) {
           }}
         >
           <thead>
-            <tr style={{ background: "#f8f9fa" }}>
-              <th style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+            <tr style={{ background: "var(--color-background-accent)" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                 Type
               </th>
-              <th style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                 Amount
               </th>
             </tr>
@@ -342,10 +343,10 @@ function Column({ title, plan }) {
           <tbody>
             {feeItems.map((f, i) => (
               <tr key={i}>
-                <td style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                   {f.type}
                 </td>
-                <td style={{ border: "1px solid #e5e7eb", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
                   ${Number(f.amount || 0).toLocaleString()}
                 </td>
               </tr>

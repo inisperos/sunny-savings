@@ -1,6 +1,7 @@
 // src/pages/CreatePlanPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../App.css'
 
 export default function CreatePlanPage({ addPlan }) {
   const navigate = useNavigate();
@@ -238,7 +239,7 @@ export default function CreatePlanPage({ addPlan }) {
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#28a745ff",
+            backgroundColor: "var(--color-accent-light)",
             color: "white",
             cursor: "pointer",
           }}
@@ -254,7 +255,7 @@ export default function CreatePlanPage({ addPlan }) {
           padding: "0.5rem 1rem",
           borderRadius: "8px",
           border: "none",
-          backgroundColor: "#6c757d",
+          backgroundColor: "var(--color-border)",
           color: "white",
           cursor: "pointer",
         }}

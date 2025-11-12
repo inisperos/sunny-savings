@@ -6,6 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import './App.css'
 
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
@@ -54,7 +55,7 @@ function Home({ plans, deletePlan }) {
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#007bff",
+                  color: "var(--color-accent-dark)",
                   cursor: "pointer",
                   fontSize: "1.1rem",
                   textDecoration: "underline",
@@ -66,7 +67,7 @@ function Home({ plans, deletePlan }) {
               <button
                 onClick={() => deletePlan(plan.id)}
                 style={{
-                  backgroundColor: "#dc3545",
+                  backgroundColor: "var(--color-border)",
                   color: "white",
                   border: "none",
                   borderRadius: "5px",
@@ -88,7 +89,7 @@ function Home({ plans, deletePlan }) {
             padding: "0.75rem 1.25rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#007bff",
+            backgroundColor: "var(--color-accent-dark)",
             color: "white",
             cursor: "pointer",
             fontSize: "1rem",
@@ -109,7 +110,7 @@ function Home({ plans, deletePlan }) {
             padding: "0.75rem 1.25rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: plans.length < 2 ? "#9ca3af" : "#007bff",
+            backgroundColor: plans.length < 2 ? "#9ca3af" : "var(--color-accent-dark)",
             color: "white",
             cursor: plans.length < 2 ? "not-allowed" : "pointer",
             fontSize: "1rem",
@@ -153,7 +154,7 @@ function PlanDetails({ plans }) {
             padding: "0.5rem 1rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#6c757d",
+            backgroundColor: "var(--color-dark-grey)",
             color: "white",
             cursor: "pointer",
           }}
@@ -251,7 +252,7 @@ function PlanDetails({ plans }) {
       {/* Offer Details Section */}
       <div
         style={{
-          backgroundColor: "#f8f9fa",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
@@ -287,7 +288,7 @@ function PlanDetails({ plans }) {
       {/* Location Info Section */}
       <div
         style={{
-          backgroundColor: "#f8f9fa",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
@@ -319,7 +320,7 @@ function PlanDetails({ plans }) {
       {plan.goals && plan.goals.length > 0 && (
         <div
           style={{
-            backgroundColor: "#f8f9fa",
+            backgroundColor: "var(--color-background-accent)",
             padding: "1.5rem",
             borderRadius: "8px",
             marginBottom: "1.5rem",
@@ -337,12 +338,12 @@ function PlanDetails({ plans }) {
               <span
                 key={index}
                 style={{
-                  backgroundColor: "#e7f3ff",
+                  backgroundColor: "var(--color-border)",
                   borderRadius: "20px",
                   padding: "0.4rem 1rem",
                   fontSize: "0.95rem",
-                  border: "1px solid #007bff",
-                  color: "#007bff",
+                  border: "1px solid var(--color-accent-dark)",
+                  color: "var(--color-accent-dark)",
                 }}
               >
                 {goal}
@@ -355,7 +356,7 @@ function PlanDetails({ plans }) {
       {/* Reimbursements / Stipends Section */}
       <div
         style={{
-          backgroundColor: "#f8f9fa",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
@@ -424,14 +425,14 @@ function PlanDetails({ plans }) {
             </div>
           </>
         ) : (
-          <p style={{ color: "#6c757d", margin: 0 }}>No reimbursements / stipends</p>
+          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No reimbursements / stipends</p>
         )}
       </div>
 
       {/* Fees Section */}
       <div
         style={{
-          backgroundColor: "#f8f9fa",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
@@ -498,18 +499,18 @@ function PlanDetails({ plans }) {
             </div>
           </>
         ) : (
-          <p style={{ color: "#6c757d", margin: 0 }}>No fees</p>
+          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No fees</p>
         )}
       </div>
 
       {/* Summary Section */}
       <div
         style={{
-          backgroundColor: "#e7f3ff",
+          backgroundColor: "var(--color-accent-light)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
-          border: "2px solid #007bff",
+          border: "2px solid var(--color-accent-dark)",
         }}
       >
         <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
@@ -542,7 +543,7 @@ function PlanDetails({ plans }) {
         </div>
 
         {numGoals > 0 && (
-          <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #007bff" }}>
+          <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--color-accent-dark)" }}>
             <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
               Suggested Savings Goals (20% of disposable income)
             </h3>
@@ -581,7 +582,7 @@ function PlanDetails({ plans }) {
             padding: "0.75rem 1.5rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "#6c757d",
+            backgroundColor: "var(--color-primary-dark)",
             color: "white",
             cursor: "pointer",
             fontSize: "1rem",
