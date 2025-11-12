@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 function BudgetCard({ category, value, onChange }) {
@@ -49,8 +49,9 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const navigate = useNavigate();
 
   // derive categories from last plan
-  const categories =
-    plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+  const categories = useMemo(() => {
+    return plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+  }, [plans]);
 
   // local state for amounts keyed by category name
   const [amounts, setAmounts] = useState({});
