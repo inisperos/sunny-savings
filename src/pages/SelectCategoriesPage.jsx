@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
 
-  const [selectedTimeframeInWeeks, setSelectedTimeframeInWeeks] = useState(4);
+  const [timeframeInWeeks, setTimeframeInWeeks] = useState(4);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [customCategories, setCustomCategories] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -56,7 +56,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       updatedPlans[updatedPlans.length - 1] = {
         ...updatedPlans[updatedPlans.length - 1],
         categories: allCategories,
-        budgetTimeframeInWeeks: selectedTimeframeInWeeks,
+        budgetTimeframeInWeeks: timeframeInWeeks,
       };
 
       setPlans(updatedPlans);
@@ -96,8 +96,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
           id="timeframe"
           type="number"
           min="1"
-          value={selectedTimeframeInWeeks}
-          onChange={(e) => setSelectedTimeframeInWeeks(Number(e.target.value))}
+          value={timeframeInWeeks}
+          onChange={(e) => setTimeframeInWeeks(Number(e.target.value))}
           style={{
             marginLeft: "1rem",
             padding: "0.5rem",
