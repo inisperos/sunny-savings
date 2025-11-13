@@ -146,7 +146,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
     navigate("/");
   };
 
-  // ===== 超支检测逻辑 =====
+
   const isOverBudget = budgetAvailable < 0;
   const overAmount = Math.abs(budgetAvailable);
 
@@ -155,7 +155,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
       <h1 style={{ fontWeight: 700 }}>Add your savings goals.</h1>
       <h2 style={{ marginTop: "0.25rem" }}>How much do you want to save?</h2>
 
-      {/* 剩余可分配 / 超支提示 */}
       <h2
         style={{
           marginTop: "0.25rem",
@@ -250,7 +249,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
           )}
         </div>
 
-        {/* Bottom buttons: Back to Fees + Finish */}
+
         <div
           style={{
             maxWidth: "760px",
@@ -258,7 +257,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
             textAlign: "right",
           }}
         >
-          {/* Back 按钮：返回 AddFeesPage */}
+
           <button
             onClick={() => navigate("/fees")}
             style={{
@@ -275,7 +274,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
             ← Back to fees
           </button>
 
-          {/* Finish 按钮：超支时禁用 */}
           <button
             onClick={handleNext}
             disabled={isOverBudget}
