@@ -1,3 +1,5 @@
+/* Defines the homepage for the app. Invites users to create a plan and begin interacting with the app */
+
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
