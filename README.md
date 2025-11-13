@@ -32,6 +32,7 @@ Make sure you have:
 ### 4. Run app
 - npm run dev
 
+```
 src/
 ├── App.jsx
 ├── components/
@@ -48,6 +49,7 @@ src/
 │       ├── OnboardingIntro.jsx
 │       ├── CategorySelection.jsx
 │       └── SummaryPage.jsx
+```
 
 <img width="414" height="456" alt="image" src="https://github.com/user-attachments/assets/1cff5dee-272e-47ca-9940-76c89cc475de" />
 
