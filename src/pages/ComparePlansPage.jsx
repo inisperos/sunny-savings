@@ -278,7 +278,7 @@ function Column({ title, plan }) {
       </Row>
 
       {/* Stipends section */}
-      <h4 style={{ marginTop: "1rem" }}>Reimbursements / Stipends</h4>
+      <h4 style={{ marginTop: "1rem", textAlign: "left" }}>Reimbursements / Stipends</h4>
       {stipendItems.length > 0 ? (
         <table
           style={{
@@ -311,17 +311,17 @@ function Column({ title, plan }) {
           </tbody>
         </table>
       ) : (
-        <div style={{ color: "#6b7280", marginTop: 4 }}>
+        <div style={{ color: "#6b7280", marginTop: 4, textAlign: "left" }}>
           No reimbursements / stipends
         </div>
       )}
       {/* Stipends total */}
-      <div style={{ marginTop: 6, textAlign: "right", fontWeight: 600 }}>
+      <div style={{ marginTop: 6, textAlign: "left", fontWeight: 600 }}>
         Total Stipends: ${stipendsTotal.toLocaleString()}
       </div>
 
       {/* Fees section */}
-      <h4 style={{ marginTop: "1rem" }}>Fees</h4>
+      <h4 style={{ marginTop: "1rem", textAlign: "left" }}>Fees</h4>
       {feeItems.length > 0 ? (
         <table
           style={{
@@ -332,10 +332,10 @@ function Column({ title, plan }) {
         >
           <thead>
             <tr style={{ background: "var(--color-background-accent)" }}>
-              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem", textAlign: "left" }}>
                 Type
               </th>
-              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
+              <th style={{ border: "1px solid var(--color-border)", padding: "0.4rem", textAlign: "left" }}>
                 Amount
               </th>
             </tr>
@@ -343,10 +343,10 @@ function Column({ title, plan }) {
           <tbody>
             {feeItems.map((f, i) => (
               <tr key={i}>
-                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem", textAlign: "left" }}>
                   {f.type}
                 </td>
-                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem" }}>
+                <td style={{ border: "1px solid var(--color-border)", padding: "0.4rem", textAlign: "left" }}>
                   ${Number(f.amount || 0).toLocaleString()}
                 </td>
               </tr>
@@ -354,10 +354,10 @@ function Column({ title, plan }) {
           </tbody>
         </table>
       ) : (
-        <div style={{ color: "#6b7280", marginTop: 4 }}>No fees</div>
+        <div style={{ color: "#6b7280", marginTop: 4, textAlign: "left" }}>No fees</div>
       )}
       {/* Fees total */}
-      <div style={{ marginTop: 6, textAlign: "right", fontWeight: 600 }}>
+      <div style={{ marginTop: 6, textAlign: "right", fontWeight: 600, textAlign: "left" }}>
         Total Fees: ${feesTotal.toLocaleString()}
       </div>
     </div>
