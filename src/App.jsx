@@ -6,6 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { calculatePlanDetails } from "./utils/planCalculations";
 
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
@@ -123,24 +124,12 @@ function Home({ plans, deletePlan }) {
 }
 
 // 📊 Plan Details Page
-// 📊 Plan Details Page
 function PlanDetails({ plans }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
 
-  const getHoursPerWeek = (p) => {
-    if (!p) return 40;
-    const hoursWeek = parseFloat(p.hoursPerWeek);
-    if (!Number.isNaN(hoursWeek) && hoursWeek > 0) {
-      return hoursWeek;
-    }
-    const hoursDay = parseFloat(p.hoursPerDay);
-    if (!Number.isNaN(hoursDay) && hoursDay > 0) {
-      return hoursDay * 5;
-    }
-    return 40;
-  };
+  const budgetTimeframeInWeeks = plan.budgetTimeframeInWeeks;
 
   if (!plan) {
     return (
@@ -165,78 +154,17 @@ function PlanDetails({ plans }) {
   }
 
   // Calculate totals with proper salary frequency conversion
-  let salaryPerWeek = 0;
   
-  // Validate and convert to weekly based on frequency
-  if (plan.salary && plan.weeks && plan.salary > 0 && plan.weeks > 0) {
-    if (plan.salaryFrequency === "hourly") {
-      const hoursPerWeek = getHoursPerWeek(plan);
-      salaryPerWeek = plan.salary * hoursPerWeek;
-    } else if (plan.salaryFrequency === "weekly") {
-      salaryPerWeek = plan.salary;
-    } else if (plan.salaryFrequency === "biweekly") {
-      salaryPerWeek = plan.salary / 2;
-    } else if (plan.salaryFrequency === "monthly") {
-      salaryPerWeek = plan.salary / 4;
-    } else if (plan.salaryFrequency === "annually") {
-      salaryPerWeek = plan.salary / 52;
-    }
-  }
-  
-  const salaryTotal = salaryPerWeek * (plan.weeks || 0);
+  const {
+    totalIncome,
+    totalReimbursements,
+    totalFees,
+    totalRentCost,
+    totalTransportationCost,
+    totalDisposableIncome,
+  } = calculatePlanDetails(plan);
 
-  const totalReimbursements =
-    plan.stipends && Array.isArray(plan.stipends)
-      ? plan.stipends.reduce((sum, s) => {
-          const amount = s && typeof s === "object" ? Number(s.amount) || 0 : 0;
-          return amount > 0 ? sum + amount : sum;
-        }, 0)
-      : 0;
-
-  const totalFees =
-    plan.fees && Array.isArray(plan.fees)
-      ? plan.fees.reduce((sum, f) => {
-          const amount = f && typeof f === "object" ? Number(f.amount) || 0 : 0;
-          return amount > 0 ? sum + amount : sum;
-        }, 0)
-      : 0;
-
-  const weeks = Number(plan.weeks) || 0;
-
-  const weeklyCostFromFrequency = (amount, frequency) => {
-    const cost = Number(amount) || 0;
-    if (cost <= 0) return 0;
-    const freq = (frequency || "").toLowerCase();
-    switch (freq) {
-      case "daily":
-        return cost * 7;
-      case "weekly":
-        return cost;
-      case "biweekly":
-        return cost / 2;
-      case "monthly":
-        return (cost * 12) / 52;
-      case "annually":
-        return cost / 52;
-      default:
-        return cost;
-    }
-  };
-
-  const totalRentCost = weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
-  const totalTransportationCost =
-    weeks * weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
-
-  const totalDisposableIncome =
-    salaryTotal +
-    totalReimbursements -
-    totalFees -
-    totalRentCost -
-    totalTransportationCost;
-
-  const numGoals = plan.goals ? plan.goals.length : 0;
-  const suggestedPerGoal =
-    numGoals > 0 ? (totalDisposableIncome * 0.2) / numGoals : 0;
+  const numberOfCategories = plan.budgets ? plan.budgets.length : 0;
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -269,17 +197,11 @@ function PlanDetails({ plans }) {
             <strong>Salary:</strong> {formatCurrency(plan.salary)} (
             {plan.salaryFrequency})
           </div>
-          {plan.salaryFrequency === "hourly" && (
-            <div>
-              <strong>Hours per Week:</strong> {getHoursPerWeek(plan)}
-              {plan.hoursPerWeek ? "" : " (assumed)"}
-            </div>
-          )}
           <div>
             <strong>Number of Weeks:</strong> {plan.weeks || 0}
           </div>
           <div>
-            <strong>Total Earnings:</strong> {formatCurrency(salaryTotal)}
+            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
         </div>
       </div>
@@ -502,78 +424,79 @@ function PlanDetails({ plans }) {
         )}
       </div>
 
-      {/* Summary Section */}
-      <div
-        style={{
-          backgroundColor: "#e7f3ff",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-          border: "2px solid #007bff",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
+      {/* Plan Details Summary Section */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "1rem",
-            marginBottom: numGoals > 0 ? "1rem" : 0,
+            backgroundColor: "#e7f3ff",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            marginBottom: "1.5rem",
+            border: "2px solid #007bff",
           }}
         >
-          <div>
-            <strong>Total Earnings:</strong> {formatCurrency(salaryTotal)}
+          <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
+          <div
+            style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "1rem",
+          marginBottom: numberOfCategories > 0 ? "1rem" : 0,
+            }}
+          >
+            <div>
+          <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
+            </div>
+            <div>
+          <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
+            </div>
+            <div>
+          <strong>Total Fees:</strong> {formatCurrency(totalFees)}
+            </div>
+            <div>
+          <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
+            </div>
+            <div>
+          <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
+            </div>
+            <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
+          <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
+            </div>
           </div>
-          <div>
-            <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
-          </div>
-          <div>
-            <strong>Total Fees:</strong> {formatCurrency(totalFees)}
-          </div>
-          <div>
-            <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
-          </div>
-          <div>
-            <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
-          </div>
-          <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
-            <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
-          </div>
+
+          {numberOfCategories > 0 && (
+            <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #007bff" }}>
+          <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
+            Budget Allocation Summary
+          </h3>
+          <p>Per {budgetTimeframeInWeeks} week(s)</p>
+          <ul
+            style={{
+              listStyleType: "none",
+              padding: 0,
+              margin: 0,
+            }}
+          >
+            {plan.budgets.map((budget, index) => (
+              <li
+            key={index}
+            style={{
+              padding: "0.25rem 0",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+              >
+            <span>
+              <strong>{budget.category}:</strong>
+            </span>
+            <span>{formatCurrency(plan.budgets?.find(b => b.category === budget.category)?.amount || 0)}</span>
+              </li>
+            ))}
+          </ul>
+            </div>
+          )}
         </div>
 
-        {numGoals > 0 && (
-          <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #007bff" }}>
-            <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
-              Suggested Savings Goals (20% of disposable income)
-            </h3>
-            <ul
-              style={{
-                listStyleType: "none",
-                padding: 0,
-                margin: 0,
-              }}
-            >
-              {plan.goals.map((goal, index) => (
-                <li
-                  key={index}
-                  style={{
-                    padding: "0.25rem 0",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>
-                    <strong>{goal}:</strong>
-                  </span>
-                  <span>{formatCurrency(suggestedPerGoal)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      {/* Navigation Buttons */}
+        {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <button
           onClick={() => navigate("/")}
