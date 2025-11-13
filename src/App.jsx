@@ -6,6 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { calculatePlanDetails } from "./utils/planCalculations";
 
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
@@ -129,19 +130,6 @@ function PlanDetails({ plans }) {
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
 
-  const getHoursPerWeek = (p) => {
-    if (!p) return 40;
-    const hoursWeek = parseFloat(p.hoursPerWeek);
-    if (!Number.isNaN(hoursWeek) && hoursWeek > 0) {
-      return hoursWeek;
-    }
-    const hoursDay = parseFloat(p.hoursPerDay);
-    if (!Number.isNaN(hoursDay) && hoursDay > 0) {
-      return hoursDay * 5;
-    }
-    return 40;
-  };
-
   if (!plan) {
     return (
       <div style={{ textAlign: "center", marginTop: "4rem" }}>
@@ -165,78 +153,18 @@ function PlanDetails({ plans }) {
   }
 
   // Calculate totals with proper salary frequency conversion
-  let salaryPerWeek = 0;
   
-  // Validate and convert to weekly based on frequency
-  if (plan.salary && plan.weeks && plan.salary > 0 && plan.weeks > 0) {
-    if (plan.salaryFrequency === "hourly") {
-      const hoursPerWeek = getHoursPerWeek(plan);
-      salaryPerWeek = plan.salary * hoursPerWeek;
-    } else if (plan.salaryFrequency === "weekly") {
-      salaryPerWeek = plan.salary;
-    } else if (plan.salaryFrequency === "biweekly") {
-      salaryPerWeek = plan.salary / 2;
-    } else if (plan.salaryFrequency === "monthly") {
-      salaryPerWeek = plan.salary / 4;
-    } else if (plan.salaryFrequency === "annually") {
-      salaryPerWeek = plan.salary / 52;
-    }
-  }
-  
-  const salaryTotal = salaryPerWeek * (plan.weeks || 0);
-
-  const totalReimbursements =
-    plan.stipends && Array.isArray(plan.stipends)
-      ? plan.stipends.reduce((sum, s) => {
-          const amount = s && typeof s === "object" ? Number(s.amount) || 0 : 0;
-          return amount > 0 ? sum + amount : sum;
-        }, 0)
-      : 0;
-
-  const totalFees =
-    plan.fees && Array.isArray(plan.fees)
-      ? plan.fees.reduce((sum, f) => {
-          const amount = f && typeof f === "object" ? Number(f.amount) || 0 : 0;
-          return amount > 0 ? sum + amount : sum;
-        }, 0)
-      : 0;
-
-  const weeks = Number(plan.weeks) || 0;
-
-  const weeklyCostFromFrequency = (amount, frequency) => {
-    const cost = Number(amount) || 0;
-    if (cost <= 0) return 0;
-    const freq = (frequency || "").toLowerCase();
-    switch (freq) {
-      case "daily":
-        return cost * 7;
-      case "weekly":
-        return cost;
-      case "biweekly":
-        return cost / 2;
-      case "monthly":
-        return (cost * 12) / 52;
-      case "annually":
-        return cost / 52;
-      default:
-        return cost;
-    }
-  };
-
-  const totalRentCost = weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
-  const totalTransportationCost =
-    weeks * weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
-
-  const totalDisposableIncome =
-    salaryTotal +
-    totalReimbursements -
-    totalFees -
-    totalRentCost -
-    totalTransportationCost;
+  const {
+    totalIncome,
+    totalReimbursements,
+    totalFees,
+    totalRentCost,
+    totalTransportationCost,
+    totalDisposableIncome,
+    suggestedPerGoal,
+  } = calculatePlanDetails(plan);
 
   const numGoals = plan.goals ? plan.goals.length : 0;
-  const suggestedPerGoal =
-    numGoals > 0 ? (totalDisposableIncome * 0.2) / numGoals : 0;
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -269,17 +197,11 @@ function PlanDetails({ plans }) {
             <strong>Salary:</strong> {formatCurrency(plan.salary)} (
             {plan.salaryFrequency})
           </div>
-          {plan.salaryFrequency === "hourly" && (
-            <div>
-              <strong>Hours per Week:</strong> {getHoursPerWeek(plan)}
-              {plan.hoursPerWeek ? "" : " (assumed)"}
-            </div>
-          )}
           <div>
             <strong>Number of Weeks:</strong> {plan.weeks || 0}
           </div>
           <div>
-            <strong>Total Earnings:</strong> {formatCurrency(salaryTotal)}
+            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
         </div>
       </div>
@@ -522,7 +444,7 @@ function PlanDetails({ plans }) {
           }}
         >
           <div>
-            <strong>Total Earnings:</strong> {formatCurrency(salaryTotal)}
+            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
           <div>
             <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
