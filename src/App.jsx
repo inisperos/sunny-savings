@@ -124,11 +124,12 @@ function Home({ plans, deletePlan }) {
 }
 
 // 📊 Plan Details Page
-// 📊 Plan Details Page
 function PlanDetails({ plans }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
+
+  const budgetTimeframeInWeeks = plan.budgetTimeframeInWeeks;
 
   if (!plan) {
     return (
@@ -161,10 +162,9 @@ function PlanDetails({ plans }) {
     totalRentCost,
     totalTransportationCost,
     totalDisposableIncome,
-    suggestedPerGoal,
   } = calculatePlanDetails(plan);
 
-  const numGoals = plan.goals ? plan.goals.length : 0;
+  const numberOfCategories = plan.budgets ? plan.budgets.length : 0;
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -424,78 +424,79 @@ function PlanDetails({ plans }) {
         )}
       </div>
 
-      {/* Summary Section */}
-      <div
-        style={{
-          backgroundColor: "#e7f3ff",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-          border: "2px solid #007bff",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
+      {/* Plan Details Summary Section */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "1rem",
-            marginBottom: numGoals > 0 ? "1rem" : 0,
+            backgroundColor: "#e7f3ff",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            marginBottom: "1.5rem",
+            border: "2px solid #007bff",
           }}
         >
-          <div>
-            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
+          <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
+          <div
+            style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "1rem",
+          marginBottom: numberOfCategories > 0 ? "1rem" : 0,
+            }}
+          >
+            <div>
+          <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
+            </div>
+            <div>
+          <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
+            </div>
+            <div>
+          <strong>Total Fees:</strong> {formatCurrency(totalFees)}
+            </div>
+            <div>
+          <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
+            </div>
+            <div>
+          <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
+            </div>
+            <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
+          <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
+            </div>
           </div>
-          <div>
-            <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
-          </div>
-          <div>
-            <strong>Total Fees:</strong> {formatCurrency(totalFees)}
-          </div>
-          <div>
-            <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
-          </div>
-          <div>
-            <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
-          </div>
-          <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
-            <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
-          </div>
+
+          {numberOfCategories > 0 && (
+            <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #007bff" }}>
+          <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
+            Budget Allocation Summary
+          </h3>
+          <p>Per {budgetTimeframeInWeeks} week(s)</p>
+          <ul
+            style={{
+              listStyleType: "none",
+              padding: 0,
+              margin: 0,
+            }}
+          >
+            {plan.budgets.map((budget, index) => (
+              <li
+            key={index}
+            style={{
+              padding: "0.25rem 0",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+              >
+            <span>
+              <strong>{budget.category}:</strong>
+            </span>
+            <span>{formatCurrency(plan.budgets?.find(b => b.category === budget.category)?.amount || 0)}</span>
+              </li>
+            ))}
+          </ul>
+            </div>
+          )}
         </div>
 
-        {numGoals > 0 && (
-          <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #007bff" }}>
-            <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
-              Suggested Savings Goals (20% of disposable income)
-            </h3>
-            <ul
-              style={{
-                listStyleType: "none",
-                padding: 0,
-                margin: 0,
-              }}
-            >
-              {plan.goals.map((goal, index) => (
-                <li
-                  key={index}
-                  style={{
-                    padding: "0.25rem 0",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>
-                    <strong>{goal}:</strong>
-                  </span>
-                  <span>{formatCurrency(suggestedPerGoal)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      {/* Navigation Buttons */}
+        {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <button
           onClick={() => navigate("/")}
