@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { calculatePlanDetails } from "../utils/planCalculations";
 
 function BudgetCard({ category, value, onChange }) {
   const cardStyle = {
@@ -48,15 +49,26 @@ function BudgetCard({ category, value, onChange }) {
 export default function SetBudgetPage({ plans, setPlans }) {
   const navigate = useNavigate();
 
-  // derive categories from last plan
-  const categories = useMemo(() => {
-    return plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
-  }, [plans]);
+  // obtain categories from last plan
+  const categories = plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+
+  // obtain number of weeks from last plan
+  const weeksInPlan = plans && plans.length > 0 ? plans[plans.length - 1].weeks || 4 : 4;
+
+  // obtain timeframeInWeeks from last plan
+  const timeframeInWeeks = plans && plans.length > 0 ? plans[plans.length - 1].budgetTimeframeInWeeks || 4 : 4;
+
+  // obtain totalDisposableIncome from last plan
+  const { totalDisposableIncome } = plans && plans.length > 0 ? calculatePlanDetails(plans[plans.length - 1]) : {};
+
+  // calculate initial budget available based on timeframe and weeks in plan
+  const initialBudgetAvailable = totalDisposableIncome / weeksInPlan * timeframeInWeeks;
 
   // local state for amounts keyed by category name
   const [amounts, setAmounts] = useState({});
   const [showAdd, setShowAdd] = useState(false);
   const [newCategory, setNewCategory] = useState("");
+  const [budgetAvailable, setBudgetAvailable] = useState(initialBudgetAvailable);
 
   useEffect(() => {
     setAmounts((prev) => {
@@ -71,7 +83,12 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const handleAmountChange = (category, value) => {
     // allow only numeric input (empty or number)
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
-      setAmounts((prev) => ({ ...prev, [category]: value }));
+      setAmounts((prev) => {
+        const updatedAmounts = { ...prev, [category]: value };
+        const totalAllocated = Object.values(updatedAmounts).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
+        setBudgetAvailable(initialBudgetAvailable - totalAllocated);
+        return updatedAmounts;
+      });
     }
   };
 
@@ -119,6 +136,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
     <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
       <h1 style={{ fontWeight: 700 }}>Add your savings goals.</h1>
       <h2 style={{ marginTop: "0.25rem" }}>How much do you want to save?</h2>
+      <h2 style={{ marginTop: "0.25rem" }}>You have {budgetAvailable.toFixed(2)} available to allocate per {timeframeInWeeks} week(s).</h2>
       <p style={{ color: "#555" }}>
         It is recommended that your savings make up 20% of your disposable
         income.
