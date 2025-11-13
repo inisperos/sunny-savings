@@ -1,3 +1,4 @@
+// src/pages/SetBudgetPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { calculatePlanDetails } from "../utils/planCalculations";
@@ -50,25 +51,35 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const navigate = useNavigate();
 
   // obtain categories from last plan
-  const categories = plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
+  const categories =
+    plans && plans.length > 0 ? plans[plans.length - 1].categories || [] : [];
 
   // obtain number of weeks from last plan
-  const weeksInPlan = plans && plans.length > 0 ? plans[plans.length - 1].weeks || 4 : 4;
+  const weeksInPlan =
+    plans && plans.length > 0 ? plans[plans.length - 1].weeks || 4 : 4;
 
   // obtain timeframeInWeeks from last plan
-  const timeframeInWeeks = plans && plans.length > 0 ? plans[plans.length - 1].budgetTimeframeInWeeks || 4 : 4;
+  const timeframeInWeeks =
+    plans && plans.length > 0
+      ? plans[plans.length - 1].budgetTimeframeInWeeks || 4
+      : 4;
 
   // obtain totalDisposableIncome from last plan
-  const { totalDisposableIncome } = plans && plans.length > 0 ? calculatePlanDetails(plans[plans.length - 1]) : {};
+  const { totalDisposableIncome } =
+    plans && plans.length > 0
+      ? calculatePlanDetails(plans[plans.length - 1])
+      : {};
 
   // calculate initial budget available based on timeframe and weeks in plan
-  const initialBudgetAvailable = totalDisposableIncome / weeksInPlan * timeframeInWeeks;
+  const initialBudgetAvailable =
+    (totalDisposableIncome / weeksInPlan) * timeframeInWeeks || 0;
 
   // local state for amounts keyed by category name
   const [amounts, setAmounts] = useState({});
   const [showAdd, setShowAdd] = useState(false);
   const [newCategory, setNewCategory] = useState("");
-  const [budgetAvailable, setBudgetAvailable] = useState(initialBudgetAvailable);
+  const [budgetAvailable, setBudgetAvailable] =
+    useState(initialBudgetAvailable);
 
   useEffect(() => {
     setAmounts((prev) => {
@@ -85,7 +96,10 @@ export default function SetBudgetPage({ plans, setPlans }) {
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
       setAmounts((prev) => {
         const updatedAmounts = { ...prev, [category]: value };
-        const totalAllocated = Object.values(updatedAmounts).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
+        const totalAllocated = Object.values(updatedAmounts).reduce(
+          (sum, val) => sum + (parseFloat(val) || 0),
+          0
+        );
         setBudgetAvailable(initialBudgetAvailable - totalAllocated);
         return updatedAmounts;
       });
@@ -132,105 +146,153 @@ export default function SetBudgetPage({ plans, setPlans }) {
     navigate("/");
   };
 
+  // ===== 超支检测逻辑 =====
+  const isOverBudget = budgetAvailable < 0;
+  const overAmount = Math.abs(budgetAvailable);
+
   return (
     <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
       <h1 style={{ fontWeight: 700 }}>Add your savings goals.</h1>
       <h2 style={{ marginTop: "0.25rem" }}>How much do you want to save?</h2>
-      <h2 style={{ marginTop: "0.25rem" }}>You have {budgetAvailable.toFixed(2)} available to allocate per {timeframeInWeeks} week(s).</h2>
+
+      {/* 剩余可分配 / 超支提示 */}
+      <h2
+        style={{
+          marginTop: "0.25rem",
+          color: isOverBudget ? "#dc2626" : "#16a34a",
+        }}
+      >
+        {isOverBudget ? (
+          <>
+            You are over budget by {overAmount.toFixed(2)} per{" "}
+            {timeframeInWeeks} week(s).
+          </>
+        ) : (
+          <>
+            You have {budgetAvailable.toFixed(2)} available to allocate per{" "}
+            {timeframeInWeeks} week(s).
+          </>
+        )}
+      </h2>
+
+      {isOverBudget && (
+        <p style={{ color: "#dc2626", marginTop: "0.25rem" }}>
+          Please reduce one or more category budgets until the remaining amount
+          is positive.
+        </p>
+      )}
+
       <p style={{ color: "#555" }}>
         It is recommended that your savings make up 20% of your disposable
         income.
       </p>
 
-        <div style={{ marginTop: "1.5rem" }}>
-          {categories.map((c) => (
-            <BudgetCard
-              key={c}
-              category={c}
-              value={amounts[c] || ""}
-              onChange={handleAmountChange}
-            />
-          ))}
+      <div style={{ marginTop: "1.5rem" }}>
+        {categories.map((c) => (
+          <BudgetCard
+            key={c}
+            category={c}
+            value={amounts[c] || ""}
+            onChange={handleAmountChange}
+          />
+        ))}
 
-          {/* Add new category dashed button */}
-          <div style={{ maxWidth: "760px", margin: "1.25rem auto" }}>
-            {!showAdd ? (
-              <button
-                onClick={() => setShowAdd(true)}
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  border: "4px dashed #000",
-                  borderRadius: "16px",
-                  background: "#f3f3f3",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                }}
-              >
-                Add New Category +
-              </button>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="New category name"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "0.75rem",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                <button
-                  onClick={handleAddCategory}
-                  style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
-                >
-                  Add
-                </button>
-                <button
-                  onClick={() => setShowAdd(false)}
-                  style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Finish button */}
-          {
-            <div
+        {/* Add new category dashed button */}
+        <div style={{ maxWidth: "760px", margin: "1.25rem auto" }}>
+          {!showAdd ? (
+            <button
+              onClick={() => setShowAdd(true)}
               style={{
-                maxWidth: "760px",
-                margin: "2rem auto",
-                textAlign: "right",
+                width: "100%",
+                padding: "1rem",
+                border: "4px dashed #000",
+                borderRadius: "16px",
+                background: "#f3f3f3",
+                cursor: "pointer",
+                fontSize: "1rem",
               }}
             >
-              <button
-                onClick={handleNext}
+              Add New Category +
+            </button>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                alignItems: "center",
+              }}
+            >
+              <input
+                type="text"
+                placeholder="New category name"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
                 style={{
-                  padding: "0.75rem 1.25rem",
-                  borderRadius: "12px",
-                  border: "none",
-                  background: "#007bffff",
-                  cursor: "pointer",
-                  fontSize: "1rem",
+                  flex: 1,
+                  padding: "0.75rem",
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
                 }}
+              />
+              <button
+                onClick={handleAddCategory}
+                style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
               >
-                Finish
+                Add
+              </button>
+              <button
+                onClick={() => setShowAdd(false)}
+                style={{ padding: "0.6rem 0.9rem", cursor: "pointer" }}
+              >
+                Cancel
               </button>
             </div>
-          }
+          )}
         </div>
+
+        {/* Bottom buttons: Back to Fees + Finish */}
+        <div
+          style={{
+            maxWidth: "760px",
+            margin: "2rem auto",
+            textAlign: "right",
+          }}
+        >
+          {/* Back 按钮：返回 AddFeesPage */}
+          <button
+            onClick={() => navigate("/fees")}
+            style={{
+              padding: "0.75rem 1.25rem",
+              borderRadius: "12px",
+              border: "1px solid #d1d5db",
+              background: "#6b7280",
+              color: "#ffffff",
+              cursor: "pointer",
+              fontSize: "1rem",
+              marginRight: "0.75rem",
+            }}
+          >
+            ← Back to fees
+          </button>
+
+          {/* Finish 按钮：超支时禁用 */}
+          <button
+            onClick={handleNext}
+            disabled={isOverBudget}
+            style={{
+              padding: "0.75rem 1.25rem",
+              borderRadius: "12px",
+              border: "none",
+              background: isOverBudget ? "#9ca3af" : "#007bff",
+              cursor: isOverBudget ? "not-allowed" : "pointer",
+              fontSize: "1rem",
+              color: "#ffffff",
+            }}
+          >
+            Finish
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
-
