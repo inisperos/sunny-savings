@@ -209,8 +209,16 @@ function MidChart({ left, right }) {
             <YAxis tickFormatter={(v) => `$${Number(v).toLocaleString()}`} />
             <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
             <Legend />
-            <Bar dataKey="A" name={left?.company || left?.name || "Plan A"} />
-            <Bar dataKey="B" name={right?.company || right?.name || "Plan B"} />
+            <Bar 
+              dataKey="A" 
+              name={left?.company || left?.name || "Plan A"} 
+              fill="var(--color-accent-light)"
+            />
+            <Bar 
+              dataKey="B" 
+              name={right?.company || right?.name || "Plan B"} 
+              fill="var(--color-accent-dark)"
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
