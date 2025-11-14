@@ -15,10 +15,6 @@ import AddFeesPage from "./pages/AddFeesPage";
 import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
 
-
-
-
-
 // 🏠 Home Page
 function Home({ plans, deletePlan }) {
   const navigate = useNavigate();
