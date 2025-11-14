@@ -5,6 +5,7 @@ import '../App.css'
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
 
+  const [timeframeInWeeks, setTimeframeInWeeks] = useState(4);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [customCategories, setCustomCategories] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -56,6 +57,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       updatedPlans[updatedPlans.length - 1] = {
         ...updatedPlans[updatedPlans.length - 1],
         categories: allCategories,
+        budgetTimeframeInWeeks: timeframeInWeeks,
       };
 
       setPlans(updatedPlans);
@@ -83,8 +85,35 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   return (
     <div style={{ textAlign: "center", marginTop: "3rem" }}>
       <h1>Add your savings goals.</h1>
-      <p>What do you want to save for during this period?</p>
 
+      <p>How often would you like to plan or review your budget?</p>
+
+      {/* Timeframe input */}
+      <div style={{ marginTop: "1.5rem" }}>
+        <label htmlFor="timeframe">
+          Every
+        </label>
+        <input
+          id="timeframe"
+          type="number"
+          min="1"
+          value={timeframeInWeeks}
+          onChange={(e) => setTimeframeInWeeks(Number(e.target.value))}
+          style={{
+            marginLeft: "1rem",
+            padding: "0.5rem",
+            width: "80px",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            textAlign: "center",
+          }}
+        />
+        <label htmlFor="timeframe">
+          week(s)
+        </label>
+      </div>
+
+      <p>What do you want to save for during this period?</p>
       {/* Circles grid */}
       <div
         style={{
