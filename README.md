@@ -32,22 +32,22 @@ Make sure you have:
 ### 4. Run app
 - npm run dev
 
-src/
-├── App.jsx
-├── components/
-│   └── Navbar.jsx
-├── pages/
-│   ├── CreatePlanPage.jsx
-│   ├── ComparePlansPage.jsx
-│   ├── PlanDetailsPage.jsx
-│   ├── Dashboard/
-│   │   ├── DashboardPage.jsx
-│   │   ├── AddSavingPage.jsx
-│   │   └── AddSpendingPage.jsx
-│   └── Onboarding/
-│       ├── OnboardingIntro.jsx
-│       ├── CategorySelection.jsx
-│       └── SummaryPage.jsx
+src/ <br>
+├── App.jsx <br>
+├── components/ <br>
+│   └── Navbar.jsx <br>
+├── pages/ <br>
+│   ├── CreatePlanPage.jsx <br>
+│   ├── ComparePlansPage.jsx <br>
+│   ├── PlanDetailsPage.jsx <br>
+│   ├── Dashboard/ <br>
+│   │   ├── DashboardPage.jsx <br>
+│   │   ├── AddSavingPage.jsx <br>
+│   │   └── AddSpendingPage.jsx <br>
+│   └── Onboarding/ <br>
+│       ├── OnboardingIntro.jsx <br>
+│       ├── CategorySelection.jsx <br>
+│       └── SummaryPage.jsx <br>
 
 <img width="414" height="456" alt="image" src="https://github.com/user-attachments/assets/1cff5dee-272e-47ca-9940-76c89cc475de" />
 

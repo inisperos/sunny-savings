@@ -1,6 +1,7 @@
 // src/pages/SetBudgetPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../App.css'
 import { calculatePlanDetails } from "../utils/planCalculations";
 
 function BudgetCard({ category, value, onChange }) {
@@ -227,6 +228,13 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
                 style={{
+                  padding: "0.75rem 1.25rem",
+                  borderRadius: "12px",
+                  border: "none",
+                  background: "var(--color-accent-dark)",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                  color: "#fff"
                   flex: 1,
                   padding: "0.75rem",
                   borderRadius: "8px",
