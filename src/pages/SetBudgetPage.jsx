@@ -234,7 +234,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
                   background: "var(--color-accent-dark)",
                   cursor: "pointer",
                   fontSize: "1rem",
-                  color: "#fff"
+                  color: "#fff",
                   flex: 1,
                   padding: "0.75rem",
                   borderRadius: "8px",
