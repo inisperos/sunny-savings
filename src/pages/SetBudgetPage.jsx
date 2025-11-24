@@ -134,18 +134,26 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const handleNext = () => {
     if (plans.length > 0) {
       const updatedPlans = [...plans];
-      updatedPlans[updatedPlans.length - 1] = {
-        ...updatedPlans[updatedPlans.length - 1],
+      const lastIndex = updatedPlans.length - 1;
+  
+      updatedPlans[lastIndex] = {
+        ...updatedPlans[lastIndex],
         budgets: Object.keys(amounts).map((c) => ({
           category: c,
-          amount: amounts[c] === "" ? 0 : parseFloat(amounts[c]),
+          amount: parseFloat(amounts[c]) || 0,
         })),
+        savings: Object.keys(amounts).reduce(
+          (acc, c) => ({ ...acc, [c]: 0 }),
+          {}
+        ),
       };
+  
       setPlans(updatedPlans);
     }
-
+  
     navigate("/");
   };
+  
 
 
   const isOverBudget = budgetAvailable < 0;

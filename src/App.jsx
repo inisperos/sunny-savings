@@ -14,6 +14,7 @@ import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
 import AddFeesPage from "./pages/AddFeesPage";
 import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
+import TrackSavingsPage from "./pages/TrackSavings";
 
 
 
@@ -24,9 +25,11 @@ function Home({ plans, deletePlan }) {
   const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: "center", marginTop: "4rem" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>Sunny Savings ☀️</h1>
-      <p>Welcome to your budgeting dashboard!</p>
+    <div style={{ textAlign: "center", marginTop: "2rem" }}>
+    <h1 style={{ fontSize: "2.2rem" }}>Sunny Savings</h1>
+    <p style={{ color: "#4b5563", marginTop: "0.5rem" }}>
+      Welcome to your budgeting dashboard!
+    </p>
 
       <div
         style={{
@@ -45,80 +48,141 @@ function Home({ plans, deletePlan }) {
             <div
               key={plan.id}
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "0.5rem",
+                width: "350px",
+                border: "1px solid var(--color-accent-dark)",
+                borderRadius: "12px",
+                padding: "0.85rem",
+                marginBottom: "1.25rem",
+                backgroundColor: "var(--color-light-grey)",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                transition: "transform 0.15s ease, box-shadow 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 6px 14px rgba(0,0,0,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "none";
+                e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
               }}
             >
-              <button
-                onClick={() => navigate(`/plan/${plan.id}`)}
+              {/* ✅ Cleaner, modern plan title */}
+              <h2
                 style={{
-                  background: "none",
-                  border: "none",
+                  fontSize: "1.2rem",
+                  fontWeight: 600,
+                  margin: "0 0 0.6rem 0",
+                  letterSpacing: "0.3px",
                   color: "var(--color-accent-dark)",
-                  cursor: "pointer",
-                  fontSize: "1.1rem",
-                  textDecoration: "underline",
                 }}
               >
                 {plan.company}
-              </button>
+              </h2>
 
-              <button
-                onClick={() => deletePlan(plan.id)}
+              {/* ✅ Sleek horizontal button row */}
+              <div
                 style={{
-                  backgroundColor: "var(--color-border)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  padding: "0.3rem 0.6rem",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.4rem",
+                  marginTop: "0.25rem",
                 }}
               >
-                Delete
-              </button>
+                <button
+                  onClick={() => navigate(`/plan/${plan.id}`)}
+                  style={{
+                    backgroundColor: "var(--color-accent-dark)",
+                    color: "white",
+                    border: "none",
+                    padding: "0.45rem 0.75rem",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    transition: "opacity 0.15s ease",
+                  }}
+                >
+                  View
+                </button>
+
+                <button
+                  onClick={() => navigate(`/track/${plan.id}`)}
+                  style={{
+                    backgroundColor: "var(--color-primary-dark)",
+                    color: "white",
+                    border: "none",
+                    padding: "0.45rem 0.75rem",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    transition: "opacity 0.15s ease",
+                  }}
+                >
+                  Track
+                </button>
+
+                <button
+                  onClick={() => {
+                    const confirmed = window.confirm(
+                      `Are you sure you want to delete "${plan.company}"?`
+                    );
+                    if (confirmed) {
+                      deletePlan(plan.id);
+                    }
+                  }}
+                  style={{
+                    backgroundColor: "#dc3545",
+                    color: "white",
+                    border: "none",
+                    padding: "0.4rem 0.8rem",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  Delete
+                </button>
+
+              </div>
             </div>
+
           ))
         )}
 
-        <button
-          onClick={() => navigate("/create")}
-          style={{
-            marginTop: "2rem",
-            padding: "0.75rem 1.25rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-accent-dark)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "1rem",
-          }}
-        >
-          Create New Plan
-        </button>
-        <button
-          onClick={() => navigate("/compare")}
-          disabled={plans.length < 2}
-          title={
-            plans.length < 2
-              ? "Create at least 2 plans to compare"
-              : "Compare two plans"
-          }
-          style={{
-            marginTop: "0.75rem",
-            padding: "0.75rem 1.25rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: plans.length < 2 ? "#9ca3af" : "var(--color-accent-dark)",
-            color: "white",
-            cursor: plans.length < 2 ? "not-allowed" : "pointer",
-            fontSize: "1rem",
-          }}
-        >
-          Compare Plans
-        </button>
+        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem" }}>
+          <button
+            onClick={() => navigate("/create")}
+            style={{
+              padding: "0.7rem 1.2rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "var(--color-accent-dark)",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.95rem",
+              fontWeight: 500,
+            }}
+          >
+            Create New Plan
+          </button>
+
+          <button
+            onClick={() => navigate("/compare")}
+            disabled={plans.length < 2}
+            style={{
+              padding: "0.7rem 1.2rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: plans.length < 2 ? "#d1d5db" : "var(--color-accent-dark)",
+              color: "white",
+              cursor: plans.length < 2 ? "not-allowed" : "pointer",
+              fontSize: "0.95rem",
+              fontWeight: 500,
+            }}
+          >
+            Compare Plans
+          </button>
+        </div>
+
       </div>
     </div>
   );
@@ -427,7 +491,6 @@ function PlanDetails({ plans }) {
 
 
       {/* Plan Details Summary Section */}
-      main
         <div
           style={{
             backgroundColor: "var(--color-accent-light)",
@@ -499,7 +562,6 @@ function PlanDetails({ plans }) {
             </div>
           )}
         </div>
-    main
 
         {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
@@ -577,6 +639,7 @@ function App() {
 
   return (
     <Router>
+      <div className="app-wrapper"> 
       <Routes>
         <Route
           path="/"
@@ -606,7 +669,12 @@ function App() {
           path="/compare"
           element={<ComparePlansPage plans={plans} />}
         />
+        <Route
+          path="/track/:id"
+          element={<TrackSavingsPage plans={plans} setPlans={setPlans} />}
+        />
       </Routes>
+      </div>
     </Router>
   );
 }
