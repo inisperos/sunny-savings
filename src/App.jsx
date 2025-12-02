@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import './App.css'
 import { calculatePlanDetails } from "./utils/planCalculations";
+import OfferCalculationSection from "./components/OfferCalculationSection";
+import BudgetCreationSection from "./components/BudgetCreationSection";
 
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
@@ -19,6 +21,23 @@ import TrackSavingsPage from "./pages/TrackSavings";
 
 
 
+
+// Helper function to determine plan status
+function getPlanStatus(plan) {
+  const hasOfferInfo = plan.company && plan.salary && plan.weeks && plan.location;
+  const hasFeesInfo = plan.stipends !== undefined || plan.fees !== undefined;
+  const hasBudget = plan.budgets && plan.budgets.length > 0;
+  
+  if (hasOfferInfo && hasFeesInfo && hasBudget) {
+    return { status: "complete", label: "Complete", color: "#10b981" };
+  } else if (hasOfferInfo && hasFeesInfo) {
+    return { status: "offer-only", label: "Offer Only", color: "#f59e0b" };
+  } else if (hasOfferInfo) {
+    return { status: "partial", label: "In Progress", color: "#3b82f6" };
+  } else {
+    return { status: "draft", label: "Draft", color: "#6b7280" };
+  }
+}
 
 // 🏠 Home Page
 function Home({ plans, deletePlan }) {
@@ -66,18 +85,38 @@ function Home({ plans, deletePlan }) {
                 e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
               }}
             >
-              {/* ✅ Cleaner, modern plan title */}
-              <h2
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  margin: "0 0 0.6rem 0",
-                  letterSpacing: "0.3px",
-                  color: "var(--color-accent-dark)",
-                }}
-              >
-                {plan.company}
-              </h2>
+              {/* Plan title and status */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+                <h2
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    margin: 0,
+                    letterSpacing: "0.3px",
+                    color: "var(--color-accent-dark)",
+                  }}
+                >
+                  {plan.company || "Untitled Plan"}
+                </h2>
+                {(() => {
+                  const planStatus = getPlanStatus(plan);
+                  return (
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: "600",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "12px",
+                        backgroundColor: `${planStatus.color}20`,
+                        color: planStatus.color,
+                        border: `1px solid ${planStatus.color}40`,
+                      }}
+                    >
+                      {planStatus.label}
+                    </span>
+                  );
+                })()}
+              </div>
 
               {/* ✅ Sleek horizontal button row */}
               <div
@@ -148,7 +187,8 @@ function Home({ plans, deletePlan }) {
           ))
         )}
 
-        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem" }}>
+        {/* Action Buttons */}
+        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", justifyContent: "center" }}>
           <button
             onClick={() => navigate("/create")}
             style={{
@@ -237,331 +277,67 @@ function PlanDetails({ plans }) {
 
   return (
     <div style={{ maxWidth: "900px", margin: "2rem auto", padding: "0 1rem" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>
-        {plan.company || "Plan Details"}
-      </h1>
-
-      {/* Offer Details Section */}
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Details</h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem",
-          }}
-        >
-          <div>
-            <strong>Salary:</strong> {formatCurrency(plan.salary)} (
-            {plan.salaryFrequency})
-          </div>
-          <div>
-            <strong>Number of Weeks:</strong> {plan.weeks || 0}
-          </div>
-          <div>
-            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
-          </div>
-        </div>
-      </div>
-
-      {/* Location Info Section */}
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Location Info</h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem",
-          }}
-        >
-          <div>
-            <strong>Location:</strong> {plan.location || "N/A"}
-          </div>
-          <div>
-            <strong>Rent:</strong> {formatCurrency(plan.rent || 0)} (
-            {plan.rentFrequency || "monthly"})
-          </div>
-          <div>
-            <strong>Transportation:</strong> {formatCurrency(plan.transportation || 0)} (
-            {plan.transportFrequency || "monthly"})
-          </div>
-        </div>
-      </div>
-
-      {/* Savings Goals Section */}
-      {plan.goals && plan.goals.length > 0 && (
-        <div
-          style={{
-            backgroundColor: "var(--color-background-accent)",
-            padding: "1.5rem",
-            borderRadius: "8px",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Savings Goals</h2>
-          <div
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+        <h1 style={{ margin: 0 }}>
+          {plan.company || "Plan Details"}
+        </h1>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            onClick={() => navigate("/create", { state: { planId: plan.id } })}
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "0.5rem",
+              padding: "0.5rem 1rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "var(--color-accent-dark)",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.9rem",
             }}
           >
-            {plan.goals.map((goal, index) => (
-              <span
-                key={index}
-                style={{
-                  backgroundColor: "var(--color-border)",
-                  borderRadius: "20px",
-                  padding: "0.4rem 1rem",
-                  fontSize: "0.95rem",
-                  border: "1px solid var(--color-accent-dark)",
-                  color: "var(--color-accent-dark)",
-                }}
-              >
-                {goal}
-              </span>
-            ))}
-          </div>
+            ✏️ Edit Plan
+          </button>
         </div>
-      )}
+      </div>
 
-      {/* Reimbursements / Stipends Section */}
+      {/* Offer Calculation Section - Clearly Separated */}
       <div
         style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
+          marginBottom: "2.5rem",
+          paddingBottom: "2rem",
+          borderBottom: "3px solid var(--color-accent-dark)",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
-          Reimbursements / Stipends
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            color: "var(--color-accent-dark)",
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          💼 Offer Calculation
         </h2>
-        {plan.stipends && plan.stipends.length > 0 ? (
-          <>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <thead>
-                <tr style={{ backgroundColor: "#e9ecef" }}>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "left",
-                    }}
-                  >
-                    Type
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "right",
-                    }}
-                  >
-                    Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan.stipends.map((s, i) => (
-                  <tr key={i}>
-                    <td
-                      style={{
-                        border: "1px solid #dee2e6",
-                        padding: "0.75rem",
-                      }}
-                    >
-                      {s.type || "N/A"}
-                    </td>
-                    <td
-                      style={{
-                        border: "1px solid #dee2e6",
-                        padding: "0.75rem",
-                        textAlign: "right",
-                      }}
-                    >
-                      {formatCurrency(s.amount || 0)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ textAlign: "right", fontWeight: "600" }}>
-              Total: {formatCurrency(totalReimbursements)}
-            </div>
-          </>
-        ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No reimbursements / stipends</p>
-        )}
+        <OfferCalculationSection plan={plan} formatCurrency={formatCurrency} />
       </div>
 
-      {/* Fees Section */}
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Fees</h2>
-        {plan.fees && plan.fees.length > 0 ? (
-          <>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <thead>
-                <tr style={{ backgroundColor: "#e9ecef" }}>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "left",
-                    }}
-                  >
-                    Type
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "right",
-                    }}
-                  >
-                    Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan.fees.map((f, i) => (
-                  <tr key={i}>
-                    <td
-                      style={{
-                        border: "1px solid #dee2e6",
-                        padding: "0.75rem",
-                      }}
-                    >
-                      {f.type || "N/A"}
-                    </td>
-                    <td
-                      style={{
-                        border: "1px solid #dee2e6",
-                        padding: "0.75rem",
-                        textAlign: "right",
-                      }}
-                    >
-                      {formatCurrency(f.amount || 0)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ textAlign: "right", fontWeight: "600" }}>
-              Total: {formatCurrency(totalFees)}
-            </div>
-          </>
-        ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No fees</p>
-        )}
-      </div>
-
-
-      {/* Plan Details Summary Section */}
-        <div
+      {/* Budget Creation Section - Clearly Separated */}
+      <div>
+        <h2
           style={{
-            backgroundColor: "var(--color-accent-light)",
-            padding: "1.5rem",
-            borderRadius: "8px",
+            fontSize: "1.5rem",
+            color: "var(--color-primary-dark)",
             marginBottom: "1.5rem",
-            border: "2px solid var(--color-accent-dark)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
           }}
         >
-          <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Summary</h2>
-          <div
-            style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "1rem",
-          marginBottom: numberOfCategories > 0 ? "1rem" : 0,
-            }}
-          >
-            <div>
-          <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
-            </div>
-            <div>
-          <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
-            </div>
-            <div>
-          <strong>Total Fees:</strong> {formatCurrency(totalFees)}
-            </div>
-            <div>
-          <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
-            </div>
-            <div>
-          <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
-            </div>
-            <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
-          <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
-            </div>
-          </div>
-
-
-          {numberOfCategories > 0 && (
-         <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--color-accent-dark)" }}>
-          <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
-            Budget Allocation Summary
-          </h3>
-          <p>Per {budgetTimeframeInWeeks} week(s)</p>
-          <ul
-            style={{
-              listStyleType: "none",
-              padding: 0,
-              margin: 0,
-            }}
-          >
-            {plan.budgets.map((budget, index) => (
-              <li
-            key={index}
-            style={{
-              padding: "0.25rem 0",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-              >
-            <span>
-              <strong>{budget.category}:</strong>
-            </span>
-            <span>{formatCurrency(plan.budgets?.find(b => b.category === budget.category)?.amount || 0)}</span>
-              </li>
-            ))}
-          </ul>
-            </div>
-          )}
-        </div>
+          💰 Budget & Savings
+        </h2>
+        <BudgetCreationSection plan={plan} formatCurrency={formatCurrency} navigate={navigate} />
+      </div>
 
         {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
@@ -633,6 +409,14 @@ function App() {
     setPlans((prevPlans) => [...prevPlans, { id, ...newPlan }]);
   };
 
+  const updatePlan = (id, updatedData) => {
+    setPlans((prevPlans) =>
+      prevPlans.map((plan) =>
+        plan.id === id ? { ...plan, ...updatedData } : plan
+      )
+    );
+  };
+
   const deletePlan = (id) => {
     setPlans((prevPlans) => prevPlans.filter((plan) => plan.id !== id));
   };
@@ -647,7 +431,7 @@ function App() {
         />
         <Route
           path="/create"
-          element={<CreatePlanPage addPlan={addPlan} />}
+          element={<CreatePlanPage addPlan={addPlan} plans={plans} updatePlan={updatePlan} />}
         />
         <Route
           path="/categories"
