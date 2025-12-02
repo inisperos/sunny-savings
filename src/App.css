@@ -121,3 +121,111 @@ table td {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ===== HOME COMPONENT ===== */
+.home-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.home-title {
+  font-size: 2.2rem;
+}
+
+.home-subtitle {
+  color: #4b5563;
+  margin-top: 0.5rem;
+}
+
+.plans-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.plan-card {
+  width: 350px;
+  border: 1px solid var(--color-accent-dark);
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+  background-color: var(--color-light-grey);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.plan-card-hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.plan-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem 0;
+  letter-spacing: 0.3px;
+  color: var(--color-accent-dark);
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.75rem;
+  transition: opacity 0.15s ease;
+}
+
+.btn-view {
+  background-color: var(--color-accent-dark);
+  color: white;
+}
+
+.btn-track {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.actions-container {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-create {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  background-color: var(--color-accent-dark);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-compare {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  background-color: var(--color-accent-dark);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}

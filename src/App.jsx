@@ -25,21 +25,12 @@ function Home({ plans, deletePlan }) {
   const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: "center", marginTop: "2rem" }}>
-    <h1 style={{ fontSize: "2.2rem" }}>Sunny Savings</h1>
-    <p style={{ color: "#4b5563", marginTop: "0.5rem" }}>
-      Welcome to your budgeting dashboard!
-    </p>
+    <div className="home-container">
+      <h1 className="home-title">Sunny Savings</h1>
+      <p className="home-subtitle">Welcome to your budgeting dashboard!</p>
 
-      <div
-        style={{
-          marginTop: "2rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h2>Your Plans:</h2>
+      <div className="plans-container">
+        <h2>Your Plans</h2>
 
         {plans.length === 0 ? (
           <p>No plans created yet.</p>
@@ -47,75 +38,27 @@ function Home({ plans, deletePlan }) {
           plans.map((plan) => (
             <div
               key={plan.id}
-              style={{
-                width: "350px",
-                border: "1px solid var(--color-accent-dark)",
-                borderRadius: "12px",
-                padding: "0.85rem",
-                marginBottom: "1.25rem",
-                backgroundColor: "var(--color-light-grey)",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-                transition: "transform 0.15s ease, box-shadow 0.15s ease",
-              }}
+              className="plan-card"
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = "0 6px 14px rgba(0,0,0,0.12)";
+                e.currentTarget.classList.add("plan-card-hover");
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "none";
-                e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
+                e.currentTarget.classList.remove("plan-card-hover");
               }}
             >
-              {/* ✅ Cleaner, modern plan title */}
-              <h2
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  margin: "0 0 0.6rem 0",
-                  letterSpacing: "0.3px",
-                  color: "var(--color-accent-dark)",
-                }}
-              >
-                {plan.company}
-              </h2>
+              <h2 className="plan-title">{plan.company}</h2>
 
-              {/* ✅ Sleek horizontal button row */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "0.4rem",
-                  marginTop: "0.25rem",
-                }}
-              >
+              <div className="plan-actions">
                 <button
                   onClick={() => navigate(`/plan/${plan.id}`)}
-                  style={{
-                    backgroundColor: "var(--color-accent-dark)",
-                    color: "white",
-                    border: "none",
-                    padding: "0.45rem 0.75rem",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "0.85rem",
-                    transition: "opacity 0.15s ease",
-                  }}
+                  className="btn btn-view"
                 >
                   View
                 </button>
 
                 <button
                   onClick={() => navigate(`/track/${plan.id}`)}
-                  style={{
-                    backgroundColor: "var(--color-primary-dark)",
-                    color: "white",
-                    border: "none",
-                    padding: "0.45rem 0.75rem",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "0.85rem",
-                    transition: "opacity 0.15s ease",
-                  }}
+                  className="btn btn-track"
                 >
                   Track
                 </button>
@@ -129,38 +72,20 @@ function Home({ plans, deletePlan }) {
                       deletePlan(plan.id);
                     }
                   }}
-                  style={{
-                    backgroundColor: "#dc3545",
-                    color: "white",
-                    border: "none",
-                    padding: "0.4rem 0.8rem",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "0.9rem",
-                  }}
+                  className="btn btn-delete"
                 >
                   Delete
                 </button>
-
               </div>
             </div>
 
           ))
         )}
 
-        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem" }}>
+        <div className="actions-container">
           <button
             onClick={() => navigate("/create")}
-            style={{
-              padding: "0.7rem 1.2rem",
-              borderRadius: "8px",
-              border: "none",
-              backgroundColor: "var(--color-accent-dark)",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.95rem",
-              fontWeight: 500,
-            }}
+            className="btn btn-create"
           >
             Create New Plan
           </button>
@@ -168,16 +93,7 @@ function Home({ plans, deletePlan }) {
           <button
             onClick={() => navigate("/compare")}
             disabled={plans.length < 2}
-            style={{
-              padding: "0.7rem 1.2rem",
-              borderRadius: "8px",
-              border: "none",
-              backgroundColor: plans.length < 2 ? "#d1d5db" : "var(--color-accent-dark)",
-              color: "white",
-              cursor: plans.length < 2 ? "not-allowed" : "pointer",
-              fontSize: "0.95rem",
-              fontWeight: 500,
-            }}
+            className={`btn btn-compare ${plans.length < 2 ? "btn-disabled" : ""}`}
           >
             Compare Plans
           </button>
