@@ -52,7 +52,7 @@ export default function StepIndicator() {
             left: "20px",
             right: "20px",
             height: "2px",
-            backgroundColor: "#e5e7eb",
+            backgroundColor: "var(--color-accent-light)",
             zIndex: 0,
           }}
         />
@@ -109,8 +109,8 @@ export default function StepIndicator() {
                     ? "var(--color-accent-dark)"
                     : isCurrent
                     ? "var(--color-accent-dark)"
-                    : "#e5e7eb",
-                  color: isCompleted || isCurrent ? "white" : "#9ca3af",
+                    : "var(--color-accent-light)",
+                  color: isCompleted || isCurrent ? "white" : "var(--color-dark-text)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -163,7 +163,7 @@ export default function StepIndicator() {
                 }}
                 onMouseLeave={(e) => {
                   if (!isCurrent) {
-                    e.currentTarget.style.color = isCompleted ? "#6b7280" : "#9ca3af";
+                    e.currentTarget.style.color = isCompleted ? "#6b7280" : "var(--color-light-accent)";
                   }
                 }}
               >

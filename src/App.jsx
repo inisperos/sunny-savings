@@ -30,7 +30,7 @@ function Home({ plans, deletePlan }) {
   return (
     <div style={{ textAlign: "center", marginTop: "2rem" }}>
     <h1 style={{ fontSize: "2.2rem" }}>Sunny Savings</h1>
-    <p style={{ color: "#4b5563", marginTop: "0.5rem" }}>
+    <p style={{ color: "var(--color-dark-text)", marginTop: "0.5rem" }}>
       Welcome to your budgeting dashboard!
     </p>
 
@@ -276,7 +276,7 @@ function PlanDetails({ plans }) {
               fontSize: "0.9rem",
             }}
           >
-            ✏️ Edit Plan
+            Edit Plan
           </button>
         </div>
       </div>
@@ -292,14 +292,14 @@ function PlanDetails({ plans }) {
         <h2
           style={{
             fontSize: "1.5rem",
-            color: "var(--color-accent-dark)",
+            color: "var(--color-light-text)",
             marginBottom: "1.5rem",
             display: "flex",
             alignItems: "center",
             gap: "0.5rem",
           }}
         >
-          💼 Offer Calculation
+          Offer Overview
         </h2>
         <OfferCalculationSection plan={plan} formatCurrency={formatCurrency} />
       </div>
@@ -329,7 +329,7 @@ function PlanDetails({ plans }) {
             padding: "0.75rem 1.5rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "var(--color-primary-dark)",
+            backgroundColor: "var(--color-light-text)",
             color: "white",
             cursor: "pointer",
             fontSize: "1rem",

@@ -564,7 +564,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
               padding: "0.75rem 1.25rem",
               borderRadius: "12px",
               border: "none",
-              background: isOverBudget ? "#9ca3af" : "var(--color-accent-dark)",
+              background: isOverBudget ? "var(--color-dark-grey)" : "var(--color-accent-dark)",
               cursor: isOverBudget ? "not-allowed" : "pointer",
               fontSize: "1rem",
               color: "#ffffff",

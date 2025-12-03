@@ -165,7 +165,7 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
                     style={{
                       width: "100%",
                       height: "8px",
-                      backgroundColor: "#e5e7eb",
+                      backgroundColor: "var(--color-light-grey)",
                       borderRadius: "4px",
                       overflow: "hidden",
                     }}
@@ -174,7 +174,7 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
                       style={{
                         width: `${percent}%`,
                         height: "100%",
-                        backgroundColor: percent >= 100 ? "#10b981" : "var(--color-primary-dark)",
+                        backgroundColor: percent >= 100 ? "var(--color-accent-light)" : "var(--color-primary-dark)",
                         transition: "width 0.3s ease",
                       }}
                     />
