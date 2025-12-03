@@ -52,7 +52,7 @@ function Home({ plans, deletePlan }) {
               key={plan.id}
               style={{
                 width: "350px",
-                border: "1px solid var(--color-accent-dark)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "12px",
                 padding: "0.85rem",
                 marginBottom: "1.25rem",
@@ -77,7 +77,7 @@ function Home({ plans, deletePlan }) {
                     fontWeight: 600,
                     margin: 0,
                     letterSpacing: "0.3px",
-                    color: "var(--color-accent-dark)",
+                    color: "var(--color-primary-dark)",
                   }}
                 >
                   {plan.company || "Untitled Plan"}
@@ -112,7 +112,7 @@ function Home({ plans, deletePlan }) {
                 <button
                   onClick={() => navigate(`/plan/${plan.id}`)}
                   style={{
-                    backgroundColor: "var(--color-accent-dark)",
+                    backgroundColor: "var(--color-primary-dark",
                     color: "white",
                     border: "none",
                     padding: "0.45rem 0.75rem",
@@ -151,7 +151,7 @@ function Home({ plans, deletePlan }) {
                     }
                   }}
                   style={{
-                    backgroundColor: "#dc3545",
+                    backgroundColor: "var(--color-accent-dark)",
                     color: "white",
                     border: "none",
                     padding: "0.4rem 0.8rem",
@@ -177,7 +177,7 @@ function Home({ plans, deletePlan }) {
               padding: "0.7rem 1.2rem",
               borderRadius: "8px",
               border: "none",
-              backgroundColor: "var(--color-accent-dark)",
+              backgroundColor: "var(--color-light-text)",
               color: "white",
               cursor: "pointer",
               fontSize: "0.95rem",
@@ -194,7 +194,7 @@ function Home({ plans, deletePlan }) {
               padding: "0.7rem 1.2rem",
               borderRadius: "8px",
               border: "none",
-              backgroundColor: plans.length < 2 ? "#d1d5db" : "var(--color-accent-dark)",
+              backgroundColor: plans.length < 2 ? "#fff" : "var(--color-light-text)",
               color: "white",
               cursor: plans.length < 2 ? "not-allowed" : "pointer",
               fontSize: "0.95rem",

@@ -18,7 +18,7 @@ function BudgetCard({ category, value, onChange, onDelete }) {
   const leftStyle = {
     flex: 1,
     padding: "1rem",
-    border: "2px solid #000",
+    border: "2px solid var(--color-dark-text)",
     borderRadius: "12px",
     textAlign: "center",
     fontSize: "1.3rem",
@@ -38,9 +38,9 @@ function BudgetCard({ category, value, onChange, onDelete }) {
     width: "48px",
     height: "48px",
     borderRadius: "8px",
-    border: "2px solid #dc3545",
+    border: "2px solid var(--color-light-text)",
     backgroundColor: "transparent",
-    color: "#dc3545",
+    color: "var(--color-light-text)",
     cursor: "pointer",
     fontSize: "1.5rem",
     fontWeight: "bold",
@@ -71,12 +71,12 @@ function BudgetCard({ category, value, onChange, onDelete }) {
         }}
         style={deleteButtonStyle}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#dc3545";
+          e.currentTarget.style.backgroundColor = "var(--color-light-text)";
           e.currentTarget.style.color = "white";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = "transparent";
-          e.currentTarget.style.color = "#dc3545";
+          e.currentTarget.style.color = "var(--color-light-text)";
         }}
         title={`Delete ${category}`}
       >
@@ -397,13 +397,13 @@ export default function SetBudgetPage({ plans, setPlans }) {
       </h2>
 
       {isOverBudget && (
-        <p style={{ color: "#dc2626", marginTop: "0.25rem" }}>
+        <p style={{ color: "var(--color-accent-dark)", marginTop: "0.25rem" }}>
           Please reduce one or more category budgets until the remaining amount
           is positive.
         </p>
       )}
 
-      <p style={{ color: "#555" }}>
+      <p style={{ color: "var(--color-dark-text)" }}>
         It is recommended that your savings make up 20% of your disposable
         income.
       </p>
@@ -427,21 +427,21 @@ export default function SetBudgetPage({ plans, setPlans }) {
               style={{
                 width: "100%",
                 padding: "1rem",
-                border: "4px dashed #000",
+                border: "4px solid var(--color-accent-dark)",
                 borderRadius: "16px",
-                background: "#f3f3f3",
+                background: "#fff",
                 cursor: "pointer",
                 fontSize: "1rem",
                 fontWeight: "500",
                 transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#e9e9e9";
-                e.currentTarget.style.borderColor = "#333";
+                e.currentTarget.style.background = "var(--color-accent-dark)";
+                e.currentTarget.style.borderColor = "var(--color-accent-dark)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#f3f3f3";
-                e.currentTarget.style.borderColor = "#000";
+                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.borderColor = "var(--color-accent-dark)";
               }}
             >
               Add New Category +
@@ -453,7 +453,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 gap: "0.75rem",
                 alignItems: "center",
                 padding: "1rem",
-                border: "2px solid #ccc",
+                border: "2px solid var(--color-accent-dark)",
                 borderRadius: "12px",
                 backgroundColor: "#fff",
               }}
@@ -476,7 +476,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
                   flex: 1,
                   padding: "0.75rem 1rem",
                   borderRadius: "8px",
-                  border: "2px solid #ccc",
+                  border: "2px solid var(--color-dark-grey)",
                   fontSize: "1rem",
                   outline: "none",
                 }}
@@ -511,16 +511,16 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 style={{
                   padding: "0.75rem 1.25rem",
                   borderRadius: "8px",
-                  border: "1px solid #ccc",
+                  border: "1px solid var(--color-dark-grey)",
                   backgroundColor: "transparent",
-                  color: "#666",
+                  color: "var(--color-dark-grey)",
                   cursor: "pointer",
                   fontSize: "0.95rem",
                   fontWeight: "500",
                   transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f3f3f3";
+                  e.currentTarget.style.backgroundColor = "#fff";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
@@ -546,8 +546,8 @@ export default function SetBudgetPage({ plans, setPlans }) {
             style={{
               padding: "0.75rem 1.25rem",
               borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              background: "#6b7280",
+              border: "none",
+              background: "var(--color-light-text)",
               color: "#ffffff",
               cursor: "pointer",
               fontSize: "1rem",
@@ -564,7 +564,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
               padding: "0.75rem 1.25rem",
               borderRadius: "12px",
               border: "none",
-              background: isOverBudget ? "#9ca3af" : "#007bff",
+              background: isOverBudget ? "#9ca3af" : "var(--color-accent-dark)",
               cursor: isOverBudget ? "not-allowed" : "pointer",
               fontSize: "1rem",
               color: "#ffffff",
