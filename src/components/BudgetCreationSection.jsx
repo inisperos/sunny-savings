@@ -7,7 +7,6 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
 
   const budgetTimeframeInWeeks = plan.budgetTimeframeInWeeks;
   const numberOfCategories = plan.budgets ? plan.budgets.length : 0;
-  const { totalDisposableIncome } = calculatePlanDetails(plan);
 
   return (
     <div>

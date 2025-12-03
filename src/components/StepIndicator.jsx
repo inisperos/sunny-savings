@@ -75,7 +75,6 @@ export default function StepIndicator() {
         {steps.map((step, index) => {
           const isCompleted = index < currentStepIndex;
           const isCurrent = index === currentStepIndex;
-          const isUpcoming = index > currentStepIndex;
 
           const handleStepClick = () => {
             // Navigate to the step, preserving planId if it exists

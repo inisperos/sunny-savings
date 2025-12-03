@@ -7,7 +7,6 @@ import {
   useParams,
 } from "react-router-dom";
 import './App.css'
-import { calculatePlanDetails } from "./utils/planDetails";
 import { getPlanStatus } from "./utils/planDetails";
 import OfferCalculationSection from "./components/OfferCalculationSection";
 import BudgetCreationSection from "./components/BudgetCreationSection";
@@ -51,29 +50,13 @@ function Home({ plans, deletePlan }) {
             >
               {/* Plan title and status */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                <h2
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 600,
-                    margin: 0,
-                    letterSpacing: "0.3px",
-                    color: "var(--color-accent-dark)",
-                  }}
-                >
+                <h2 className="plan-title">
                   {plan.company || "Untitled Plan"}
                 </h2>
                 {(() => {
                   const planStatus = getPlanStatus(plan);
                   return (
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: "600",
-                        padding: "0.25rem 0.5rem",
-                        borderRadius: "12px",
-                        border: "1px solid var(--color-primary-dark)",
-                      }}
-                    >
+                    <span className={"plan-status"} >
                       {planStatus.label}
                     </span>
                   );
@@ -150,8 +133,6 @@ function PlanDetails({ plans }) {
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
 
-  const budgetTimeframeInWeeks = plan.budgetTimeframeInWeeks;
-
   if (!plan) {
     return (
       <div style={{ textAlign: "center", marginTop: "4rem" }}>
@@ -173,19 +154,6 @@ function PlanDetails({ plans }) {
       </div>
     );
   }
-
-  // Calculate totals with proper salary frequency conversion
-  
-  const {
-    totalIncome,
-    totalReimbursements,
-    totalFees,
-    totalRentCost,
-    totalTransportationCost,
-    totalDisposableIncome,
-  } = calculatePlanDetails(plan);
-
-  const numberOfCategories = plan.budgets ? plan.budgets.length : 0;
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
