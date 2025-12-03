@@ -363,29 +363,32 @@ form {
   flex: 1;
 }
 
-/* Style for Add buttons */
-.add-btn {
-  height: 56px;
-  padding: 0 1rem;
-  border: none;
+.add-entry-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px dotted #888;
   border-radius: 6px;
-  background: var(--color-accent-dark);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.add-btn:hover {
-  background: var(--color-accent);
-}
-
-/* List styling */
-.stipend-list,
-.fee-list {
-  margin-top: 0.5rem;
-  padding-left: 1.1rem;
+  background: transparent;
+  color: #444;
   font-size: 0.95rem;
-  line-height: 1.4;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.add-entry-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.delete-btn {
+  padding: 0 0.75rem;
+  border: none;
+  background: #eee;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ddd;
 }
 
