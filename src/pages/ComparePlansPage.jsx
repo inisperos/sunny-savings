@@ -14,6 +14,12 @@ import {
   CartesianGrid,
 } from "recharts";
 
+// global constant definitions 
+const MAX_PLANS = 4; // maximum number of plans that can be compared 
+
+// Helper to check for array (avoids redefining Array.isArray)
+const ArrayOf = Array.isArray;
+
 export default function ComparePlansPage({ plans }) {
   const navigate = useNavigate();
 
@@ -21,28 +27,49 @@ export default function ComparePlansPage({ plans }) {
   const safePlans = Array.isArray(plans) ? plans : [];
   const [selectedIds, setSelectedIds] = useState([]);
 
-  // Select at most 2 plans
+  // Select at most MAX_PLANS plans
   const toggle = (id) => {
     setSelectedIds((prev) => {
       if (prev.includes(id)) return prev.filter((x) => x !== id);
-      if (prev.length >= 2) return prev;
+      if (prev.length >= MAX_PLANS) return prev;
       return [...prev, id];
     });
   };
 
-  // Get the two selected plans (left and right)
-  const [leftPlan, rightPlan] = useMemo(() => {
-    const chosen = selectedIds
+  // Get the selected plans in order (P1, P2, P3, P4)
+  const selectedPlans = useMemo(() => {
+    return selectedIds
       .map((id) => safePlans.find((p) => p.id === id))
       .filter(Boolean);
-    return [chosen[0] || null, chosen[1] || null];
   }, [selectedIds, safePlans]);
 
+  // Use map to assign an index (A, B, C, D) to each selected plan
+  const planMap = useMemo(() => {
+    const keys = ['A', 'B', 'C', 'D']; // Keys for recharts
+    const map = new Map();
+    selectedPlans.forEach((plan, index) => {
+      if (index < MAX_PLANS) {
+        map.set(plan.id, {
+          plan,
+          key: keys[index],
+          label: plan.company || plan.name || `Plan ${keys[index]}`,
+          color: ['var(--color-accent-light)', 'var(--color-accent-dark)', 'var(--color-light-text)', 'var(--color-primary-dark)'][index] // would appreciate some feedback on the blues
+        });
+      }
+    });
+    return map;
+  }, [selectedPlans]);
+  
+  const selectedPlansWithMeta = selectedPlans.map(plan => planMap.get(plan.id));
+  
+  // Create a list of plans to pass to the chart
+  const chartPlans = selectedPlans.map(plan => planMap.get(plan.id));
+
   return (
-    <div style={{ maxWidth: 1000, margin: "3rem auto", padding: "0 16px" }}>
+    <div style={{ maxWidth: 1200, margin: "3rem auto", padding: "0 16px" }}>
       <h1 style={{ textAlign: "center" }}>Compare Plans</h1>
-      <p style={{ textAlign: "center", color: "#555" }}>
-        Select <strong>two</strong> plans to compare Salary, Stipends, and Fees.
+      <p style={{ textAlign: "center", color: "var(--color-dark-grey)" }}>
+        Select up to <strong>{MAX_PLANS}</strong> plans to compare Salary, Stipends, and Fees.
       </p>
 
       {/* Plan selector */}
@@ -57,7 +84,7 @@ export default function ComparePlansPage({ plans }) {
       >
         {safePlans.map((p) => {
           const checked = selectedIds.includes(p.id);
-          const disabled = !checked && selectedIds.length >= 2;
+          const disabled = !checked && selectedIds.length >= MAX_PLANS;
           const label = p.company || p.name || "Untitled";
           return (
             <label
@@ -92,26 +119,42 @@ export default function ComparePlansPage({ plans }) {
       </div>
 
 
-      {leftPlan && rightPlan ? (
+      {selectedPlans.length >= 2 ? (
         <div
           style={{
             marginTop: 20,
+            // Use a single-column grid container for the overall layout ---
             display: "grid",
-            gridTemplateColumns: "1fr 1.4fr 1fr", // Middle column wider for chart
-            gap: 16,
+            gridTemplateColumns: "1fr", // Single column for main layout
+            gap: 20, // Increased gap between rows
             alignItems: "stretch",
           }}
         >
-          <Column title={leftPlan.company || leftPlan.name || "Plan A"} plan={leftPlan} />
-
-          {/* Middle bar chart: Total of Salary / Stipends / Fees */}
-          <MidChart left={leftPlan} right={rightPlan} />
-
-          <Column title={rightPlan.company || rightPlan.name || "Plan B"} plan={rightPlan} />
+          {/* ROW 1: BAR CHART (100% width) */}
+          <MidChart plans={chartPlans} />
+          
+          {/* ROW 2: PLAN COLUMNS (Dynamic grid) */}
+          <div
+            style={{
+              display: "grid",
+              // --- Dynamic columns for the summaries ---
+              gridTemplateColumns: `repeat(${selectedPlans.length}, 1fr)`,
+              gap: 16,
+            }}
+          >
+            {/* Dynamically render columns for selected plans */}
+            {selectedPlansWithMeta.map(meta => (
+               <Column 
+                  key={meta.plan.id}
+                  title={meta.label} 
+                  plan={meta.plan}
+               />
+            ))}
+          </div>
         </div>
       ) : (
         <div style={{ textAlign: "center", marginTop: 20, color: "var(--color-light-text)" }}>
-          (Pick two plans to show comparison)
+          (Pick at least two plans to show comparison)
         </div>
       )}
 
@@ -160,7 +203,8 @@ function calculateTotalEarnings(plan) {
   return salaryPerWeek * plan.weeks;
 }
 
-function MidChart({ left, right }) {
+// MidChart now accepts 'plans' (an array of {plan, key, label, color} objects)
+function MidChart({ plans, style }) {
   const sumAmount = (arr) => {
     if (!Array.isArray(arr)) return 0;
     return arr.reduce((s, x) => {
@@ -170,21 +214,33 @@ function MidChart({ left, right }) {
       return s + Number(x.amount ?? x.value ?? x.price ?? 0);
     }, 0);
   };
+  
+  const planDataMap = new Map();
+  plans.forEach(({ plan, key }) => {
+    const totalEarnings = calculateTotalEarnings(plan);
+    
+    const stipendsTotal = sumAmount(
+      plan?.stipends ?? plan?.reimbursements ?? plan?.allowances ?? []
+    );
+    
+    const feesTotal = sumAmount(
+      plan?.fees ?? plan?.costs ?? plan?.expenses ?? []
+    );
+    
+    planDataMap.set(key, { totalEarnings, stipendsTotal, feesTotal });
+  });
 
-  const lStip = sumAmount(
-    left?.stipends ?? left?.reimbursements ?? left?.allowances ?? []
-  );
-  const rStip = sumAmount(
-    right?.stipends ?? right?.reimbursements ?? right?.allowances ?? []
-  );
-
-  const lFees = sumAmount(left?.fees ?? left?.costs ?? left?.expenses ?? []);
-  const rFees = sumAmount(right?.fees ?? right?.costs ?? right?.expenses ?? []);
 
   const data = [
-    { name: "Salary",   A: calculateTotalEarnings(left),  B: calculateTotalEarnings(right) },
-    { name: "Stipends", A: lStip,              B: rStip },
-    { name: "Fees",     A: lFees,              B: rFees },
+    { name: "Salary", ...Object.fromEntries(
+        plans.map(({ key }) => [key, planDataMap.get(key).totalEarnings])
+    ) },
+    { name: "Stipends", ...Object.fromEntries(
+        plans.map(({ key }) => [key, planDataMap.get(key).stipendsTotal])
+    ) },
+    { name: "Fees", ...Object.fromEntries(
+        plans.map(({ key }) => [key, planDataMap.get(key).feesTotal])
+    ) },
   ];
 
   return (
@@ -196,29 +252,29 @@ function MidChart({ left, right }) {
         background: "white",
         display: "flex",
         flexDirection: "column",
+        ...style
       }}
     >
       <h3 style={{ margin: 0, marginBottom: "0.5rem", textAlign: "center" }}>
         Comparison (Totals)
       </h3>
-      <div style={{ flex: 1, minHeight: 260 }}>
+      <div style={{ flex: 1, minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 8 }}>
+          <BarChart data={data} margin={{ top: 8, right: 15, left: 15, bottom: 8 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis tickFormatter={(v) => `$${Number(v).toLocaleString()}`} />
             <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
             <Legend />
-            <Bar 
-              dataKey="A" 
-              name={left?.company || left?.name || "Plan A"} 
-              fill="var(--color-accent-light)"
-            />
-            <Bar 
-              dataKey="B" 
-              name={right?.company || right?.name || "Plan B"} 
-              fill="var(--color-accent-dark)"
-            />
+            {/* Dynamically render a Bar for each selected plan */}
+            {plans.map(({ key, label, color }) => (
+                <Bar 
+                  key={key}
+                  dataKey={key} 
+                  name={label} 
+                  fill={color}
+                />
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -251,7 +307,7 @@ function Column({ title, plan }) {
 
   // Normalize fee list
   let rawFees = plan.fees ?? plan.costs ?? plan.expenses ?? plan.charges ?? [];
-  if (!Array.isArray(rawFees)) rawFees = [rawFees];
+  if (!ArrayOf(rawFees)) rawFees = [rawFees];
 
   const feeItems = rawFees
     .map((x, i) => {
@@ -261,7 +317,7 @@ function Column({ title, plan }) {
       const type = x.type ?? x.category ?? x.name ?? x.label ?? `Fee ${i + 1}`;
       const amount = Number(x.amount ?? x.value ?? x.price ?? 0);
       return { type, amount };
-    })
+      })
     .filter(Boolean);
 
   // Total
@@ -380,7 +436,7 @@ function Row({ label, children }) {
         display: "flex",
         justifyContent: "space-between",
         padding: "6px 0",
-        borderBottom: "1px dashed #eee",
+        borderBottom: "1px dashed var(--color-light-grey)",
       }}
     >
       <span style={{ color: "#6b7280" }}>{label}</span>
