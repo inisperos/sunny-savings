@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../App.css'
+import "../App.css";
 
 export default function SelectBudgetCategories({ plans, setPlans }) {
   const navigate = useNavigate();
@@ -10,13 +10,14 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   const [customCategories, setCustomCategories] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [showTip, setShowTip] = useState(false); 
 
   const defaultCategories = [
-    "Travel",
     "Emergency",
-    "Utilities",
+    "Travel",
     "Retirement",
-    "Groceries",
+    "Education",
+    "Big purchase",
     "Entertainment",
   ];
 
@@ -70,9 +71,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     width: "120px",
     height: "120px",
     borderRadius: "50%",
-    backgroundColor: selectedCategories.includes(category)
-      ? "#4caf50"
-      : "#ddd",
+    backgroundColor: selectedCategories.includes(category) ? "#4caf50" : "#ddd",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -80,6 +79,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     fontSize: isCustom ? "1rem" : "1.1rem",
     fontWeight: "500",
     transition: "0.2s",
+    padding: "0.5rem",
+    textAlign: "center",
   });
 
   return (
@@ -90,9 +91,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
 
       {/* Timeframe input */}
       <div style={{ marginTop: "1.5rem" }}>
-        <label htmlFor="timeframe">
-          Every
-        </label>
+        <label htmlFor="timeframe">Every</label>
         <input
           id="timeframe"
           type="number"
@@ -108,12 +107,70 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
             textAlign: "center",
           }}
         />
-        <label htmlFor="timeframe">
-          week(s)
-        </label>
+        <label htmlFor="timeframe"> week(s)</label>
       </div>
 
-      <p>What do you want to save for during this period?</p>
+      <div
+        style={{
+          marginTop: "1.5rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "0.5rem",
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          What do you want to save for during this period?
+        </p>
+        <button
+          type="button"
+          onClick={() => setShowTip((prev) => !prev)}
+          aria-label="What is a saving goal?"
+          style={{
+            width: "22px",
+            height: "22px",
+            borderRadius: "50%",
+            border: "1px solid #9ca3af",
+            backgroundColor: "#f3f4f6",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            lineHeight: "20px",
+            padding: 0,
+          }}
+        >
+          ?
+        </button>
+      </div>
+
+  {showTip && (
+  <div
+    style={{
+      maxWidth: "600px",
+      margin: "0.6rem auto 0",
+      backgroundColor: "#f9fafb",
+      borderRadius: "8px",
+      border: "1px solid #e5e7eb",
+      padding: "0.75rem 1rem",
+      fontSize: "0.9rem",
+      color: "#4b5563",
+      textAlign: "left",
+    }}
+  >
+    <strong>Saving goals in this app:</strong>
+    <ul
+      style={{
+        margin: "0.4rem 0 0",
+        paddingLeft: "1.2rem",
+      }}
+    >
+      <li>Basic living costs (rent, groceries, utilities) are already counted.</li>
+      <li>Saving goals are things you want to put money aside for after that.</li>
+      <li>Examples: emergency fund, a trip, education, or a big purchase.</li>
+    </ul>
+  </div>
+)}
+
       {/* Circles grid */}
       <div
         style={{
@@ -248,3 +305,4 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     </div>
   );
 }
+

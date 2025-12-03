@@ -134,26 +134,18 @@ export default function SetBudgetPage({ plans, setPlans }) {
   const handleNext = () => {
     if (plans.length > 0) {
       const updatedPlans = [...plans];
-      const lastIndex = updatedPlans.length - 1;
-  
-      updatedPlans[lastIndex] = {
-        ...updatedPlans[lastIndex],
+      updatedPlans[updatedPlans.length - 1] = {
+        ...updatedPlans[updatedPlans.length - 1],
         budgets: Object.keys(amounts).map((c) => ({
           category: c,
-          amount: parseFloat(amounts[c]) || 0,
+          amount: amounts[c] === "" ? 0 : parseFloat(amounts[c]),
         })),
-        savings: Object.keys(amounts).reduce(
-          (acc, c) => ({ ...acc, [c]: 0 }),
-          {}
-        ),
       };
-  
       setPlans(updatedPlans);
     }
-  
+
     navigate("/");
   };
-  
 
 
   const isOverBudget = budgetAvailable < 0;
@@ -236,13 +228,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
                 style={{
-                  padding: "0.75rem 1.25rem",
-                  borderRadius: "12px",
-                  border: "none",
-                  background: "var(--color-accent-dark)",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  color: "#fff",
                   flex: 1,
                   padding: "0.75rem",
                   borderRadius: "8px",

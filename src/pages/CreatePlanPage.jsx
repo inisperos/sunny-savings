@@ -1,7 +1,7 @@
 // src/pages/CreatePlanPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../App.css'
+import "../App.css";
 
 export default function CreatePlanPage({ addPlan }) {
   const navigate = useNavigate();
@@ -20,6 +20,12 @@ export default function CreatePlanPage({ addPlan }) {
   const [transportation, setTransportation] = useState("");
   const [transportFrequency, setTransportFrequency] = useState("monthly");
 
+  // 🆕 Additional monthly living expenses
+  const [groceries, setGroceries] = useState("");
+  const [groceriesFrequency, setGroceriesFrequency] = useState("monthly");
+  const [utilities, setUtilities] = useState("");
+  const [utilitiesFrequency, setUtilitiesFrequency] = useState("monthly");
+
   const handleNext = (e) => {
     e.preventDefault();
     if (
@@ -28,7 +34,9 @@ export default function CreatePlanPage({ addPlan }) {
       weeks.trim() === "" ||
       location.trim() === "" ||
       rent.trim() === "" ||
-      transportation.trim() === ""
+      transportation.trim() === "" ||
+      groceries.trim() === "" ||         // 🆕 必填
+      utilities.trim() === ""            // 🆕 必填
     ) {
       alert("Please fill out all required fields.");
       return;
@@ -56,7 +64,9 @@ export default function CreatePlanPage({ addPlan }) {
         hoursPerWeekValue <= 0 ||
         hoursPerWeekValue > 168
       ) {
-        alert("Please enter valid hours per week (between 1 and 168) for hourly salary.");
+        alert(
+          "Please enter valid hours per week (between 1 and 168) for hourly salary."
+        );
         return;
       }
     }
@@ -74,7 +84,21 @@ export default function CreatePlanPage({ addPlan }) {
       alert("Please enter a valid transportation cost (0 or positive).");
       return;
     }
-  
+
+    // 🆕 Validate groceries
+    const groceriesValue = parseFloat(groceries);
+    if (isNaN(groceriesValue) || groceriesValue < 0) {
+      alert("Please enter a valid groceries cost (0 or positive).");
+      return;
+    }
+
+    // 🆕 Validate utilities
+    const utilitiesValue = parseFloat(utilities);
+    if (isNaN(utilitiesValue) || utilitiesValue < 0) {
+      alert("Please enter a valid utilities cost (0 or positive).");
+      return;
+    }
+
     const newPlan = {
       company,
       salary: salaryValue,
@@ -85,11 +109,17 @@ export default function CreatePlanPage({ addPlan }) {
       rentFrequency,
       transportation: transportationValue,
       transportFrequency,
+
+      groceries: groceriesValue,
+      groceriesFrequency,
+      utilities: utilitiesValue,
+      utilitiesFrequency,
+
       ...(salaryFrequency === "hourly" && {
         hoursPerWeek: hoursPerWeekValue,
       }),
     };
-  
+
     addPlan(newPlan);
     navigate("/fees");
   };
@@ -174,7 +204,9 @@ export default function CreatePlanPage({ addPlan }) {
                 max="168"
                 step="1"
               />
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
+              <span style={{ fontSize: "0.9rem", color: "#666" }}>
+                hrs/week
+              </span>
             </div>
             <br />
           </>
@@ -223,6 +255,57 @@ export default function CreatePlanPage({ addPlan }) {
         <select
           value={transportFrequency}
           onChange={(e) => setTransportFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <br />
+
+        {/* 🆕 Additional living expenses */}
+        <p
+          style={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            marginTop: "1.5rem",
+          }}
+        >
+          Additional Living Expenses:
+        </p>
+
+        {/* Groceries */}
+        <input
+          type="number"
+          placeholder="Groceries (e.g., food)"
+          value={groceries}
+          onChange={(e) => setGroceries(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={groceriesFrequency}
+          onChange={(e) => setGroceriesFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <br />
+
+        {/* Utilities */}
+        <input
+          type="number"
+          placeholder="Utilities (e.g., Wi-Fi, electricity)"
+          value={utilities}
+          onChange={(e) => setUtilities(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={utilitiesFrequency}
+          onChange={(e) => setUtilitiesFrequency(e.target.value)}
           style={inputStyle}
         >
           <option value="daily">Daily</option>

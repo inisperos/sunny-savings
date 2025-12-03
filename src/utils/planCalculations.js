@@ -12,7 +12,7 @@ export const calculatePlanDetails = (plan) => {
     }
     return 40;
   };
-  
+
   let salaryPerWeek = 0;
 
   if (plan.salary && plan.weeks && plan.salary > 0 && plan.weeks > 0) {
@@ -70,16 +70,28 @@ export const calculatePlanDetails = (plan) => {
     }
   };
 
-  const totalRentCost = weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
+  // 基本生活费四块
+  const totalRentCost =
+    weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
   const totalTransportationCost =
-    weeks * weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
+    weeks *
+    weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
+  const totalGroceriesCost =
+    weeks *
+    weeklyCostFromFrequency(plan.groceries, plan.groceriesFrequency);
+  const totalUtilitiesCost =
+    weeks *
+    weeklyCostFromFrequency(plan.utilities, plan.utilitiesFrequency);
+
+  // 一个总的 living expense
+  const totalLivingExpenses =
+    totalRentCost +
+    totalTransportationCost +
+    totalGroceriesCost +
+    totalUtilitiesCost;
 
   const totalDisposableIncome =
-    totalIncome +
-    totalReimbursements -
-    totalFees -
-    totalRentCost -
-    totalTransportationCost;
+    totalIncome + totalReimbursements - totalFees - totalLivingExpenses;
 
   const numGoals = plan.goals ? plan.goals.length : 0;
   const suggestedPerGoal =
@@ -91,6 +103,9 @@ export const calculatePlanDetails = (plan) => {
     totalFees,
     totalRentCost,
     totalTransportationCost,
+    totalGroceriesCost,
+    totalUtilitiesCost,
+    totalLivingExpenses,    
     totalDisposableIncome,
     suggestedPerGoal,
   };
