@@ -168,6 +168,14 @@ table td {
   color: var(--color-accent-dark);
 }
 
+.plan-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-primary-dark);
+}
+
 .plan-actions {
   display: flex;
   justify-content: center;
