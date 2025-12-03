@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { calculatePlanDetails } from "../utils/planCalculations";
+import { calculatePlanDetails } from "../utils/planDetails";
 
 export default function TrackSavingsPage({ plans, setPlans }) {
   const { id } = useParams();

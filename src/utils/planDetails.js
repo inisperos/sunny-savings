@@ -95,3 +95,17 @@ export const calculatePlanDetails = (plan) => {
     suggestedPerGoal,
   };
 };
+
+// Helper function to determine plan status
+export const getPlanStatus = (plan) => {
+  const hasOfferInfo = plan.company && plan.salary && plan.weeks && plan.location;
+  const hasBudget = plan.budgets && plan.budgets.length > 0;
+  
+  if (hasOfferInfo && hasBudget) {
+    return { status: "complete", label: "Complete"};
+  } else if (hasOfferInfo) {
+    return { status: "offer-only", label: "Offer Entered" };
+  } else {
+    return { status: "draft", label: "Draft"};
+  }
+}
