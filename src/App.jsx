@@ -7,7 +7,8 @@ import {
   useParams,
 } from "react-router-dom";
 import './App.css'
-import { calculatePlanDetails } from "./utils/planCalculations";
+import { calculatePlanDetails } from "./utils/planDetails";
+import { getPlanStatus } from "./utils/planDetails";
 import OfferCalculationSection from "./components/OfferCalculationSection";
 import BudgetCreationSection from "./components/BudgetCreationSection";
 
@@ -68,18 +69,36 @@ function Home({ plans, deletePlan }) {
                 e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
               }}
             >
-              {/* Plan title */}
-              <h2
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  margin: "0 0 0.6rem 0",
-                  letterSpacing: "0.3px",
-                  color: "var(--color-accent-dark)",
-                }}
-              >
-                {plan.company || "Untitled Plan"}
-              </h2>
+              {/* Plan title and status */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+                <h2
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    margin: 0,
+                    letterSpacing: "0.3px",
+                    color: "var(--color-accent-dark)",
+                  }}
+                >
+                  {plan.company || "Untitled Plan"}
+                </h2>
+                {(() => {
+                  const planStatus = getPlanStatus(plan);
+                  return (
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: "600",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "12px",
+                        border: "1px solid var(--color-primary-dark)",
+                      }}
+                    >
+                      {planStatus.label}
+                    </span>
+                  );
+                })()}
+              </div>
 
               {/* ✅ Sleek horizontal button row */}
               <div

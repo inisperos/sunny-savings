@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import '../App.css'
-import { calculatePlanDetails } from "../utils/planCalculations";
+import { calculatePlanDetails } from "../utils/planDetails";
 import StepIndicator from '../components/StepIndicator';
 
 function BudgetCard({ category, value, onChange, onDelete }) {

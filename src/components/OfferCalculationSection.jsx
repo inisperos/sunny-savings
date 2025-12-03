@@ -1,6 +1,6 @@
 // src/components/OfferCalculationSection.jsx
 import React from "react";
-import { calculatePlanDetails } from "../utils/planCalculations";
+import { calculatePlanDetails } from "../utils/planDetails";
 
 export default function OfferCalculationSection({ plan, formatCurrency }) {
   if (!plan) return null;
