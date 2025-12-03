@@ -34,24 +34,6 @@ function BudgetCard({ category, value, onChange, onDelete }) {
     textAlign: "right",
   };
 
-  const deleteButtonStyle = {
-    width: "48px",
-    height: "48px",
-    borderRadius: "8px",
-    border: "2px solid #dc3545",
-    backgroundColor: "transparent",
-    color: "#dc3545",
-    cursor: "pointer",
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "all 0.2s ease",
-    flexShrink: 0,
-    lineHeight: "1",
-  };
-
   return (
     <div style={cardStyle}>
       <div style={leftStyle}>{category}</div>
@@ -69,14 +51,14 @@ function BudgetCard({ category, value, onChange, onDelete }) {
             onDelete(category);
           }
         }}
-        style={deleteButtonStyle}
+        className="delete-btn"
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#dc3545";
+          e.currentTarget.style.backgroundColor = "var(--color-accent-dark)";
           e.currentTarget.style.color = "white";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = "transparent";
-          e.currentTarget.style.color = "#dc3545";
+          e.currentTarget.style.color = "var(--color-primary-dark)";
         }}
         title={`Delete ${category}`}
       >

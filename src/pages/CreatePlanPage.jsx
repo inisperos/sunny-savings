@@ -478,15 +478,27 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
               />
 
               {/* Delete button */}
-              <button
-                type="button"
-                className="delete-btn"
-                onClick={() => {
-                  setStipends(stipends.filter((_, idx) => idx !== i));
-                }}
+              <div
+                style={{ display: "flex", alignItems: "center" }}
               >
-                –
-              </button>
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => {
+                    setStipends(stipends.filter((_, idx) => idx !== i));
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-accent-dark)";
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "var(--color-primary-dark)";
+                  }}
+                >
+                  x
+                </button>
+              </div>
             </div>
           ))}
 
@@ -532,15 +544,27 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
               />
 
               {/* Delete button */}
-              <button
-                type="button"
-                className="delete-btn"
-                onClick={() => {
-                  setFees(fees.filter((_, idx) => idx !== i));
-                }}
+              <div
+                style={{ display: "flex", alignItems: "center" }}
               >
-                –
-              </button>
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => {
+                    setFees(fees.filter((_, idx) => idx !== i));
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-accent-dark)";
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "var(--color-primary-dark)";
+                  }}
+                >
+                  x
+                </button>
+              </div>
             </div>
           ))}
 

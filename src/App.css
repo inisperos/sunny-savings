@@ -382,7 +382,7 @@ form {
 .delete-btn {
   padding: 0 0.75rem;
   border: none;
-  background: #eee;
+  background: transparent;
   border-radius: 6px;
   font-size: 1.2rem;
   cursor: pointer;
