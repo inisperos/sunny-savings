@@ -427,9 +427,9 @@ export default function SetBudgetPage({ plans, setPlans }) {
               style={{
                 width: "100%",
                 padding: "1rem",
-                border: "4px dashed #000",
+                border: "3px dashed #000",
                 borderRadius: "16px",
-                background: "#f3f3f3",
+                background: "var(--color-light-grey)",
                 cursor: "pointer",
                 fontSize: "1rem",
                 fontWeight: "500",
@@ -444,7 +444,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
                 e.currentTarget.style.borderColor = "#000";
               }}
             >
-              Add New Category +
+              Add New Category
             </button>
           ) : (
             <div

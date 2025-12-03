@@ -153,7 +153,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       width: "120px",
       height: "120px",
       borderRadius: "50%",
-      backgroundColor: isSelected ? "#4caf50" : "#ddd",
+      backgroundColor: isSelected ? "var(--color-accent-light)" : "var(--color-light-grey)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
