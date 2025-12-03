@@ -9,10 +9,9 @@ export default function StepIndicator() {
   const planId = location.state?.planId;
 
   const steps = [
-    { path: "/create", label: "Create Plan", number: 1 },
-    { path: "/fees", label: "Fees & Stipends", number: 2 },
-    { path: "/categories", label: "Categories", number: 3 },
-    { path: "/set-budget", label: "Set Budget", number: 4 },
+    { path: "/create", label: "Offer Details", number: 1 },
+    { path: "/categories", label: "Budget Categories", number: 2 },
+    { path: "/set-budget", label: "Set Budget", number: 3 },
   ];
 
   const getCurrentStepIndex = () => {
@@ -75,7 +74,6 @@ export default function StepIndicator() {
         {steps.map((step, index) => {
           const isCompleted = index < currentStepIndex;
           const isCurrent = index === currentStepIndex;
-          const isUpcoming = index > currentStepIndex;
 
           const handleStepClick = () => {
             // Navigate to the step, preserving planId if it exists

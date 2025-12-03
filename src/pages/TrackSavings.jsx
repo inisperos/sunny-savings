@@ -237,20 +237,13 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         )}
       </div>
 
-      {/* ✅ COLLAPSIBLE EDIT PLAN */}
+      {/* EDIT PLAN */}
       <button
-        onClick={() => setShowEdit((prev) => !prev)}
-        style={{
-          marginTop: "3rem",
-          backgroundColor: "var(--color-accent-dark)",
-          padding: "0.75rem 1.25rem",
-          borderRadius: "10px",
-          border:"none",
-          color:"white",
-          cursor: "pointer",
-        }}
+        onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
+        className="btn btn-edit"
+        style={{ marginTop: "3rem" }}
       >
-        {showEdit ? "Close Edit Plan" : "Edit Plan"}
+        Edit Plan
       </button>
 
       {showEdit && (

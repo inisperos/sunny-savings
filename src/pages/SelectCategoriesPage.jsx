@@ -138,7 +138,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   // Handle back button - save and go to fees page
   const handleBack = () => {
     saveCurrentData();
-    navigate("/fees", { state: { planId: actualPlanId } });
+    navigate("/create", { state: { planId: actualPlanId } });
   };
 
   const circleStyle = (category, isCustom = false) => {
@@ -167,7 +167,9 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   return (
     <div style={{ textAlign: "center", marginTop: "3rem" }}>
       <StepIndicator />
-      <h1>Add your savings goals.</h1>
+      <h1>Add Budget Categories</h1>
+
+      <h2>Timeline</h2>
 
       <p>How often would you like to plan or review your budget?</p>
 
@@ -183,7 +185,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
           value={timeframeInWeeks}
           onChange={(e) => setTimeframeInWeeks(Number(e.target.value))}
           style={{
-            marginLeft: "1rem",
+            marginLeft: "0.5rem",
+            marginRight: "0.5rem",
             padding: "0.5rem",
             width: "80px",
             border: "1px solid #ccc",
@@ -196,7 +199,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         </label>
       </div>
 
-      <p>What do you want to save for during this period?</p>
+      <h2 style={{ marginTop: "2.5rem" }}>Select Categories</h2>
+      <p> What do you want to save for during this period?</p>
       {/* Circles grid */}
       <div
         style={{
@@ -232,14 +236,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       {/* Add custom category */}
       <button
         onClick={() => setShowPopup(true)}
-        style={{
-          marginTop: "2rem",
-          padding: "0.75rem 1.25rem",
-          border: "2px dashed #000",
-          borderRadius: "10px",
-          background: "none",
-          cursor: "pointer",
-        }}
+        className="add-entry-btn"
+        style = {{ width: "200px", marginTop: "2rem" }}
       >
         Add Custom Category +
       </button>
@@ -313,39 +311,16 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         </div>
       )}
 
-      {/* Navigation buttons at bottom - Back and Next parallel */}
+       {/* Navigation Buttons */}
       <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
-        <button
-          onClick={handleBack}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-primary-light)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          ← Back (Save)
-        </button>
-        <button
-          onClick={handleNext}
-          style={{
-            padding: "0.6rem 1.2rem",
-            backgroundColor: "var(--color-primary-light)",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          Next →
-        </button>
-      </div>
+
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
+          </button>
+          <button className="btn-navigation" onClick={handleNext} >
+            Next →
+          </button>
+        </div>
     </div>
   );
 }

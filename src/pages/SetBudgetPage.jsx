@@ -34,24 +34,6 @@ function BudgetCard({ category, value, onChange, onDelete }) {
     textAlign: "right",
   };
 
-  const deleteButtonStyle = {
-    width: "48px",
-    height: "48px",
-    borderRadius: "8px",
-    border: "2px solid var(--color-light-text)",
-    backgroundColor: "transparent",
-    color: "var(--color-light-text)",
-    cursor: "pointer",
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "all 0.2s ease",
-    flexShrink: 0,
-    lineHeight: "1",
-  };
-
   return (
     <div style={cardStyle}>
       <div style={leftStyle}>{category}</div>
@@ -69,7 +51,7 @@ function BudgetCard({ category, value, onChange, onDelete }) {
             onDelete(category);
           }
         }}
-        style={deleteButtonStyle}
+        className="delete-btn"
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = "var(--color-light-text)";
           e.currentTarget.style.color = "white";
@@ -424,25 +406,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
           {!showAdd ? (
             <button
               onClick={() => setShowAdd(true)}
-              style={{
-                width: "100%",
-                padding: "1rem",
-                border: "4px solid var(--color-accent-dark)",
-                borderRadius: "16px",
-                background: "#fff",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "500",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--color-accent-dark)";
-                e.currentTarget.style.borderColor = "var(--color-accent-dark)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#fff";
-                e.currentTarget.style.borderColor = "var(--color-accent-dark)";
-              }}
+              className="add-entry-btn"
             >
               Add New Category +
             </button>
@@ -532,29 +496,10 @@ export default function SetBudgetPage({ plans, setPlans }) {
           )}
         </div>
 
+        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
 
-        <div
-          style={{
-            maxWidth: "760px",
-            margin: "2rem auto",
-            textAlign: "right",
-          }}
-        >
-
-          <button
-            onClick={handleBack}
-            style={{
-              padding: "0.75rem 1.25rem",
-              borderRadius: "12px",
-              border: "none",
-              background: "var(--color-light-text)",
-              color: "#ffffff",
-              cursor: "pointer",
-              fontSize: "1rem",
-              marginRight: "0.75rem",
-            }}
-          >
-            ← Back (Save)
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
           </button>
 
           <button
@@ -573,6 +518,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
             Finish
           </button>
         </div>
+
       </div>
     </div>
   );

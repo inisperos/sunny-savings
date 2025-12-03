@@ -19,7 +19,7 @@ yellow: #efce59
   --color-dark-grey: #9ca3af ;
   --color-dark-text: #09457e;
   --color-light-text: #3a9dd8; 
-  --color-border: #efce59;
+  --color-border: #09457e;
 }
 * {
   margin: 0;
@@ -76,6 +76,18 @@ button:active {
   opacity: 1;
 }
 
+/* ===== NAVIGATION BUTTONS ===== */
+.btn-navigation {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-primary-light);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 /* ===== SECTIONS / CARD STYLE ===== */
 .section {
   background-color: white;
@@ -122,3 +134,248 @@ table td {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ===== HOME COMPONENT ===== */
+.home-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.home-title {
+  font-size: 2.2rem;
+}
+
+.home-subtitle {
+  color: #4b5563;
+  margin-top: 0.5rem;
+}
+
+.plans-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.plan-card {
+  width: 350px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+  background-color: var(--color-light-grey);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.plan-card-hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.plan-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem 0;
+  letter-spacing: 0.3px;
+  color: var(--color-primary-dark);
+}
+
+.plan-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-primary-dark);
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.75rem;
+  transition: opacity 0.15s ease;
+}
+
+.btn-view, .btn-track {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.btn-delete {
+  background-color: var(--color-accent-dark);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.actions-container {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-create, .btn-compare, .btn-edit {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  background-color: var(--color-primary-light);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* ===== INPUT OFFER DETAILS COMPONENT ===== */
+/* -------- PAGE LAYOUT -------- */
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+  padding: 0 1.5rem;
+}
+
+form {
+  width: 100%;
+  max-width: 600px; /* wider desktop-friendly width */
+  margin: 0 auto;
+}
+
+/* Section headers */
+.form-section {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+
+/* -------- INPUT WRAPPER -------- */
+
+.inp {
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.inp input,
+.inp select {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  border: none;
+  padding: 22px 12px 8px 12px; /* more top padding since the label is always raised */
+  height: 60px;
+  font-size: 16px;
+  background: rgba(0,0,0,0.03);
+  box-shadow: inset 0 -1.5px 0 rgba(0,0,0,0.3);
+  color: #222;
+  font-family: inherit;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.inp input:hover,
+.inp select:hover {
+  background: rgba(0,0,0,0.05);
+  box-shadow: inset 0 -1.5px 0 rgba(0,0,0,0.5);
+}
+
+.inp input:focus,
+.inp select:focus {
+  background: rgba(0,0,0,0.06);
+  box-shadow: inset 0 -2.5px 0 #3f51b5;
+  outline: none;
+}
+
+/* -------- LABEL (always above) -------- */
+
+.inp .label {
+  position: absolute;
+  top: 6px;     /* permanently floating */
+  left: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.6);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.inp input:focus + .label,
+.inp select:focus + .label {
+  color: #3f51b5;
+}
+
+
+/* -------- CUSTOM SELECT DROPDOWN ARROW -------- */
+
+.inp select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' width='20' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px; /* space for arrow */
+  cursor: pointer;
+}
+
+.inp select option[value=""][disabled] {
+  display: none; /* hide placeholder option */
+}
+
+/* -------- STIPEND AND FEES -------- */
+
+/* Row layout for stipend/fee inputs */
+.inp-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin: 1.2rem 0;
+}
+
+/* to make smaller inputs inside rows */
+.inp-row .inp {
+  flex: 1;
+}
+
+.add-entry-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px dotted #888;
+  border-radius: 6px;
+  background: transparent;
+  color: #444;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.add-entry-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.delete-btn {
+  padding: 0 0.75rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ddd;
+}
+

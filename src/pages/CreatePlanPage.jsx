@@ -29,6 +29,50 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
   // Track if we have a plan ID (editing mode)
   const [currentPlanId, setCurrentPlanId] = useState(editingPlanId || null);
 
+  // State for stipends and fees - initialize from editing plan if exists
+  const [stipends, setStipends] = useState(editingPlan?.stipends || []);
+  const [fees, setFees] = useState(editingPlan?.fees || []);
+
+  // Input fields for stipends and fees
+  const [stipendType, setStipendType] = useState("");
+  const [stipendAmount, setStipendAmount] = useState("");
+  const [feeType, setFeeType] = useState("");
+  const [feeAmount, setFeeAmount] = useState("");
+
+  // Add new stipend
+  const addStipend = () => {
+    if (stipendType.trim() === "" || stipendAmount.trim() === "") {
+      alert("Please enter both type and amount for the stipend.");
+      return;
+    }
+
+    const newStipend = {
+      type: stipendType,
+      amount: parseFloat(stipendAmount),
+    };
+
+    setStipends((prev) => [...prev, newStipend]);
+    setStipendType("");
+    setStipendAmount("");
+  };
+
+  // Add new fee
+  const addFee = () => {
+    if (feeType.trim() === "" || feeAmount.trim() === "") {
+      alert("Please enter both type and amount for the fee.");
+      return;
+    }
+
+    const newFee = {
+      type: feeType,
+      amount: parseFloat(feeAmount),
+    };
+
+    setFees((prev) => [...prev, newFee]);
+    setFeeType("");
+    setFeeAmount("");
+  };
+
   // Save current form data (even if incomplete) to plan
   const saveCurrentData = () => {
     const planData = {
@@ -41,6 +85,8 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
       rentFrequency,
       transportation: parseFloat(transportation) || 0,
       transportFrequency,
+      stipends,
+      fees,
       ...(salaryFrequency === "hourly" && {
         hoursPerWeek: parseFloat(hoursPerWeek) || 40,
       }),
@@ -145,196 +191,405 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     
     // Navigate to fees page, passing plan ID if we have one
     if (currentPlanId) {
-      navigate("/fees", { state: { planId: currentPlanId } });
+      navigate("/categories", { state: { planId: currentPlanId } });
     } else {
       const id = Date.now();
       addPlan({ id, ...newPlan });
-      navigate("/fees", { state: { planId: id } });
+      navigate("/categories", { state: { planId: id } });
     }
   };
 
-  const handleBack = () => {
+  const handleBack = () => {{/* --- STIPENDS SECTION --- */}
+<p className="form-section">Stipends</p>
+
+{stipends.map((s, i) => (
+  <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+    <input
+      type="text"
+      placeholder="e.g. Housing, Travel"
+      value={s.type}
+      onChange={(e) => {
+        const updated = [...stipends];
+        updated[i].type = e.target.value;
+        setStipends(updated);
+      }}
+    />
+
+    <input
+      type="number"
+      placeholder="$ Amount"
+      value={s.amount}
+      onChange={(e) => {
+        const updated = [...stipends];
+        updated[i].amount = Number(e.target.value);
+        setStipends(updated);
+      }}
+    />
+
+    {/* Delete button */}
+    <button
+      type="button"
+      className="delete-btn"
+      onClick={() => {
+        setStipends(stipends.filter((_, idx) => idx !== i));
+      }}
+    >
+      –
+    </button>
+  </div>
+))}
+
+{/* Add New Stipend Button */}
+<button
+  type="button"
+  className="add-entry-btn"
+  onClick={() =>
+    setStipends([...stipends, { type: "", amount: "" }])
+  }
+>
+  Add new stipend
+</button>
+
+
+
+
+{/* --- FEES SECTION --- */}
+<p className="form-section">One-Time Fees</p>
+
+{fees.map((f, i) => (
+  <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+    <input
+      type="text"
+      placeholder="e.g. Relocation, Deposit"
+      value={f.type}
+      onChange={(e) => {
+        const updated = [...fees];
+        updated[i].type = e.target.value;
+        setFees(updated);
+      }}
+    />
+
+    <input
+      type="number"
+      placeholder="$ Amount"
+      value={f.amount}
+      onChange={(e) => {
+        const updated = [...fees];
+        updated[i].amount = Number(e.target.value);
+        setFees(updated);
+      }}
+    />
+
+    {/* Delete button */}
+    <button
+      type="button"
+      className="delete-btn"
+      onClick={() => {
+        setFees(fees.filter((_, idx) => idx !== i));
+      }}
+    >
+      –
+    </button>
+  </div>
+))}
+
+{/* Add New Fee Button */}
+<button
+  type="button"
+  className="add-entry-btn"
+  onClick={() =>
+    setFees([...fees, { type: "", amount: "" }])
+  }
+>
+  Add new fee
+</button>
     // Save current data before going back
     saveCurrentData();
     navigate("/");
   };
 
-  const inputStyle = {
-    padding: "0.5rem",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    width: "220px",
-    margin: "0.5rem",
-  };
-
-  const sectionHeader = {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    marginTop: "2rem",
-  };
-
   return (
-    <div style={{ textAlign: "center", marginTop: "3rem" }}>
+    <div>
       <StepIndicator />
-      <h1>Create Plan Page 📝</h1>
-      <form onSubmit={handleNext}>
-        {/* Offer Details */}
-        <p style={sectionHeader}>Add Offer Details:</p>
+      <div className="form-container">
+        <h1>Create Plan Page</h1>
 
-        <input
-          type="text"
-          placeholder="Company"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          style={inputStyle}
-        />
-        <br />
+        <form onSubmit={handleNext}>
+          {/* Offer Section */}
+          <p className="form-section">Add Offer Details</p>
 
-        <input
-          type="number"
-          placeholder="Salary"
-          value={salary}
-          onChange={(e) => setSalary(e.target.value)}
-          style={inputStyle}
-        />
-        <select
-          value={salaryFrequency}
-          onChange={(e) => setSalaryFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="hourly">Hourly</option>
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Biweekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
-        </select>
-        <br />
+          {/* Company */}
+          <div className="inp">
+            <input
+              type="text"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              required
+            />
+            <span className="label">Company</span>
+          </div>
 
-        <input
-          type="number"
-          placeholder="Number of weeks"
-          value={weeks}
-          onChange={(e) => setWeeks(e.target.value)}
-          style={inputStyle}
-        />
-        <br />
+          {/* Salary */}
+          <div className="inp">
+            <input
+              type="number"
+              value={salary}
+              onChange={(e) => setSalary(e.target.value)}
+              required
+            />
+            <span className="label">Salary</span>
+          </div>
 
-        {/* Show hours per week input only when hourly is selected */}
-        {salaryFrequency === "hourly" && (
-          <>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-              }}
+          {/* Salary Frequency */}
+          <div className="inp">
+            <select
+              value={salaryFrequency}
+              onChange={(e) => setSalaryFrequency(e.target.value)}
+              required
             >
+              <option value="" disabled></option>
+              <option value="hourly">Hourly</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Biweekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="annually">Annually</option>
+            </select>
+            <span className="label">Salary Frequency</span>
+          </div>
+
+          {/* Weeks */}
+          <div className="inp">
+            <input
+              type="number"
+              value={weeks}
+              onChange={(e) => setWeeks(e.target.value)}
+              required
+            />
+            <span className="label">Number of Weeks</span>
+          </div>
+
+          {/* Hours per week if hourly */}
+          {salaryFrequency === "hourly" && (
+            <div className="inp">
               <input
                 type="number"
-                placeholder="Hours per week"
                 value={hoursPerWeek}
                 onChange={(e) => setHoursPerWeek(e.target.value)}
-                style={inputStyle}
                 min="1"
                 max="168"
                 step="1"
+                required
               />
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
+              <span className="label">Hours per Week</span>
             </div>
-            <br />
-          </>
-        )}
+          )}
 
-        {/* Location Info */}
-        <p style={sectionHeader}>Add Location Info:</p>
+          {/* Location Section */}
+          <p className="form-section">Add Location Info</p>
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <br />
+          {/* Location */}
+          <div className="inp">
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+            <span className="label">Location</span>
+          </div>
 
-        <input
-          type="number"
-          placeholder="Rent"
-          value={rent}
-          onChange={(e) => setRent(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={rentFrequency}
-          onChange={(e) => setRentFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-        <br />
+          {/* Rent */}
+          <div className="inp">
+            <input
+              type="number"
+              value={rent}
+              onChange={(e) => setRent(e.target.value)}
+              required
+            />
+            <span className="label">Rent</span>
+          </div>
 
-        <input
-          type="number"
-          placeholder="Transportation Cost"
-          value={transportation}
-          onChange={(e) => setTransportation(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={transportFrequency}
-          onChange={(e) => setTransportFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
+          {/* Rent Frequency */}
+          <div className="inp">
+            <select
+              value={rentFrequency}
+              onChange={(e) => setRentFrequency(e.target.value)}
+              required
+            >
+              <option value="" disabled></option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <span className="label">Rent Frequency</span>
+          </div>
 
-        <br />
-      </form>
+          {/* Transportation */}
+          <div className="inp">
+            <input
+              type="number"
+              value={transportation}
+              onChange={(e) => setTransportation(e.target.value)}
+              required
+            />
+            <span className="label">Transportation Cost</span>
+          </div>
 
-      {/* Navigation buttons at bottom - Back and Next parallel */}
-      <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
-        <button
-          onClick={handleBack}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-primary-light)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          ← Back (Save)
-        </button>
-        <button
-          type="button"
-          onClick={(e) => {
-            // Save and go to fees page (continue to budget setup)
-            handleNext(e);
-          }}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-primary-light)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          Next →
-        </button>
+          {/* Transport frequency */}
+          <div className="inp">
+            <select
+              value={transportFrequency}
+              onChange={(e) => setTransportFrequency(e.target.value)}
+              required
+            >
+              <option value="" disabled></option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <span className="label">Transportation Frequency</span>
+          </div>
+
+          {/* --- STIPENDS SECTION --- */}
+          <p className="form-section">Stipends</p>
+
+          {stipends.map((s, i) => (
+            <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+              <input
+                type="text"
+                placeholder="e.g. Housing, Travel"
+                value={s.type}
+                onChange={(e) => {
+                  const updated = [...stipends];
+                  updated[i].type = e.target.value;
+                  setStipends(updated);
+                }}
+              />
+
+              <input
+                type="number"
+                placeholder="$ Amount"
+                value={s.amount}
+                onChange={(e) => {
+                  const updated = [...stipends];
+                  updated[i].amount = Number(e.target.value);
+                  setStipends(updated);
+                }}
+              />
+
+              {/* Delete button */}
+              <div
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => {
+                    setStipends(stipends.filter((_, idx) => idx !== i));
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-accent-dark)";
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "var(--color-primary-dark)";
+                  }}
+                >
+                  x
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Add New Stipend Button */}
+          <button
+            type="button"
+            className="add-entry-btn"
+            onClick={() =>
+              setStipends([...stipends, { type: "", amount: "" }])
+            }
+          >
+            Add New Stipend +
+          </button>
+
+
+
+
+          {/* --- FEES SECTION --- */}
+          <p className="form-section">One-Time Fees</p>
+
+          {fees.map((f, i) => (
+            <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+              <input
+                type="text"
+                placeholder="e.g. Relocation, Deposit"
+                value={f.type}
+                onChange={(e) => {
+                  const updated = [...fees];
+                  updated[i].type = e.target.value;
+                  setFees(updated);
+                }}
+              />
+
+              <input
+                type="number"
+                placeholder="$ Amount"
+                value={f.amount}
+                onChange={(e) => {
+                  const updated = [...fees];
+                  updated[i].amount = Number(e.target.value);
+                  setFees(updated);
+                }}
+              />
+
+              {/* Delete button */}
+              <div
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => {
+                    setFees(fees.filter((_, idx) => idx !== i));
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-accent-dark)";
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "var(--color-primary-dark)";
+                  }}
+                >
+                  x
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Add New Fee Button */}
+          <button
+            type="button"
+            className="add-entry-btn"
+            onClick={() =>
+              setFees([...fees, { type: "", amount: "" }])
+            }
+          >
+            Add New Fee +
+          </button>
+        </form>
+
+        {/* Navigation Buttons */}
+        <div style={{ display: "flex", gap: "0.75rem", marginTop: "2rem" }}>
+          
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
+          </button>
+          <button className="btn-navigation" onClick={handleNext} >
+            Next →
+          </button>
+        </div>
       </div>
     </div>
   );
