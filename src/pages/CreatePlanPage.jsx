@@ -312,7 +312,7 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     <div>
       <StepIndicator />
       <div className="form-container">
-        <h1>Create Plan Page</h1>
+        <h1>Input Offer Details</h1>
 
         <form onSubmit={handleNext}>
           {/* Offer Section */}

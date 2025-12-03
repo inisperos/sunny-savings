@@ -356,7 +356,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
   return (
     <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
       <StepIndicator />
-      <h1 style={{ fontWeight: 700 }}>Add your savings goals.</h1>
+      <h1 style={{ fontWeight: 700 }}>Add Savings Goals</h1>
       <h2 style={{ marginTop: "0.25rem" }}>How much do you want to save?</h2>
 
       <h2
