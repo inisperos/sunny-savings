@@ -25,7 +25,7 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           marginBottom: "1.5rem",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Details</h2>
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Details</h3>
         <div
           style={{
             display: "grid",
@@ -44,18 +44,9 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
             <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
         </div>
-      </div>
 
       {/* Location Info Section */}
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Location Info</h2>
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Location Info</h3>
         <div
           style={{
             display: "grid",
@@ -77,7 +68,8 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
         </div>
       </div>
 
-      {/* Stipends Section */}
+    {/* Stipends Section */}
+    <div>
       <div
         style={{
           backgroundColor: "var(--color-background-accent)",
@@ -86,9 +78,7 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           marginBottom: "1.5rem",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
-          Stipends
-        </h2>
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}> Stipends </h3>
         {plan.stipends && plan.stipends.length > 0 ? (
           <>
             <table
@@ -149,20 +139,11 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
             </div>
           </>
         ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No reimbursements / stipends</p>
+          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No stipends</p>
         )}
-      </div>
 
-      {/* Fees Section */}
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Fees</h2>
+    {/* Fees Section */}
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Fees</h3>
         {plan.fees && plan.fees.length > 0 ? (
           <>
             <table
@@ -226,18 +207,19 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No fees</p>
         )}
       </div>
+    </div>
 
-      {/* Summary Section */}
       <div
         style={{
-          backgroundColor: "var(--color-accent-light)",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
-          border: "2px solid var(--color-accent-dark)",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Summary</h2>
+
+      {/* Summary Section */}
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Summary</h3>
         <div
           style={{
             display: "grid",
@@ -260,12 +242,12 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           <div>
             <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
           </div>
-          <div style={{ fontWeight: "600", fontSize: "1.1rem" }}>
+          <div>
             <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
           </div>
         </div>
       </div>
-    </div>
+      </div>
   );
 }
 

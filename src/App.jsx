@@ -178,7 +178,7 @@ function PlanDetails({ plans }) {
               fontSize: "0.9rem",
             }}
           >
-            ✏️ Edit Plan
+            Edit Plan
           </button>
         </div>
       </div>
@@ -188,38 +188,15 @@ function PlanDetails({ plans }) {
         style={{
           marginBottom: "2.5rem",
           paddingBottom: "2rem",
-          borderBottom: "3px solid var(--color-accent-dark)",
         }}
       >
-        <h2
-          style={{
-            fontSize: "1.5rem",
-            color: "var(--color-accent-dark)",
-            marginBottom: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
-          Offer Calculation
-        </h2>
+        <h2> Offer Calculation </h2>
         <OfferCalculationSection plan={plan} formatCurrency={formatCurrency} />
       </div>
 
-      {/* Budget Creation Section - Clearly Separated */}
+      {/* Budget Creation Section*/}
       <div>
-        <h2
-          style={{
-            fontSize: "1.5rem",
-            color: "var(--color-primary-dark)",
-            marginBottom: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
-          Budget & Savings
-        </h2>
+        <h2> Budget & Savings </h2>
         <BudgetCreationSection plan={plan} formatCurrency={formatCurrency} navigate={navigate} />
       </div>
 
@@ -231,14 +208,14 @@ function PlanDetails({ plans }) {
             padding: "0.75rem 1.5rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "var(--color-primary-dark)",
+            backgroundColor: "var(--color-border)",
             color: "white",
             cursor: "pointer",
             fontSize: "1rem",
             marginRight: "0.5rem",
           }}
         >
-          ← Back Home
+          Back Home
         </button>
       </div>
     </div>
