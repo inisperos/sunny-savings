@@ -241,7 +241,10 @@ export default function TrackSavingsPage({ plans, setPlans }) {
       <button
         onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
         className="btn btn-edit"
-        style={{ marginTop: "3rem" }}
+        style={{ 
+          marginTop: "3rem",
+          backgroundColor: "var(--color-accent-dark"
+        }}
       >
         Edit Plan
       </button>
