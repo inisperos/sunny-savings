@@ -26,36 +26,20 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
             <h2 style={{ marginTop: 0, marginBottom: 0 }}>
               Budget Allocation Summary
             </h2>
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              <button
-                onClick={() => navigate("/categories", { state: { planId: plan.id } })}
-                style={{
-                  padding: "0.4rem 0.8rem",
-                  borderRadius: "6px",
-                  border: "1px solid var(--color-primary-dark)",
-                  backgroundColor: "transparent",
-                  color: "var(--color-primary-dark)",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                }}
-              >
-                Edit Categories
-              </button>
-              <button
-                onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
-                style={{
-                  padding: "0.4rem 0.8rem",
-                  borderRadius: "6px",
-                  border: "1px solid var(--color-primary-dark)",
-                  backgroundColor: "transparent",
-                  color: "var(--color-primary-dark)",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                }}
-              >
-                Edit Budget
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
+              style={{
+                padding: "0.4rem 0.8rem",
+                borderRadius: "6px",
+                border: "1px solid var(--color-primary-dark)",
+                backgroundColor: "transparent",
+                color: "var(--color-primary-dark)",
+                cursor: "pointer",
+                fontSize: "0.85rem",
+              }}
+            >
+              Edit Budget
+            </button>
           </div>
           <p>Per {budgetTimeframeInWeeks} week(s)</p>
           <ul

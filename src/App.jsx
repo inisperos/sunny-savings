@@ -22,23 +22,6 @@ import TrackSavingsPage from "./pages/TrackSavings";
 
 
 
-// Helper function to determine plan status
-function getPlanStatus(plan) {
-  const hasOfferInfo = plan.company && plan.salary && plan.weeks && plan.location;
-  const hasFeesInfo = plan.stipends !== undefined || plan.fees !== undefined;
-  const hasBudget = plan.budgets && plan.budgets.length > 0;
-  
-  if (hasOfferInfo && hasFeesInfo && hasBudget) {
-    return { status: "complete", label: "Complete", color: "#10b981" };
-  } else if (hasOfferInfo && hasFeesInfo) {
-    return { status: "offer-only", label: "Offer Only", color: "#f59e0b" };
-  } else if (hasOfferInfo) {
-    return { status: "partial", label: "In Progress", color: "#3b82f6" };
-  } else {
-    return { status: "draft", label: "Draft", color: "#6b7280" };
-  }
-}
-
 // 🏠 Home Page
 function Home({ plans, deletePlan }) {
   const navigate = useNavigate();
@@ -85,38 +68,18 @@ function Home({ plans, deletePlan }) {
                 e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
               }}
             >
-              {/* Plan title and status */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                <h2
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 600,
-                    margin: 0,
-                    letterSpacing: "0.3px",
-                    color: "var(--color-accent-dark)",
-                  }}
-                >
-                  {plan.company || "Untitled Plan"}
-                </h2>
-                {(() => {
-                  const planStatus = getPlanStatus(plan);
-                  return (
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: "600",
-                        padding: "0.25rem 0.5rem",
-                        borderRadius: "12px",
-                        backgroundColor: `${planStatus.color}20`,
-                        color: planStatus.color,
-                        border: `1px solid ${planStatus.color}40`,
-                      }}
-                    >
-                      {planStatus.label}
-                    </span>
-                  );
-                })()}
-              </div>
+              {/* Plan title */}
+              <h2
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: 600,
+                  margin: "0 0 0.6rem 0",
+                  letterSpacing: "0.3px",
+                  color: "var(--color-accent-dark)",
+                }}
+              >
+                {plan.company || "Untitled Plan"}
+              </h2>
 
               {/* ✅ Sleek horizontal button row */}
               <div
