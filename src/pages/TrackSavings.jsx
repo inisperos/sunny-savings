@@ -105,7 +105,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
 
     if (newSaved >= goal && goal > 0) {
       setPopupMessage(
-        `🎉 Congrats! You completed your savings goal for ${category}!`
+        `Congrats! You completed your savings goal for ${category}!`
       );
     } else {
       setPopupMessage(
@@ -225,155 +225,14 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         )}
       </div>
 
-      {/* ✅ COLLAPSIBLE EDIT PLAN */}
+      {/* EDIT PLAN */}
       <button
-        onClick={() => setShowEdit((prev) => !prev)}
-        style={{
-          marginTop: "3rem",
-          backgroundColor: "var(--color-accent-dark)",
-          padding: "0.75rem 1.25rem",
-          borderRadius: "10px",
-          border:"none",
-          color:"white",
-          cursor: "pointer",
-        }}
+        onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
+        className="btn btn-edit"
+        style={{ marginTop: "3rem" }}
       >
-        {showEdit ? "Close Edit Plan" : "Edit Plan"}
+        Edit Plan
       </button>
-
-      {showEdit && (
-        <div style={{ marginTop: "2rem" }}>
-          <h2>Edit your Plan</h2>
-
-          <h3
-            style={{
-              color: isOverBudget ? "#dc2626" : "#16a34a",
-            }}
-          >
-            {isOverBudget
-              ? `You are over budget by $${Math.abs(
-                  budgetRemaining
-                ).toFixed(2)}`
-              : `You have $${budgetRemaining.toFixed(
-                  2
-                )} left to allocate`}
-          </h3>
-
-          {Object.keys(editAmounts).map((c) => (
-            <div
-              key={c}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "1rem",
-                margin: "0.75rem auto",
-              }}
-            >
-              <div
-                style={{
-                  padding: "1rem",
-                  border: "2px solid #000",
-                  borderRadius: "12px",
-                  width: "200px",
-                }}
-              >
-                {c}
-              </div>
-
-              <input
-                type="number"
-                value={editAmounts[c]}
-                onChange={(e) => handleEditAmountChange(c, e.target.value)}
-                style={{
-                  width: "200px",
-                  padding: "1rem",
-                  borderRadius: "12px",
-                  border: "2px solid #ccc",
-                }}
-              />
-            </div>
-          ))}
-
-          {!showAddCategory ? (
-            <button
-              onClick={() => setShowAddCategory(true)}
-              style={{
-                marginTop: "1rem",
-                padding: "1rem",
-                border: "3px dashed #000",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
-            >
-              Add New Category +
-            </button>
-          ) : (
-            <div style={{ marginTop: "1rem" }}>
-              <input
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-                placeholder="New category"
-                style={{
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "1px solid #ccc",
-                }}
-              />
-              <button onClick={handleAddNewCategory}>Add</button>
-              <button onClick={() => setShowAddCategory(false)}>
-                Cancel
-              </button>
-            </div>
-          )}
-
-          <div style={{ marginTop: "2rem" }}>
-            <button onClick={() => setShowEdit(false)}>Cancel</button>
-            <button onClick={handleSaveEdit}>Save</button>
-          </div>
-        </div>
-      )}
-
-      {/* ✅ popup */}
-      {showPopup && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              padding: "2rem",
-              borderRadius: "12px",
-              width: "320px",
-              textAlign: "center",
-            }}
-          >
-            <p style={{ fontSize: "1.2rem" }}>{popupMessage}</p>
-            <button
-              onClick={() => setShowPopup(false)}
-              style={{
-                marginTop: "1rem",
-                backgroundColor: "#1e3a8a",
-                color: "white",
-                padding: "0.75rem 1.25rem",
-                borderRadius: "8px",
-                border: "none",
-              }}
-            >
-              Thanks!
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* ✅ BACK BUTTON FIXED */}
       <div style={{ marginTop: "3rem" }}>
