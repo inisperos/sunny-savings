@@ -159,182 +159,185 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     navigate("/");
   };
 
-  const inputStyle = {
-    padding: "0.5rem",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    width: "220px",
-    margin: "0.5rem",
-  };
-
-  const sectionHeader = {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    marginTop: "2rem",
-  };
-
   return (
-    <div style={{ textAlign: "center", marginTop: "3rem" }}>
+    <div>
       <StepIndicator />
-      <h1>Create Plan Page 📝</h1>
-      <form onSubmit={handleNext}>
-        {/* Offer Details */}
-        <p style={sectionHeader}>Add Offer Details:</p>
+      <div className="form-container"> 
+        <h1>Create Plan Page 📝</h1>
 
-        <input
-          type="text"
-          placeholder="Company"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          style={inputStyle}
-        />
-        <br />
+        <form onSubmit={handleNext}>
 
-        <input
-          type="number"
-          placeholder="Salary"
-          value={salary}
-          onChange={(e) => setSalary(e.target.value)}
-          style={inputStyle}
-        />
-        <select
-          value={salaryFrequency}
-          onChange={(e) => setSalaryFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="hourly">Hourly</option>
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Biweekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
-        </select>
-        <br />
+          {/* Offer Section */}
+          <p className="form-section">Add Offer Details:</p>
 
-        <input
-          type="number"
-          placeholder="Number of weeks"
-          value={weeks}
-          onChange={(e) => setWeeks(e.target.value)}
-          style={inputStyle}
-        />
-        <br />
+          {/* Company */}
+          <div className="inp">
+            <input
+              type="text"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              required
+            />
+            <span className="label">Company</span>
+          </div>
 
-        {/* Show hours per week input only when hourly is selected */}
-        {salaryFrequency === "hourly" && (
-          <>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-              }}
+          {/* Salary */}
+          <div className="inp">
+            <input
+              type="number"
+              value={salary}
+              onChange={(e) => setSalary(e.target.value)}
+              required
+            />
+            <span className="label">Salary</span>
+          </div>
+
+          {/* Salary Frequency */}
+          <div className="inp">
+            <select
+              value={salaryFrequency}
+              onChange={(e) => setSalaryFrequency(e.target.value)}
+              required
             >
+              <option value="" disabled></option>
+              <option value="hourly">Hourly</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Biweekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="annually">Annually</option>
+            </select>
+            <span className="label">Salary Frequency</span>
+          </div>
+
+          {/* Weeks */}
+          <div className="inp">
+            <input
+              type="number"
+              value={weeks}
+              onChange={(e) => setWeeks(e.target.value)}
+              required
+            />
+            <span className="label">Number of Weeks</span>
+          </div>
+
+          {/* Hours per week if hourly */}
+          {salaryFrequency === "hourly" && (
+            <div className="inp">
               <input
                 type="number"
-                placeholder="Hours per week"
                 value={hoursPerWeek}
                 onChange={(e) => setHoursPerWeek(e.target.value)}
-                style={inputStyle}
                 min="1"
                 max="168"
                 step="1"
+                required
               />
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
+              <span className="label">Hours per Week</span>
             </div>
-            <br />
-          </>
-        )}
+          )}
 
-        {/* Location Info */}
-        <p style={sectionHeader}>Add Location Info:</p>
+          {/* Location Section */}
+          <p className="form-section">Add Location Info:</p>
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <br />
+          {/* Location */}
+          <div className="inp">
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+            <span className="label">Location</span>
+          </div>
 
-        <input
-          type="number"
-          placeholder="Rent"
-          value={rent}
-          onChange={(e) => setRent(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={rentFrequency}
-          onChange={(e) => setRentFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-        <br />
+          {/* Rent */}
+          <div className="inp">
+            <input
+              type="number"
+              value={rent}
+              onChange={(e) => setRent(e.target.value)}
+              required
+            />
+            <span className="label">Rent</span>
+          </div>
 
-        <input
-          type="number"
-          placeholder="Transportation Cost"
-          value={transportation}
-          onChange={(e) => setTransportation(e.target.value)}
-          style={inputStyle}
-          required
-        />
-        <select
-          value={transportFrequency}
-          onChange={(e) => setTransportFrequency(e.target.value)}
-          style={inputStyle}
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
+          {/* Rent Frequency */}
+          <div className="inp">
+            <select
+              value={rentFrequency}
+              onChange={(e) => setRentFrequency(e.target.value)}
+              required
+            >
+              <option value="" disabled></option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <span className="label">Rent Frequency</span>
+          </div>
 
-        <br />
-      </form>
+          {/* Transportation */}
+          <div className="inp">
+            <input
+              type="number"
+              value={transportation}
+              onChange={(e) => setTransportation(e.target.value)}
+              required
+            />
+            <span className="label">Transportation Cost</span>
+          </div>
 
-      {/* Navigation buttons at bottom - Back and Next parallel */}
-      <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
-        <button
-          onClick={handleBack}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-border)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          ← Back (Save)
-        </button>
-        <button
-          type="button"
-          onClick={(e) => {
-            // Save and go to fees page (continue to budget setup)
-            handleNext(e);
-          }}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-accent-light)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          Next →
-        </button>
+          {/* Transport frequency */}
+          <div className="inp">
+            <select
+              value={transportFrequency}
+              onChange={(e) => setTransportFrequency(e.target.value)}
+              required
+            >
+              <option value="" disabled></option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <span className="label">Transportation Frequency</span>
+          </div>
+        </form>
+
+        {/* Navigation Buttons */}
+        <div style={{ display: "flex", gap: "0.75rem", marginTop: "2rem" }}>
+          <button
+            onClick={handleBack}
+            style={{
+              padding: "0.6rem 1.2rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "var(--color-border)",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.95rem",
+              fontWeight: 500,
+            }}
+          >
+            ← Back (Save)
+          </button>
+
+          <button
+            type="button"
+            onClick={handleNext}
+            style={{
+              padding: "0.6rem 1.2rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "var(--color-accent-light)",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.95rem",
+              fontWeight: 500,
+            }}
+          >
+            Next →
+          </button>
+        </div>
       </div>
     </div>
   );
