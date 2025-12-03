@@ -1,9 +1,9 @@
 // src/pages/SetBudgetPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import '../App.css'
+import "../App.css";
 import { calculatePlanDetails } from "../utils/planDetails";
-import StepIndicator from '../components/StepIndicator';
+import StepIndicator from "../components/StepIndicator";
 
 function BudgetCard({ category, value, onChange, onDelete }) {
   const cardStyle = {
@@ -65,7 +65,11 @@ function BudgetCard({ category, value, onChange, onDelete }) {
       />
       <button
         onClick={() => {
-          if (window.confirm(`Are you sure you want to delete "${category}"? This will remove all budget and savings data for this category.`)) {
+          if (
+            window.confirm(
+              `Are you sure you want to delete "${category}"? This will remove all budget and savings data for this category.`
+            )
+          ) {
             onDelete(category);
           }
         }}
@@ -89,170 +93,123 @@ function BudgetCard({ category, value, onChange, onDelete }) {
 export default function SetBudgetPage({ plans, setPlans }) {
   const navigate = useNavigate();
   const locationState = useLocation();
-  
-  // Get plan ID from location state
+
+  // 哪个 plan
   const planId = locationState.state?.planId;
-  const currentPlan = planId ? plans.find(p => p.id === planId) : (plans.length > 0 ? plans[plans.length - 1] : null);
-  const actualPlanId = planId || (currentPlan?.id);
+  const currentPlan = planId
+    ? plans.find((p) => p.id === planId)
+    : plans.length > 0
+    ? plans[plans.length - 1]
+    : null;
+  const actualPlanId = planId || currentPlan?.id;
 
-  // obtain categories from current plan
   const categories = currentPlan?.categories || [];
-
-  // obtain number of weeks from current plan
   const weeksInPlan = currentPlan?.weeks || 4;
-
-  // obtain timeframeInWeeks from current plan
   const timeframeInWeeks = currentPlan?.budgetTimeframeInWeeks || 4;
 
-  // obtain totalDisposableIncome from current plan
   const { totalDisposableIncome } = currentPlan
     ? calculatePlanDetails(currentPlan)
     : { totalDisposableIncome: 0 };
 
-  // calculate initial budget available based on timeframe and weeks in plan
   const initialBudgetAvailable =
-    (totalDisposableIncome / weeksInPlan) * timeframeInWeeks || 0;
+    weeksInPlan > 0
+      ? (totalDisposableIncome / weeksInPlan) * timeframeInWeeks
+      : 0;
 
-  // Load existing budgets from plan, but only for categories that are currently in the categories array
   const existingBudgets = currentPlan?.budgets || [];
   const initialAmounts = {};
-  // Only initialize amounts for categories that are in the current categories array
   categories.forEach((c) => {
-    const existingBudget = existingBudgets.find(b => b.category === c);
-    initialAmounts[c] = existingBudget ? (existingBudget.amount?.toString() || "") : "";
+    const existing = existingBudgets.find((b) => b.category === c);
+    initialAmounts[c] =
+      existing && typeof existing.amount === "number"
+        ? existing.amount.toString()
+        : "";
   });
 
-  // local state for amounts keyed by category name
   const [amounts, setAmounts] = useState(initialAmounts);
   const [showAdd, setShowAdd] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [budgetAvailable, setBudgetAvailable] =
     useState(initialBudgetAvailable);
 
+  // 根据当前 amounts 重新算还能分多少
   useEffect(() => {
-    setAmounts((prev) => {
-      const next = {};
-      // Only keep categories that are in the current categories array
-      categories.forEach((c) => {
-        // Preserve existing amount if category still exists, otherwise initialize to empty
-        next[c] = prev[c] !== undefined ? prev[c] : "";
-      });
-      // Remove categories that are no longer in the categories array
-      return next;
-    });
+    const totalAllocated = Object.values(amounts).reduce(
+      (sum, val) => sum + (parseFloat(val) || 0),
+      0
+    );
+    setBudgetAvailable(initialBudgetAvailable - totalAllocated);
+  }, [amounts, initialBudgetAvailable]);
 
-    // Clean up budgets and savings for deleted categories when categories change
-    if (actualPlanId && currentPlan) {
-      const currentBudgetCategories = (currentPlan.budgets || []).map(b => b.category);
-      const hasDeletedCategories = currentBudgetCategories.some(cat => !categories.includes(cat));
-      
-      if (hasDeletedCategories) {
-        // Only update if there are actually deleted categories
-        const updatedPlans = plans.map((plan) => {
-          if (plan.id === actualPlanId) {
-            // Filter budgets to only include current categories
-            const validBudgets = (plan.budgets || []).filter(b => categories.includes(b.category));
-            
-            // Filter savings to only include current categories
-            const validSavings = {};
-            categories.forEach((c) => {
-              validSavings[c] = plan.savings?.[c] || 0;
-            });
-
-            return {
-              ...plan,
-              budgets: validBudgets,
-              savings: validSavings,
-            };
-          }
-          return plan;
-        });
-        setPlans(updatedPlans);
-      }
-    }
-  }, [categories, actualPlanId]);
-
-  // Save current budget data - only save categories that are in the current categories array
   const saveCurrentData = () => {
-    // Filter amounts to only include categories that are currently in the categories array
-    const validAmounts = {};
-    categories.forEach((c) => {
-      if (amounts[c] !== undefined) {
-        validAmounts[c] = amounts[c];
-      }
-    });
+    if (!categories.length) return;
 
     if (actualPlanId) {
-      const updatedPlans = plans.map((plan) => {
-        if (plan.id === actualPlanId) {
-          // Only save budgets for categories that are in the current categories array
-          const validBudgets = categories.map((c) => ({
-            category: c,
-            amount: parseFloat(validAmounts[c]) || 0,
-          }));
+      const updated = plans.map((plan) => {
+        if (plan.id !== actualPlanId) return plan;
 
-          // Only keep savings for categories that are in the current categories array
-          const validSavings = {};
-          categories.forEach((c) => {
-            validSavings[c] = plan.savings?.[c] || 0;
-          });
+        const budgets = categories.map((c) => ({
+          category: c,
+          amount: parseFloat(amounts[c]) || 0,
+        }));
 
-          return {
-            ...plan,
-            budgets: validBudgets,
-            savings: validSavings,
-          };
-        }
-        return plan;
+        const savings = {};
+        categories.forEach((c) => {
+          savings[c] = plan.savings?.[c] || 0;
+        });
+
+        return {
+          ...plan,
+          budgets,
+          savings,
+        };
       });
-      setPlans(updatedPlans);
+      setPlans(updated);
     } else if (plans.length > 0) {
-      // Fallback to last plan
       const updatedPlans = [...plans];
       const lastIndex = updatedPlans.length - 1;
+      const last = updatedPlans[lastIndex];
 
-      const validBudgets = categories.map((c) => ({
+      const planCategories = last.categories || categories;
+
+      const budgets = planCategories.map((c) => ({
         category: c,
-        amount: parseFloat(validAmounts[c]) || 0,
+        amount: parseFloat(amounts[c]) || 0,
       }));
 
-      const validSavings = {};
-      categories.forEach((c) => {
-        validSavings[c] = updatedPlans[lastIndex].savings?.[c] || 0;
+      const savings = {};
+      planCategories.forEach((c) => {
+        savings[c] = last.savings?.[c] || 0;
       });
 
       updatedPlans[lastIndex] = {
-        ...updatedPlans[lastIndex],
-        budgets: validBudgets,
-        savings: validSavings,
+        ...last,
+        budgets,
+        savings,
       };
+
       setPlans(updatedPlans);
     }
   };
 
-  // Auto-save on changes
+  // 自动保存
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (Object.keys(amounts).length > 0 || actualPlanId) {
+      if (Object.keys(amounts).length > 0 && (actualPlanId || plans.length)) {
         saveCurrentData();
       }
     }, 1000);
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amounts]);
 
   const handleAmountChange = (category, value) => {
-    // allow only numeric input (empty or number)
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
-      setAmounts((prev) => {
-        const updatedAmounts = { ...prev, [category]: value };
-        const totalAllocated = Object.values(updatedAmounts).reduce(
-          (sum, val) => sum + (parseFloat(val) || 0),
-          0
-        );
-        setBudgetAvailable(initialBudgetAvailable - totalAllocated);
-        return updatedAmounts;
-      });
+      setAmounts((prev) => ({
+        ...prev,
+        [category]: value,
+      }));
     }
   };
 
@@ -262,109 +219,62 @@ export default function SetBudgetPage({ plans, setPlans }) {
       return;
     }
 
-    const trimmedCategory = newCategory.trim();
+    const trimmed = newCategory.trim();
 
-    // Check if category already exists
-    if (categories.includes(trimmedCategory)) {
-      alert("This category already exists!");
-      return;
-    }
+    const targetId =
+      actualPlanId || (plans.length ? plans[plans.length - 1].id : null);
+    if (!targetId) return;
 
-    // Update plans with new category appended
-    if (actualPlanId) {
-      const updatedPlans = plans.map((plan) => {
-        if (plan.id === actualPlanId) {
-          const existing = Array.isArray(plan.categories) ? plan.categories : [];
-          if (!existing.includes(trimmedCategory)) {
-            return {
-              ...plan,
-              categories: [...existing, trimmedCategory],
-            };
-          }
-        }
-        return plan;
-      });
-      setPlans(updatedPlans);
-    } else if (plans.length > 0) {
-      // Fallback to last plan if no ID
-      const updatedPlans = [...plans];
-      const last = { ...updatedPlans[updatedPlans.length - 1] };
-      const existing = Array.isArray(last.categories) ? last.categories : [];
-      if (!existing.includes(trimmedCategory)) {
-        last.categories = [...existing, trimmedCategory];
-        updatedPlans[updatedPlans.length - 1] = last;
-        setPlans(updatedPlans);
-      }
-    }
+    const updated = plans.map((plan) => {
+      if (plan.id !== targetId) return plan;
+      const existing = Array.isArray(plan.categories) ? plan.categories : [];
+      if (existing.includes(trimmed)) return plan;
+      return {
+        ...plan,
+        categories: [...existing, trimmed],
+      };
+    });
+    setPlans(updated);
 
-    // Initialize amount for it locally
-    setAmounts((prev) => ({ ...prev, [trimmedCategory]: "" }));
+    setAmounts((prev) => ({
+      ...prev,
+      [trimmed]: "",
+    }));
     setNewCategory("");
     setShowAdd(false);
   };
 
-  // Handle category deletion - removes category and all related data
   const handleDeleteCategory = (categoryToDelete) => {
-    if (actualPlanId) {
-      const updatedPlans = plans.map((plan) => {
-        if (plan.id === actualPlanId) {
-          // Remove from categories array
-          const updatedCategories = (plan.categories || []).filter(c => c !== categoryToDelete);
-          
-          // Remove from budgets array
-          const updatedBudgets = (plan.budgets || []).filter(b => b.category !== categoryToDelete);
-          
-          // Remove from savings object
-          const updatedSavings = { ...plan.savings };
-          delete updatedSavings[categoryToDelete];
+    const targetId =
+      actualPlanId || (plans.length ? plans[plans.length - 1].id : null);
+    if (!targetId) return;
 
-          return {
-            ...plan,
-            categories: updatedCategories,
-            budgets: updatedBudgets,
-            savings: updatedSavings,
-          };
-        }
-        return plan;
-      });
-      setPlans(updatedPlans);
-    } else if (plans.length > 0) {
-      // Fallback to last plan
-      const updatedPlans = [...plans];
-<<<<<<< HEAD
-      updatedPlans[updatedPlans.length - 1] = {
-        ...updatedPlans[updatedPlans.length - 1],
-        budgets: Object.keys(amounts).map((c) => ({
-          category: c,
-          amount: amounts[c] === "" ? 0 : parseFloat(amounts[c]),
-        })),
-=======
-      const last = { ...updatedPlans[updatedPlans.length - 1] };
-      
-      const updatedCategories = (last.categories || []).filter(c => c !== categoryToDelete);
-      const updatedBudgets = (last.budgets || []).filter(b => b.category !== categoryToDelete);
-      const updatedSavings = { ...last.savings };
+    const updated = plans.map((plan) => {
+      if (plan.id !== targetId) return plan;
+
+      const updatedCategories = (plan.categories || []).filter(
+        (c) => c !== categoryToDelete
+      );
+      const updatedBudgets = (plan.budgets || []).filter(
+        (b) => b.category !== categoryToDelete
+      );
+      const updatedSavings = { ...(plan.savings || {}) };
       delete updatedSavings[categoryToDelete];
 
-      updatedPlans[updatedPlans.length - 1] = {
-        ...last,
+      return {
+        ...plan,
         categories: updatedCategories,
         budgets: updatedBudgets,
         savings: updatedSavings,
->>>>>>> main
       };
-      setPlans(updatedPlans);
-    }
+    });
 
-<<<<<<< HEAD
-    navigate("/");
-  };
-=======
-    // Remove from local amounts state
+    setPlans(updated);
+
     setAmounts((prev) => {
-      const updated = { ...prev };
-      delete updated[categoryToDelete];
-      return updated;
+      const copy = { ...prev };
+      delete copy[categoryToDelete];
+      return copy;
     });
   };
 
@@ -373,14 +283,10 @@ export default function SetBudgetPage({ plans, setPlans }) {
     navigate("/");
   };
 
-  // Handle back button - save and go to categories page
   const handleBack = () => {
     saveCurrentData();
     navigate("/categories", { state: { planId: actualPlanId } });
   };
-  
->>>>>>> main
-
 
   const isOverBudget = budgetAvailable < 0;
   const overAmount = Math.abs(budgetAvailable);
@@ -546,7 +452,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
           )}
         </div>
 
-
         <div
           style={{
             maxWidth: "760px",
@@ -554,7 +459,6 @@ export default function SetBudgetPage({ plans, setPlans }) {
             textAlign: "right",
           }}
         >
-
           <button
             onClick={handleBack}
             style={{
