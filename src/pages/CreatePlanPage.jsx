@@ -199,7 +199,110 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     }
   };
 
-  const handleBack = () => {
+  const handleBack = () => {{/* --- STIPENDS SECTION --- */}
+<p className="form-section">Stipends</p>
+
+{stipends.map((s, i) => (
+  <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+    <input
+      type="text"
+      placeholder="e.g. Housing, Travel"
+      value={s.type}
+      onChange={(e) => {
+        const updated = [...stipends];
+        updated[i].type = e.target.value;
+        setStipends(updated);
+      }}
+    />
+
+    <input
+      type="number"
+      placeholder="$ Amount"
+      value={s.amount}
+      onChange={(e) => {
+        const updated = [...stipends];
+        updated[i].amount = Number(e.target.value);
+        setStipends(updated);
+      }}
+    />
+
+    {/* Delete button */}
+    <button
+      type="button"
+      className="delete-btn"
+      onClick={() => {
+        setStipends(stipends.filter((_, idx) => idx !== i));
+      }}
+    >
+      –
+    </button>
+  </div>
+))}
+
+{/* Add New Stipend Button */}
+<button
+  type="button"
+  className="add-entry-btn"
+  onClick={() =>
+    setStipends([...stipends, { type: "", amount: "" }])
+  }
+>
+  Add new stipend
+</button>
+
+
+
+
+{/* --- FEES SECTION --- */}
+<p className="form-section">One-Time Fees</p>
+
+{fees.map((f, i) => (
+  <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
+    <input
+      type="text"
+      placeholder="e.g. Relocation, Deposit"
+      value={f.type}
+      onChange={(e) => {
+        const updated = [...fees];
+        updated[i].type = e.target.value;
+        setFees(updated);
+      }}
+    />
+
+    <input
+      type="number"
+      placeholder="$ Amount"
+      value={f.amount}
+      onChange={(e) => {
+        const updated = [...fees];
+        updated[i].amount = Number(e.target.value);
+        setFees(updated);
+      }}
+    />
+
+    {/* Delete button */}
+    <button
+      type="button"
+      className="delete-btn"
+      onClick={() => {
+        setFees(fees.filter((_, idx) => idx !== i));
+      }}
+    >
+      –
+    </button>
+  </div>
+))}
+
+{/* Add New Fee Button */}
+<button
+  type="button"
+  className="add-entry-btn"
+  onClick={() =>
+    setFees([...fees, { type: "", amount: "" }])
+  }
+>
+  Add new fee
+</button>
     // Save current data before going back
     saveCurrentData();
     navigate("/");
@@ -347,86 +450,110 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
             <span className="label">Transportation Frequency</span>
           </div>
 
-          {/* Stipends Section */}
-          <p className="form-section">Add Stipends</p>
+          {/* --- STIPENDS SECTION --- */}
+          <p className="form-section">Stipends</p>
 
-          <div className="inp-row">
-            <div className="inp">
+          {stipends.map((s, i) => (
+            <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
               <input
                 type="text"
-                placeholder="Housing, Travel, etc."
-                value={stipendType}
-                onChange={(e) => setStipendType(e.target.value)}
-                required
+                placeholder="e.g. Housing, Travel"
+                value={s.type}
+                onChange={(e) => {
+                  const updated = [...stipends];
+                  updated[i].type = e.target.value;
+                  setStipends(updated);
+                }}
               />
-              <span className="label">Stipend Type</span>
-            </div>
 
-            <div className="inp">
               <input
                 type="number"
-                value={stipendAmount}
-                onChange={(e) => setStipendAmount(e.target.value)}
-                required
+                placeholder="$ Amount"
+                value={s.amount}
+                onChange={(e) => {
+                  const updated = [...stipends];
+                  updated[i].amount = Number(e.target.value);
+                  setStipends(updated);
+                }}
               />
-              <span className="label">Amount</span>
+
+              {/* Delete button */}
+              <button
+                type="button"
+                className="delete-btn"
+                onClick={() => {
+                  setStipends(stipends.filter((_, idx) => idx !== i));
+                }}
+              >
+                –
+              </button>
             </div>
+          ))}
 
-            <button type="button" className="add-btn" onClick={addStipend}>
-              Add
-            </button>
-          </div>
-
-          {stipends.length > 0 && (
-            <ul className="stipend-list">
-              {stipends.map((s, i) => (
-                <li key={i}>
-                  {s.type}: ${s.amount.toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* Add New Stipend Button */}
+          <button
+            type="button"
+            className="add-entry-btn"
+            onClick={() =>
+              setStipends([...stipends, { type: "", amount: "" }])
+            }
+          >
+            Add New Stipend +
+          </button>
 
 
-          {/* Fees Section */}
-          <p className="form-section">Add One-Time Fees</p>
 
-          <div className="inp-row">
-            <div className="inp">
+
+          {/* --- FEES SECTION --- */}
+          <p className="form-section">One-Time Fees</p>
+
+          {fees.map((f, i) => (
+            <div className="inp" key={i} style={{ display: "flex", gap: "0.5rem" }}>
               <input
                 type="text"
-                placeholder="Relocation, Deposit, etc."
-                value={feeType}
-                onChange={(e) => setFeeType(e.target.value)}
-                required
+                placeholder="e.g. Relocation, Deposit"
+                value={f.type}
+                onChange={(e) => {
+                  const updated = [...fees];
+                  updated[i].type = e.target.value;
+                  setFees(updated);
+                }}
               />
-              <span className="label">Fee Type</span>
-            </div>
 
-            <div className="inp">
               <input
                 type="number"
-                value={feeAmount}
-                onChange={(e) => setFeeAmount(e.target.value)}
-                required
+                placeholder="$ Amount"
+                value={f.amount}
+                onChange={(e) => {
+                  const updated = [...fees];
+                  updated[i].amount = Number(e.target.value);
+                  setFees(updated);
+                }}
               />
-              <span className="label">Amount</span>
+
+              {/* Delete button */}
+              <button
+                type="button"
+                className="delete-btn"
+                onClick={() => {
+                  setFees(fees.filter((_, idx) => idx !== i));
+                }}
+              >
+                –
+              </button>
             </div>
+          ))}
 
-            <button type="button" className="add-btn" onClick={addFee}>
-              Add
-            </button>
-          </div>
-
-          {fees.length > 0 && (
-            <ul className="fee-list">
-              {fees.map((f, i) => (
-                <li key={i}>
-                  {f.type}: ${f.amount.toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* Add New Fee Button */}
+          <button
+            type="button"
+            className="add-entry-btn"
+            onClick={() =>
+              setFees([...fees, { type: "", amount: "" }])
+            }
+          >
+            Add New Fee +
+          </button>
         </form>
 
         {/* Navigation Buttons */}
