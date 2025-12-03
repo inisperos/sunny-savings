@@ -213,7 +213,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         onClick={handleAdd}
         style={{
           padding: "0.5rem 1rem",
-          backgroundColor: "var(--color-primary-light)",
+          backgroundColor: "var(--color-accent-dark)",
           color: "white",
           border: "none",
           borderRadius: "8px",
@@ -241,7 +241,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
       <button
         onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
         className="btn btn-edit"
-        style={{ marginTop: "3rem" }}
+        style={{ marginTop: "3rem", padding: "0.5rem 1rem" }}
       >
         Edit Plan
       </button>
@@ -394,7 +394,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
             cursor: "pointer"
         }}
         >
-        ← Back to Plan
+        Back to Plan
         </button>
       </div>
     </div>

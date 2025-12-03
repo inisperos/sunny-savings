@@ -185,8 +185,9 @@ table td {
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  border: 1px solid var(--color-primary-dark);
+  border-radius: 13px;
+  color: white;
+  background-color: var(--color-primary-dark);
 }
 
 .plan-actions {
@@ -205,8 +206,8 @@ table td {
   transition: opacity 0.15s ease;
 }
 
-.btn-view, .btn-track {
-  background-color: var(--color-primary-dark);
+.btn-view, .btn-track, .btn-edit {
+  background-color: var(--color-accent-dark);
   color: white;
 }
 
@@ -223,7 +224,7 @@ table td {
   gap: 0.75rem;
 }
 
-.btn-create, .btn-compare, .btn-edit {
+.btn-create, .btn-compare {
   padding: 0.7rem 1.2rem;
   border-radius: 8px;
   background-color: var(--color-primary-light);
