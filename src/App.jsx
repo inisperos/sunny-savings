@@ -330,10 +330,6 @@ function App() {
           element={<PlanDetails plans={plans} />}
         />
         <Route
-          path="/fees"
-          element={<AddFeesPage plans={plans} setPlans={setPlans} />}
-        />
-        <Route
           path="/compare"
           element={<ComparePlansPage plans={plans} />}
         />

@@ -138,7 +138,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   // Handle back button - save and go to fees page
   const handleBack = () => {
     saveCurrentData();
-    navigate("/fees", { state: { planId: actualPlanId } });
+    navigate("/create", { state: { planId: actualPlanId } });
   };
 
   const circleStyle = (category, isCustom = false) => {

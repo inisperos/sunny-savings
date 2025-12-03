@@ -29,6 +29,50 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
   // Track if we have a plan ID (editing mode)
   const [currentPlanId, setCurrentPlanId] = useState(editingPlanId || null);
 
+  // State for stipends and fees - initialize from editing plan if exists
+  const [stipends, setStipends] = useState(editingPlan?.stipends || []);
+  const [fees, setFees] = useState(editingPlan?.fees || []);
+
+  // Input fields for stipends and fees
+  const [stipendType, setStipendType] = useState("");
+  const [stipendAmount, setStipendAmount] = useState("");
+  const [feeType, setFeeType] = useState("");
+  const [feeAmount, setFeeAmount] = useState("");
+
+  // Add new stipend
+  const addStipend = () => {
+    if (stipendType.trim() === "" || stipendAmount.trim() === "") {
+      alert("Please enter both type and amount for the stipend.");
+      return;
+    }
+
+    const newStipend = {
+      type: stipendType,
+      amount: parseFloat(stipendAmount),
+    };
+
+    setStipends((prev) => [...prev, newStipend]);
+    setStipendType("");
+    setStipendAmount("");
+  };
+
+  // Add new fee
+  const addFee = () => {
+    if (feeType.trim() === "" || feeAmount.trim() === "") {
+      alert("Please enter both type and amount for the fee.");
+      return;
+    }
+
+    const newFee = {
+      type: feeType,
+      amount: parseFloat(feeAmount),
+    };
+
+    setFees((prev) => [...prev, newFee]);
+    setFeeType("");
+    setFeeAmount("");
+  };
+
   // Save current form data (even if incomplete) to plan
   const saveCurrentData = () => {
     const planData = {
@@ -41,6 +85,8 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
       rentFrequency,
       transportation: parseFloat(transportation) || 0,
       transportFrequency,
+      stipends,
+      fees,
       ...(salaryFrequency === "hourly" && {
         hoursPerWeek: parseFloat(hoursPerWeek) || 40,
       }),
@@ -145,11 +191,11 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     
     // Navigate to fees page, passing plan ID if we have one
     if (currentPlanId) {
-      navigate("/fees", { state: { planId: currentPlanId } });
+      navigate("/categories", { state: { planId: currentPlanId } });
     } else {
       const id = Date.now();
       addPlan({ id, ...newPlan });
-      navigate("/fees", { state: { planId: id } });
+      navigate("/categories", { state: { planId: id } });
     }
   };
 
@@ -162,11 +208,10 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
   return (
     <div>
       <StepIndicator />
-      <div className="form-container"> 
+      <div className="form-container">
         <h1>Create Plan Page</h1>
 
         <form onSubmit={handleNext}>
-
           {/* Offer Section */}
           <p className="form-section">Add Offer Details</p>
 
@@ -301,6 +346,87 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
             </select>
             <span className="label">Transportation Frequency</span>
           </div>
+
+          {/* Stipends Section */}
+          <p className="form-section">Add Stipends</p>
+
+          <div className="inp-row">
+            <div className="inp">
+              <input
+                type="text"
+                placeholder="Housing, Travel, etc."
+                value={stipendType}
+                onChange={(e) => setStipendType(e.target.value)}
+                required
+              />
+              <span className="label">Stipend Type</span>
+            </div>
+
+            <div className="inp">
+              <input
+                type="number"
+                value={stipendAmount}
+                onChange={(e) => setStipendAmount(e.target.value)}
+                required
+              />
+              <span className="label">Amount</span>
+            </div>
+
+            <button type="button" className="add-btn" onClick={addStipend}>
+              Add
+            </button>
+          </div>
+
+          {stipends.length > 0 && (
+            <ul className="stipend-list">
+              {stipends.map((s, i) => (
+                <li key={i}>
+                  {s.type}: ${s.amount.toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          )}
+
+
+          {/* Fees Section */}
+          <p className="form-section">Add One-Time Fees</p>
+
+          <div className="inp-row">
+            <div className="inp">
+              <input
+                type="text"
+                placeholder="Relocation, Deposit, etc."
+                value={feeType}
+                onChange={(e) => setFeeType(e.target.value)}
+                required
+              />
+              <span className="label">Fee Type</span>
+            </div>
+
+            <div className="inp">
+              <input
+                type="number"
+                value={feeAmount}
+                onChange={(e) => setFeeAmount(e.target.value)}
+                required
+              />
+              <span className="label">Amount</span>
+            </div>
+
+            <button type="button" className="add-btn" onClick={addFee}>
+              Add
+            </button>
+          </div>
+
+          {fees.length > 0 && (
+            <ul className="fee-list">
+              {fees.map((f, i) => (
+                <li key={i}>
+                  {f.type}: ${f.amount.toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          )}
         </form>
 
         {/* Navigation Buttons */}

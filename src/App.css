@@ -335,3 +335,45 @@ form {
 .inp select option[value=""][disabled] {
   display: none; /* hide placeholder option */
 }
+
+/* -------- STIPEND AND FEES -------- */
+
+/* Row layout for stipend/fee inputs */
+.inp-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin: 1.2rem 0;
+}
+
+/* to make smaller inputs inside rows */
+.inp-row .inp {
+  flex: 1;
+}
+
+/* Style for Add buttons */
+.add-btn {
+  height: 56px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-accent-light);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-btn:hover {
+  background: var(--color-accent);
+}
+
+/* List styling */
+.stipend-list,
+.fee-list {
+  margin-top: 0.5rem;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
