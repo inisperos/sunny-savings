@@ -213,7 +213,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         onClick={handleAdd}
         style={{
           padding: "0.5rem 1rem",
-          backgroundColor: "var(--color-light-text)",
+          backgroundColor: "var(--color-primary-light)",
           color: "white",
           border: "none",
           borderRadius: "8px",
@@ -393,7 +393,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         onClick={() => navigate(`/plan/${plan.id}`)}
         style={{
             marginTop: "3rem",
-            backgroundColor: "var(--color-light-text)",
+            backgroundColor: "var(--color-primary-light)",
             padding: "0.75rem 1.25rem",
             borderRadius: "10px",
             border:"none",

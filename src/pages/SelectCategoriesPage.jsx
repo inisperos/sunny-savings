@@ -288,7 +288,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
                 style={{
                   padding: "0.5rem 1rem",
                   marginRight: "1rem",
-                  backgroundColor: "var(--color-light-text)",
+                  backgroundColor: "var(--color-primary-light)",
                   color: "white",
                   border: "none",
                   borderRadius: "6px",
@@ -321,7 +321,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
             padding: "0.6rem 1.2rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "var(--color-light-text)",
+            backgroundColor: "var(--color-primary-light)",
             color: "white",
             cursor: "pointer",
             fontSize: "0.95rem",
@@ -334,7 +334,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
           onClick={handleNext}
           style={{
             padding: "0.6rem 1.2rem",
-            backgroundColor: "var(--color-light-text)",
+            backgroundColor: "var(--color-primary-light)",
             color: "white",
             border: "none",
             borderRadius: "8px",

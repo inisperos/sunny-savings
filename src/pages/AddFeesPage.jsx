@@ -221,7 +221,7 @@ export default function AddFeesPage({ plans, setPlans }) {
             padding: "0.6rem 1.2rem",
             borderRadius: "8px",
             border: "none",
-            backgroundColor: "var(--color-light-text)",
+            backgroundColor: "var(--color-primary-light)",
             color: "white",
             cursor: "pointer",
             fontSize: "0.95rem",
@@ -234,7 +234,7 @@ export default function AddFeesPage({ plans, setPlans }) {
           onClick={handleNext}
           style={{
             padding: "0.6rem 1.2rem",
-            backgroundColor: "var(--color-light-text)",
+            backgroundColor: "var(--color-primary-light)",
             color: "white",
             border: "none",
             borderRadius: "8px",
