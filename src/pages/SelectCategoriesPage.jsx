@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -13,6 +14,25 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   const [showTip, setShowTip] = useState(false); 
 
   const defaultCategories = [
+=======
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import '../App.css'
+import StepIndicator from '../components/StepIndicator';
+
+export default function SelectBudgetCategories({ plans, setPlans }) {
+  const navigate = useNavigate();
+  const locationState = useLocation();
+  
+  // Get plan ID from location state
+  const planId = locationState.state?.planId;
+  const currentPlan = planId ? plans.find(p => p.id === planId) : (plans.length > 0 ? plans[plans.length - 1] : null);
+  const actualPlanId = planId || (currentPlan?.id);
+  
+  // Separate default and custom categories
+  const defaultCategoriesList = [
+    "Travel",
+>>>>>>> main
     "Emergency",
     "Travel",
     "Retirement",
@@ -20,18 +40,60 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     "Big purchase",
     "Entertainment",
   ];
+  
+  // Initialize from plan if exists - get fresh data from currentPlan
+  const existingCategories = currentPlan?.categories || [];
+  const existingTimeframe = currentPlan?.budgetTimeframeInWeeks || 4;
+  
+  // All existing categories should be marked as selected (they're already in the plan)
+  const initialSelected = existingCategories.filter(c => defaultCategoriesList.includes(c));
+  const initialCustom = existingCategories.filter(c => !defaultCategoriesList.includes(c));
+
+  const [timeframeInWeeks, setTimeframeInWeeks] = useState(existingTimeframe);
+  const [selectedCategories, setSelectedCategories] = useState(initialSelected);
+  const [customCategories, setCustomCategories] = useState(initialCustom);
+  
+  // Update selectedCategories and customCategories when plan categories change (e.g., when coming back from step 4)
+  useEffect(() => {
+    const freshPlan = planId ? plans.find(p => p.id === planId) : (plans.length > 0 ? plans[plans.length - 1] : null);
+    const freshCategories = freshPlan?.categories || [];
+    const newSelected = freshCategories.filter(c => defaultCategoriesList.includes(c));
+    const newCustom = freshCategories.filter(c => !defaultCategoriesList.includes(c));
+    setSelectedCategories(newSelected);
+    setCustomCategories(newCustom);
+  }, [plans, planId]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+
+  const defaultCategories = defaultCategoriesList;
 
   // Toggle a category selection
   const toggleCategory = (category) => {
-    setSelectedCategories((prev) => {
-      if (prev.includes(category)) {
-        // Remove the category
-        return prev.filter((c) => c !== category);
-      } else {
-        // Add the category
-        return [...prev, category];
-      }
-    });
+    const isDefaultCategory = defaultCategoriesList.includes(category);
+    
+    if (isDefaultCategory) {
+      // Toggle default category
+      setSelectedCategories((prev) => {
+        if (prev.includes(category)) {
+          // Remove the category
+          return prev.filter((c) => c !== category);
+        } else {
+          // Add the category
+          return [...prev, category];
+        }
+      });
+    } else {
+      // Toggle custom category
+      setCustomCategories((prev) => {
+        if (prev.includes(category)) {
+          // Remove the category
+          return prev.filter((c) => c !== category);
+        } else {
+          // Add the category
+          return [...prev, category];
+        }
+      });
+    }
   };
 
   // Add custom category
@@ -45,12 +107,23 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     setNewCategoryName("");
   };
 
-  // Save all categories and move to Fees page
-  const handleNext = () => {
-    if (plans.length > 0) {
-      const updatedPlans = [...plans];
-
+  // Save current data to plan
+  const saveCurrentData = () => {
+    if (actualPlanId) {
       // Combine and deduplicate all categories
+      const allCategories = Array.from(
+        new Set([...selectedCategories, ...customCategories].filter(Boolean))
+      );
+
+      const updatedPlans = plans.map((plan) =>
+        plan.id === actualPlanId
+          ? { ...plan, categories: allCategories, budgetTimeframeInWeeks: timeframeInWeeks }
+          : plan
+      );
+      setPlans(updatedPlans);
+    } else if (plans.length > 0) {
+      // Fallback to last plan if no ID
+      const updatedPlans = [...plans];
       const allCategories = Array.from(
         new Set([...selectedCategories, ...customCategories].filter(Boolean))
       );
@@ -60,13 +133,11 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         categories: allCategories,
         budgetTimeframeInWeeks: timeframeInWeeks,
       };
-
       setPlans(updatedPlans);
     }
-
-    navigate("/set-budget");
   };
 
+<<<<<<< HEAD
   const circleStyle = (category, isCustom = false) => ({
     width: "120px",
     height: "120px",
@@ -82,9 +153,57 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
     padding: "0.5rem",
     textAlign: "center",
   });
+=======
+  // Auto-save on changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (selectedCategories.length > 0 || customCategories.length > 0 || actualPlanId) {
+        saveCurrentData();
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [selectedCategories, customCategories, timeframeInWeeks]);
+
+  // Save all categories and move to set-budget page
+  const handleNext = () => {
+    saveCurrentData();
+    navigate("/set-budget", { state: { planId: actualPlanId } });
+  };
+
+  // Handle back button - save and go to fees page
+  const handleBack = () => {
+    saveCurrentData();
+    navigate("/fees", { state: { planId: actualPlanId } });
+  };
+
+  const circleStyle = (category, isCustom = false) => {
+    // Check if category is selected
+    // For default categories: check if in selectedCategories
+    // For custom categories: check if in existingCategories (plan.categories) - means it's already saved/selected
+    const isSelected = isCustom 
+      ? existingCategories.includes(category)  // Custom category is selected if it exists in plan
+      : selectedCategories.includes(category); // Default category is selected if in selectedCategories
+    
+    return {
+      width: "120px",
+      height: "120px",
+      borderRadius: "50%",
+      backgroundColor: isSelected ? "#4caf50" : "#ddd",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      fontSize: isCustom ? "1rem" : "1.1rem",
+      fontWeight: "500",
+      transition: "0.2s",
+    };
+  };
+>>>>>>> main
 
   return (
     <div style={{ textAlign: "center", marginTop: "3rem" }}>
+      <StepIndicator />
       <h1>Add your savings goals.</h1>
 
       <p>How often would you like to plan or review your budget?</p>
@@ -287,21 +406,39 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         </div>
       )}
 
-      {/* Next button */}
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: "2rem",
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "var(--color-accent-light)",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        Next →
-      </button>
+      {/* Navigation buttons at bottom - Back and Next parallel */}
+      <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
+        <button
+          onClick={handleBack}
+          style={{
+            padding: "0.6rem 1.2rem",
+            borderRadius: "8px",
+            border: "none",
+            backgroundColor: "var(--color-border)",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.95rem",
+            fontWeight: 500,
+          }}
+        >
+          ← Back (Save)
+        </button>
+        <button
+          onClick={handleNext}
+          style={{
+            padding: "0.6rem 1.2rem",
+            backgroundColor: "var(--color-accent-light)",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "0.95rem",
+            fontWeight: 500,
+          }}
+        >
+          Next →
+        </button>
+      </div>
     </div>
   );
 }

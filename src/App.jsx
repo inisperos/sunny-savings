@@ -7,8 +7,16 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+<<<<<<< HEAD
 import "./App.css";
 import { calculatePlanDetails } from "./utils/planCalculations";
+=======
+import './App.css'
+import { calculatePlanDetails } from "./utils/planDetails";
+import { getPlanStatus } from "./utils/planDetails";
+import OfferCalculationSection from "./components/OfferCalculationSection";
+import BudgetCreationSection from "./components/BudgetCreationSection";
+>>>>>>> main
 
 import CreatePlanPage from "./pages/CreatePlanPage";
 import SelectBudgetCategoriesPage from "./pages/SelectCategoriesPage";
@@ -65,6 +73,7 @@ function Home({ plans, deletePlan }) {
                   "0 2px 6px rgba(0, 0, 0, 0.06)";
               }}
             >
+<<<<<<< HEAD
               <h2
                 style={{
                   fontSize: "1.2rem",
@@ -76,6 +85,38 @@ function Home({ plans, deletePlan }) {
               >
                 {plan.company}
               </h2>
+=======
+              {/* Plan title and status */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+                <h2
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    margin: 0,
+                    letterSpacing: "0.3px",
+                    color: "var(--color-accent-dark)",
+                  }}
+                >
+                  {plan.company || "Untitled Plan"}
+                </h2>
+                {(() => {
+                  const planStatus = getPlanStatus(plan);
+                  return (
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: "600",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "12px",
+                        border: "1px solid var(--color-primary-dark)",
+                      }}
+                    >
+                      {planStatus.label}
+                    </span>
+                  );
+                })()}
+              </div>
+>>>>>>> main
 
               <div
                 style={{
@@ -143,7 +184,8 @@ function Home({ plans, deletePlan }) {
           ))
         )}
 
-        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem" }}>
+        {/* Action Buttons */}
+        <div style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", justifyContent: "center" }}>
           <button
             onClick={() => navigate("/create")}
             style={{
@@ -237,6 +279,7 @@ function PlanDetails({ plans }) {
 
   return (
     <div style={{ maxWidth: "900px", margin: "2rem auto", padding: "0 1rem" }}>
+<<<<<<< HEAD
       <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>
         {plan.company || "Plan Details"}
       </h1>
@@ -315,43 +358,51 @@ function PlanDetails({ plans }) {
         >
           <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Savings Goals</h2>
           <div
+=======
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+        <h1 style={{ margin: 0 }}>
+          {plan.company || "Plan Details"}
+        </h1>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            onClick={() => navigate("/create", { state: { planId: plan.id } })}
+>>>>>>> main
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "0.5rem",
+              padding: "0.5rem 1rem",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "var(--color-accent-dark)",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.9rem",
             }}
           >
-            {plan.goals.map((goal, index) => (
-              <span
-                key={index}
-                style={{
-                  backgroundColor: "var(--color-border)",
-                  borderRadius: "20px",
-                  padding: "0.4rem 1rem",
-                  fontSize: "0.95rem",
-                  border: "1px solid var(--color-accent-dark)",
-                  color: "var(--color-accent-dark)",
-                }}
-              >
-                {goal}
-              </span>
-            ))}
-          </div>
+            ✏️ Edit Plan
+          </button>
         </div>
-      )}
+      </div>
 
-      {/* Reimbursements / Stipends Section */}
+      {/* Offer Calculation Section - Clearly Separated */}
       <div
         style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
+          marginBottom: "2.5rem",
+          paddingBottom: "2rem",
+          borderBottom: "3px solid var(--color-accent-dark)",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
-          Reimbursements / Stipends
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            color: "var(--color-accent-dark)",
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          💼 Offer Calculation
         </h2>
+<<<<<<< HEAD
         {plan.stipends && plan.stipends.length > 0 ? (
           <>
             <table
@@ -540,6 +591,27 @@ function PlanDetails({ plans }) {
             {formatCurrency(totalDisposableIncome)}
           </div>
         </div>
+=======
+        <OfferCalculationSection plan={plan} formatCurrency={formatCurrency} />
+      </div>
+
+      {/* Budget Creation Section - Clearly Separated */}
+      <div>
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            color: "var(--color-primary-dark)",
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          💰 Budget & Savings
+        </h2>
+        <BudgetCreationSection plan={plan} formatCurrency={formatCurrency} navigate={navigate} />
+      </div>
+>>>>>>> main
 
         {numberOfCategories > 0 && (
           <div
@@ -658,12 +730,21 @@ function App() {
     setPlans((prevPlans) => [...prevPlans, { id, ...newPlan }]);
   };
 
+  const updatePlan = (id, updatedData) => {
+    setPlans((prevPlans) =>
+      prevPlans.map((plan) =>
+        plan.id === id ? { ...plan, ...updatedData } : plan
+      )
+    );
+  };
+
   const deletePlan = (id) => {
     setPlans((prevPlans) => prevPlans.filter((plan) => plan.id !== id));
   };
 
   return (
     <Router>
+<<<<<<< HEAD
       <div className="app-wrapper">
         <Routes>
           <Route
@@ -695,6 +776,43 @@ function App() {
             element={<TrackSavingsPage plans={plans} setPlans={setPlans} />}
           />
         </Routes>
+=======
+      <div className="app-wrapper"> 
+      <Routes>
+        <Route
+          path="/"
+          element={<Home plans={plans} deletePlan={deletePlan} />}
+        />
+        <Route
+          path="/create"
+          element={<CreatePlanPage addPlan={addPlan} plans={plans} updatePlan={updatePlan} />}
+        />
+        <Route
+          path="/categories"
+          element={<SelectBudgetCategoriesPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/set-budget"
+          element={<SetBudgetPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/plan/:id"
+          element={<PlanDetails plans={plans} />}
+        />
+        <Route
+          path="/fees"
+          element={<AddFeesPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/compare"
+          element={<ComparePlansPage plans={plans} />}
+        />
+        <Route
+          path="/track/:id"
+          element={<TrackSavingsPage plans={plans} setPlans={setPlans} />}
+        />
+      </Routes>
+>>>>>>> main
       </div>
     </Router>
   );
