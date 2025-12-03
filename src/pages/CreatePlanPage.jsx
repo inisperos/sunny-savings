@@ -1,37 +1,73 @@
 // src/pages/CreatePlanPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import '../App.css'
-import StepIndicator from '../components/StepIndicator';
+import "../App.css";
+import StepIndicator from "../components/StepIndicator";
 
 export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
   const navigate = useNavigate();
   const locationState = useLocation();
-  
-  // Get plan ID from location state if editing
+
+  // If we are editing an existing plan, we get its id from location state
   const editingPlanId = locationState.state?.planId;
-  const editingPlan = editingPlanId ? plans.find(p => p.id === editingPlanId) : null;
+  const editingPlan = editingPlanId
+    ? plans.find((p) => p.id === editingPlanId)
+    : null;
 
   // Offer details - initialize from editing plan if exists
   const [company, setCompany] = useState(editingPlan?.company || "");
-  const [salary, setSalary] = useState(editingPlan?.salary?.toString() || "");
-  const [salaryFrequency, setSalaryFrequency] = useState(editingPlan?.salaryFrequency || "annually");
-  const [weeks, setWeeks] = useState(editingPlan?.weeks?.toString() || "");
-  const [hoursPerWeek, setHoursPerWeek] = useState(editingPlan?.hoursPerWeek?.toString() || "40");
+  const [salary, setSalary] = useState(
+    editingPlan?.salary != null ? editingPlan.salary.toString() : ""
+  );
+  const [salaryFrequency, setSalaryFrequency] = useState(
+    editingPlan?.salaryFrequency || "annually"
+  );
+  const [weeks, setWeeks] = useState(
+    editingPlan?.weeks != null ? editingPlan.weeks.toString() : ""
+  );
+  const [hoursPerWeek, setHoursPerWeek] = useState(
+    editingPlan?.hoursPerWeek != null
+      ? editingPlan.hoursPerWeek.toString()
+      : "40"
+  );
 
   // Location info
   const [location, setLocation] = useState(editingPlan?.location || "");
-  const [rent, setRent] = useState(editingPlan?.rent?.toString() || "");
-  const [rentFrequency, setRentFrequency] = useState(editingPlan?.rentFrequency || "monthly");
-  const [transportation, setTransportation] = useState(editingPlan?.transportation?.toString() || "");
-  const [transportFrequency, setTransportFrequency] = useState(editingPlan?.transportFrequency || "monthly");
-  
-  // Track if we have a plan ID (editing mode)
+  const [rent, setRent] = useState(
+    editingPlan?.rent != null ? editingPlan.rent.toString() : ""
+  );
+  const [rentFrequency, setRentFrequency] = useState(
+    editingPlan?.rentFrequency || "monthly"
+  );
+  const [transportation, setTransportation] = useState(
+    editingPlan?.transportation != null
+      ? editingPlan.transportation.toString()
+      : ""
+  );
+  const [transportFrequency, setTransportFrequency] = useState(
+    editingPlan?.transportFrequency || "monthly"
+  );
+
+  // 🆕 Extra living expenses: Groceries & Utilities
+  const [groceries, setGroceries] = useState(
+    editingPlan?.groceries != null ? editingPlan.groceries.toString() : ""
+  );
+  const [groceriesFrequency, setGroceriesFrequency] = useState(
+    editingPlan?.groceriesFrequency || "monthly"
+  );
+  const [utilities, setUtilities] = useState(
+    editingPlan?.utilities != null ? editingPlan.utilities.toString() : ""
+  );
+  const [utilitiesFrequency, setUtilitiesFrequency] = useState(
+    editingPlan?.utilitiesFrequency || "monthly"
+  );
+
+  // Track if we already created a plan object (for auto-save / edit mode)
   const [currentPlanId, setCurrentPlanId] = useState(editingPlanId || null);
 
-  // Save current form data (even if incomplete) to plan
-  const saveCurrentData = () => {
-    const planData = {
+  // Build plan data from current form values
+  const buildPlanData = (overrides = {}) => {
+    const base = {
       company: company.trim() || "",
       salary: parseFloat(salary) || 0,
       salaryFrequency,
@@ -41,57 +77,104 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
       rentFrequency,
       transportation: parseFloat(transportation) || 0,
       transportFrequency,
-      ...(salaryFrequency === "hourly" && {
-        hoursPerWeek: parseFloat(hoursPerWeek) || 40,
-      }),
+      groceries: parseFloat(groceries) || 0,
+      groceriesFrequency,
+      utilities: parseFloat(utilities) || 0,
+      utilitiesFrequency,
     };
 
+    if (salaryFrequency === "hourly") {
+      base.hoursPerWeek = parseFloat(hoursPerWeek) || 40;
+    }
+
+    return { ...base, ...overrides };
+  };
+
+  /**
+   * Save current form data to plans.
+   * - If currentPlanId exists → update that plan
+   * - Else if company not empty → create a new plan and return its id
+   * Returns: id of the plan that was saved/updated (or null if nothing saved)
+   */
+  const saveCurrentData = () => {
+    const planData = buildPlanData();
+
+    // No meaningful data, don't create anything
+    const hasAnyInput =
+      company.trim() ||
+      salary ||
+      weeks ||
+      location.trim() ||
+      rent ||
+      transportation ||
+      groceries ||
+      utilities;
+
+    if (!currentPlanId && !hasAnyInput) {
+      return null;
+    }
+
     if (currentPlanId) {
-      // Update existing plan
       updatePlan(currentPlanId, planData);
+      return currentPlanId;
     } else {
-      // Create new plan if we have at least company name
-      if (company.trim()) {
-        const id = Date.now();
-        setCurrentPlanId(id);
-        addPlan({ id, ...planData });
-      }
+      // Create a brand-new plan
+      const id = Date.now();
+      setCurrentPlanId(id);
+      addPlan({ id, ...planData });
+      return id;
     }
   };
 
-  // Auto-save on input changes (debounced)
+  // Auto-save when user is typing (debounced 1s)
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (company.trim() || salary || weeks || location.trim() || rent || transportation) {
-        saveCurrentData();
-      }
-    }, 1000); // Save after 1 second of no changes
+      saveCurrentData();
+    }, 1000);
 
     return () => clearTimeout(timer);
-  }, [company, salary, salaryFrequency, weeks, hoursPerWeek, location, rent, rentFrequency, transportation, transportFrequency]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    company,
+    salary,
+    salaryFrequency,
+    weeks,
+    hoursPerWeek,
+    location,
+    rent,
+    rentFrequency,
+    transportation,
+    transportFrequency,
+    groceries,
+    groceriesFrequency,
+    utilities,
+    utilitiesFrequency,
+  ]);
 
+  // Validate + go to Fees page
   const handleNext = (e) => {
     e.preventDefault();
+
     if (
       company.trim() === "" ||
       salary.trim() === "" ||
       weeks.trim() === "" ||
       location.trim() === "" ||
       rent.trim() === "" ||
-      transportation.trim() === ""
+      transportation.trim() === "" ||
+      groceries.trim() === "" || // U & G required
+      utilities.trim() === ""
     ) {
       alert("Please fill out all required fields.");
       return;
     }
 
-    // Validate salary
     const salaryValue = parseFloat(salary);
     if (isNaN(salaryValue) || salaryValue <= 0) {
       alert("Please enter a valid positive salary amount.");
       return;
     }
 
-    // Validate weeks
     const weeksValue = parseInt(weeks);
     if (isNaN(weeksValue) || weeksValue <= 0 || !Number.isInteger(weeksValue)) {
       alert("Please enter a valid positive number of weeks (whole number).");
@@ -106,55 +189,64 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
         hoursPerWeekValue <= 0 ||
         hoursPerWeekValue > 168
       ) {
-        alert("Please enter valid hours per week (between 1 and 168) for hourly salary.");
+        alert(
+          "Please enter valid hours per week (between 1 and 168) for hourly salary."
+        );
         return;
       }
     }
 
-    // Validate rent
     const rentValue = parseFloat(rent);
     if (isNaN(rentValue) || rentValue < 0) {
       alert("Please enter a valid rent amount (0 or positive).");
       return;
     }
 
-    // Validate transportation
     const transportationValue = parseFloat(transportation);
     if (isNaN(transportationValue) || transportationValue < 0) {
       alert("Please enter a valid transportation cost (0 or positive).");
       return;
     }
-  
-    const newPlan = {
-      company,
+
+    const groceriesValue = parseFloat(groceries);
+    if (isNaN(groceriesValue) || groceriesValue < 0) {
+      alert("Please enter a valid groceries cost (0 or positive).");
+      return;
+    }
+
+    const utilitiesValue = parseFloat(utilities);
+    if (isNaN(utilitiesValue) || utilitiesValue < 0) {
+      alert("Please enter a valid utilities cost (0 or positive).");
+      return;
+    }
+
+    // Build a cleaned version with validated numbers
+    const validatedPlan = buildPlanData({
       salary: salaryValue,
-      salaryFrequency,
       weeks: weeksValue,
-      location,
       rent: rentValue,
-      rentFrequency,
       transportation: transportationValue,
-      transportFrequency,
+      groceries: groceriesValue,
+      utilities: utilitiesValue,
       ...(salaryFrequency === "hourly" && {
         hoursPerWeek: hoursPerWeekValue,
       }),
-    };
+    });
 
-    // Save before navigating
-    saveCurrentData();
-    
-    // Navigate to fees page, passing plan ID if we have one
+    // Save & get id
+    const id = currentPlanId || Date.now();
     if (currentPlanId) {
-      navigate("/fees", { state: { planId: currentPlanId } });
+      updatePlan(currentPlanId, validatedPlan);
     } else {
-      const id = Date.now();
-      addPlan({ id, ...newPlan });
-      navigate("/fees", { state: { planId: id } });
+      setCurrentPlanId(id);
+      addPlan({ id, ...validatedPlan });
     }
+
+    navigate("/fees", { state: { planId: id } });
   };
 
   const handleBack = () => {
-    // Save current data before going back
+    // Save (possibly creating a draft) then go home
     saveCurrentData();
     navigate("/");
   };
@@ -177,6 +269,7 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     <div style={{ textAlign: "center", marginTop: "3rem" }}>
       <StepIndicator />
       <h1>Create Plan Page 📝</h1>
+
       <form onSubmit={handleNext}>
         {/* Offer Details */}
         <p style={sectionHeader}>Add Offer Details:</p>
@@ -219,7 +312,6 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
         />
         <br />
 
-        {/* Show hours per week input only when hourly is selected */}
         {salaryFrequency === "hourly" && (
           <>
             <div
@@ -240,7 +332,9 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
                 max="168"
                 step="1"
               />
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>hrs/week</span>
+              <span style={{ fontSize: "0.9rem", color: "#666" }}>
+                hrs/week
+              </span>
             </div>
             <br />
           </>
@@ -295,12 +389,69 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
         </select>
+        <br />
 
+        {/* Additional living expenses */}
+        <p
+          style={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            marginTop: "1.5rem",
+          }}
+        >
+          Additional Living Expenses:
+        </p>
+
+        {/* Groceries */}
+        <input
+          type="number"
+          placeholder="Groceries (e.g., food)"
+          value={groceries}
+          onChange={(e) => setGroceries(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={groceriesFrequency}
+          onChange={(e) => setGroceriesFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <br />
+
+        {/* Utilities */}
+        <input
+          type="number"
+          placeholder="Utilities (e.g., Wi-Fi, electricity)"
+          value={utilities}
+          onChange={(e) => setUtilities(e.target.value)}
+          style={inputStyle}
+          required
+        />
+        <select
+          value={utilitiesFrequency}
+          onChange={(e) => setUtilitiesFrequency(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
         <br />
       </form>
 
-      {/* Navigation buttons at bottom - Back and Next parallel */}
-      <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
+      {/* Navigation buttons */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0.75rem",
+          justifyContent: "center",
+          marginTop: "2rem",
+        }}
+      >
         <button
           onClick={handleBack}
           style={{
@@ -318,10 +469,7 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
         </button>
         <button
           type="button"
-          onClick={(e) => {
-            // Save and go to fees page (continue to budget setup)
-            handleNext(e);
-          }}
+          onClick={handleNext}
           style={{
             padding: "0.6rem 1.2rem",
             borderRadius: "8px",
