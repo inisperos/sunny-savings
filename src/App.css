@@ -281,25 +281,11 @@ form {
   padding: 22px 12px 8px 12px; /* more top padding since the label is always raised */
   height: 60px;
   font-size: 16px;
-  background: rgba(0,0,0,0.03);
   box-shadow: inset 0 -1.5px 0 rgba(0,0,0,0.3);
   color: #222;
   font-family: inherit;
   border-radius: 6px;
   transition: all 0.15s ease;
-}
-
-.inp input:hover,
-.inp select:hover {
-  background: rgba(0,0,0,0.05);
-  box-shadow: inset 0 -1.5px 0 rgba(0,0,0,0.5);
-}
-
-.inp input:focus,
-.inp select:focus {
-  background: rgba(0,0,0,0.06);
-  box-shadow: inset 0 -2.5px 0 #3f51b5;
-  outline: none;
 }
 
 /* -------- LABEL (always above) -------- */
