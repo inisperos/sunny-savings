@@ -431,36 +431,11 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
 
         {/* Navigation Buttons */}
         <div style={{ display: "flex", gap: "0.75rem", marginTop: "2rem" }}>
-          <button
-            onClick={handleBack}
-            style={{
-              padding: "0.6rem 1.2rem",
-              borderRadius: "8px",
-              border: "none",
-              backgroundColor: "var(--color-border)",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.95rem",
-              fontWeight: 500,
-            }}
-          >
-            ← Back (Save)
+          
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
           </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            style={{
-              padding: "0.6rem 1.2rem",
-              borderRadius: "8px",
-              border: "none",
-              backgroundColor: "var(--color-accent-light)",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.95rem",
-              fontWeight: 500,
-            }}
-          >
+          <button className="btn-navigation" onClick={handleNext} >
             Next →
           </button>
         </div>

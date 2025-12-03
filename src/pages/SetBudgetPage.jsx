@@ -532,47 +532,16 @@ export default function SetBudgetPage({ plans, setPlans }) {
           )}
         </div>
 
+        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
 
-        <div
-          style={{
-            maxWidth: "760px",
-            margin: "2rem auto",
-            textAlign: "right",
-          }}
-        >
-
-          <button
-            onClick={handleBack}
-            style={{
-              padding: "0.75rem 1.25rem",
-              borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              background: "#6b7280",
-              color: "#ffffff",
-              cursor: "pointer",
-              fontSize: "1rem",
-              marginRight: "0.75rem",
-            }}
-          >
-            ← Back (Save)
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
           </button>
-
-          <button
-            onClick={handleNext}
-            disabled={isOverBudget}
-            style={{
-              padding: "0.75rem 1.25rem",
-              borderRadius: "12px",
-              border: "none",
-              background: isOverBudget ? "#9ca3af" : "#007bff",
-              cursor: isOverBudget ? "not-allowed" : "pointer",
-              fontSize: "1rem",
-              color: "#ffffff",
-            }}
-          >
-            Finish
+          <button className="btn-navigation" onClick={handleNext} >
+            Next →
           </button>
         </div>
+
       </div>
     </div>
   );

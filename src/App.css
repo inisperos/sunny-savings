@@ -75,6 +75,18 @@ button:active {
   opacity: 1;
 }
 
+/* ===== NAVIGATION BUTTONS ===== */
+.btn-navigation {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-accent-dark);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 /* ===== SECTIONS / CARD STYLE ===== */
 .section {
   background-color: white;
@@ -357,7 +369,7 @@ form {
   padding: 0 1rem;
   border: none;
   border-radius: 6px;
-  background: var(--color-accent-light);
+  background: var(--color-accent-dark);
   color: #fff;
   font-weight: 600;
   cursor: pointer;

@@ -313,39 +313,16 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         </div>
       )}
 
-      {/* Navigation buttons at bottom - Back and Next parallel */}
+       {/* Navigation Buttons */}
       <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2rem" }}>
-        <button
-          onClick={handleBack}
-          style={{
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "var(--color-border)",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          ← Back (Save)
-        </button>
-        <button
-          onClick={handleNext}
-          style={{
-            padding: "0.6rem 1.2rem",
-            backgroundColor: "var(--color-accent-light)",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-          }}
-        >
-          Next →
-        </button>
-      </div>
+
+          <button className="btn-navigation" onClick={handleBack}>
+            ← Back
+          </button>
+          <button className="btn-navigation" onClick={handleNext} >
+            Next →
+          </button>
+        </div>
     </div>
   );
 }
