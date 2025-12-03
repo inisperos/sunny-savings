@@ -236,16 +236,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       {/* Add custom category */}
       <button
         onClick={() => setShowPopup(true)}
-        style={{
-          padding: "0.75rem",
-          border: "2px dotted #888",
-          borderRadius: "6px",
-          background: "transparent",
-          color: "#444",
-          fontSize: "0.95rem",
-          cursor: "pointer",
-          marginTop: "0.5rem",
-        }}
+        className="add-entry-btn"
+        style = {{ width: "200px", marginTop: "2rem" }}
       >
         Add Custom Category +
       </button>
