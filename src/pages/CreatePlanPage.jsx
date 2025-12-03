@@ -163,12 +163,12 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
     <div>
       <StepIndicator />
       <div className="form-container"> 
-        <h1>Create Plan Page 📝</h1>
+        <h1>Create Plan Page</h1>
 
         <form onSubmit={handleNext}>
 
           {/* Offer Section */}
-          <p className="form-section">Add Offer Details:</p>
+          <p className="form-section">Add Offer Details</p>
 
           {/* Company */}
           <div className="inp">
@@ -237,7 +237,7 @@ export default function CreatePlanPage({ addPlan, plans, updatePlan }) {
           )}
 
           {/* Location Section */}
-          <p className="form-section">Add Location Info:</p>
+          <p className="form-section">Add Location Info</p>
 
           {/* Location */}
           <div className="inp">

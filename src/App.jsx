@@ -201,7 +201,7 @@ function PlanDetails({ plans }) {
             gap: "0.5rem",
           }}
         >
-          💼 Offer Calculation
+          Offer Calculation
         </h2>
         <OfferCalculationSection plan={plan} formatCurrency={formatCurrency} />
       </div>
@@ -218,7 +218,7 @@ function PlanDetails({ plans }) {
             gap: "0.5rem",
           }}
         >
-          💰 Budget & Savings
+          Budget & Savings
         </h2>
         <BudgetCreationSection plan={plan} formatCurrency={formatCurrency} navigate={navigate} />
       </div>

@@ -237,7 +237,7 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           border: "2px solid var(--color-accent-dark)",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Offer Summary</h2>
+        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Summary</h2>
         <div
           style={{
             display: "grid",
