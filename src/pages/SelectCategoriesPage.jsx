@@ -153,7 +153,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       width: "120px",
       height: "120px",
       borderRadius: "50%",
-      backgroundColor: isSelected ? "#4caf50" : "#ddd",
+      backgroundColor: isSelected ? "var(--color-light-text)" : "#ddd",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -288,7 +288,7 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
                 style={{
                   padding: "0.5rem 1rem",
                   marginRight: "1rem",
-                  backgroundColor: "#4caf50",
+                  backgroundColor: "var(--color-light-text)",
                   color: "white",
                   border: "none",
                   borderRadius: "6px",

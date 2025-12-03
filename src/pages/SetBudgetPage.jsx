@@ -380,7 +380,7 @@ export default function SetBudgetPage({ plans, setPlans }) {
       <h2
         style={{
           marginTop: "0.25rem",
-          color: isOverBudget ? "#dc2626" : "#16a34a",
+          color: isOverBudget ? "#dc2626" : "var(--color-light-text)",
         }}
       >
         {isOverBudget ? (

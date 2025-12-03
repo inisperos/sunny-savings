@@ -247,7 +247,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
 
           <h3
             style={{
-              color: isOverBudget ? "#dc2626" : "#16a34a",
+              color: isOverBudget ? "#dc2626" : "var(--color-light-text)",
             }}
           >
             {isOverBudget
