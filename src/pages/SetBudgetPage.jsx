@@ -424,27 +424,9 @@ export default function SetBudgetPage({ plans, setPlans }) {
           {!showAdd ? (
             <button
               onClick={() => setShowAdd(true)}
-              style={{
-                width: "100%",
-                padding: "1rem",
-                border: "3px dashed #000",
-                borderRadius: "16px",
-                background: "var(--color-light-grey)",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "500",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#e9e9e9";
-                e.currentTarget.style.borderColor = "#333";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#f3f3f3";
-                e.currentTarget.style.borderColor = "#000";
-              }}
+              className="add-entry-btn"
             >
-              Add New Category
+              Add New Category +
             </button>
           ) : (
             <div
