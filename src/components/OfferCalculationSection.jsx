@@ -77,7 +77,7 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
         </div>
       </div>
 
-      {/* Reimbursements / Stipends Section */}
+      {/* Stipends Section */}
       <div
         style={{
           backgroundColor: "var(--color-background-accent)",
@@ -87,7 +87,7 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
         }}
       >
         <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
-          Reimbursements / Stipends
+          Stipends
         </h2>
         {plan.stipends && plan.stipends.length > 0 ? (
           <>
