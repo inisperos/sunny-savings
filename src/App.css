@@ -207,7 +207,7 @@ table td {
 }
 
 .btn-view, .btn-track, .btn-edit {
-  background-color: var(--color-accent-dark);
+  background-color: var(--color-primary-dark);
   color: white;
 }
 
