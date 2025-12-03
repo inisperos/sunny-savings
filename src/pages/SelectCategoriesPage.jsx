@@ -167,7 +167,9 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
   return (
     <div style={{ textAlign: "center", marginTop: "3rem" }}>
       <StepIndicator />
-      <h1>Add your savings goals.</h1>
+      <h1>Add Budget Categories</h1>
+
+      <h2>Timeline</h2>
 
       <p>How often would you like to plan or review your budget?</p>
 
@@ -183,7 +185,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
           value={timeframeInWeeks}
           onChange={(e) => setTimeframeInWeeks(Number(e.target.value))}
           style={{
-            marginLeft: "1rem",
+            marginLeft: "0.5rem",
+            marginRight: "0.5rem",
             padding: "0.5rem",
             width: "80px",
             border: "1px solid #ccc",
@@ -196,7 +199,8 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
         </label>
       </div>
 
-      <p>What do you want to save for during this period?</p>
+      <h2 style={{ marginTop: "2.5rem" }}>Select Categories</h2>
+      <p> What do you want to save for during this period?</p>
       {/* Circles grid */}
       <div
         style={{
@@ -233,12 +237,14 @@ export default function SelectBudgetCategories({ plans, setPlans }) {
       <button
         onClick={() => setShowPopup(true)}
         style={{
-          marginTop: "2rem",
-          padding: "0.75rem 1.25rem",
-          border: "2px dashed #000",
-          borderRadius: "10px",
-          background: "none",
+          padding: "0.75rem",
+          border: "2px dotted #888",
+          borderRadius: "6px",
+          background: "transparent",
+          color: "#444",
+          fontSize: "0.95rem",
           cursor: "pointer",
+          marginTop: "0.5rem",
         }}
       >
         Add Custom Category +
