@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -7,8 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-
-import "./App.css";
+import './App.css'
 import { getPlanStatus } from "./utils/planDetails";
 import OfferCalculationSection from "./components/OfferCalculationSection";
 import BudgetCreationSection from "./components/BudgetCreationSection";
@@ -20,7 +18,11 @@ import SetBudgetPage from "./pages/SetBudgetPage";
 import ComparePlansPage from "./pages/ComparePlansPage";
 import TrackSavingsPage from "./pages/TrackSavings";
 
-// Home Page
+
+
+
+
+// 🏠 Home Page
 function Home({ plans, deletePlan }) {
   const navigate = useNavigate();
 
@@ -51,7 +53,6 @@ function Home({ plans, deletePlan }) {
               {/* Plan title and status */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
                 <h2 className="plan-title">
-
                   {plan.company || "Untitled Plan"}
                 </h2>
                 {(() => {
@@ -64,7 +65,7 @@ function Home({ plans, deletePlan }) {
                 })()}
               </div>
 
-              {/* Action buttons */}
+              {/* ✅ Sleek horizontal button row */}
               <div
                 style={{
                   display: "flex",
@@ -102,6 +103,7 @@ function Home({ plans, deletePlan }) {
                 </button>
               </div>
             </div>
+
           ))
         )}
 
@@ -121,19 +123,17 @@ function Home({ plans, deletePlan }) {
             Compare Plans
           </button>
         </div>
+
       </div>
     </div>
   );
 }
 
-// Plan Details Page
+// 📊 Plan Details Page
 function PlanDetails({ plans }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const plan = plans.find((p) => p.id === parseInt(id));
-
-  const budgetTimeframeInWeeks = plan?.budgetTimeframeInWeeks;
-  const numberOfCategories = plan?.budgets ? plan.budgets.length : 0;
 
   if (!plan) {
     return (
@@ -158,23 +158,15 @@ function PlanDetails({ plans }) {
   }
 
   const formatCurrency = (amount) => {
-    return `$${amount
-      .toFixed(2)
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
 
   return (
     <div style={{ maxWidth: "900px", margin: "2rem auto", padding: "0 1rem" }}>
-      {/* 标题 + Edit 按钮（用 main 的结构） */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "2rem",
-        }}
-      >
-        <h1 style={{ margin: 0 }}>{plan.company || "Plan Details"}</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+        <h1 style={{ margin: 0 }}>
+          {plan.company || "Plan Details"}
+        </h1>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
             onClick={() => navigate("/create", { state: { planId: plan.id } })}
@@ -193,7 +185,7 @@ function PlanDetails({ plans }) {
         </div>
       </div>
 
-      {/* Offer Calculation Section（main 的新结构） */}
+      {/* Offer Calculation Section - Clearly Separated */}
       <div
         style={{
           marginBottom: "2.5rem",
@@ -212,51 +204,7 @@ function PlanDetails({ plans }) {
         <BudgetCreationSection plan={plan} formatCurrency={formatCurrency} navigate={navigate} />
       </div>
 
-      {/* Budget Allocation Summary（保留你之前的分配 summary） */}
-      {numberOfCategories > 0 && (
-        <div
-          style={{
-            marginTop: "1rem",
-            paddingTop: "1rem",
-            borderTop: "1px solid var(--color-accent-dark)",
-          }}
-        >
-          <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>
-            Budget Allocation Summary
-          </h3>
-          <p>Per {budgetTimeframeInWeeks} week(s)</p>
-          <ul
-            style={{
-              listStyleType: "none",
-              padding: 0,
-              margin: 0,
-            }}
-          >
-            {plan.budgets.map((budget, index) => (
-              <li
-                key={index}
-                style={{
-                  padding: "0.25rem 0",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>
-                  <strong>{budget.category}:</strong>
-                </span>
-                <span>
-                  {formatCurrency(
-                    plan.budgets?.find(
-                      (b) => b.category === budget.category
-                    )?.amount || 0
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
+        {/* Navigation Buttons */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <button
           onClick={() => navigate("/")}
@@ -278,7 +226,11 @@ function PlanDetails({ plans }) {
   );
 }
 
-// localStorage helpers
+
+// 🌞 Main App Component
+
+
+//  localStorage  plans
 function loadPlansFromStorage() {
   try {
     const raw = localStorage.getItem("sunny_plans");
@@ -298,16 +250,10 @@ function normalizePlan(p = {}) {
     salary: num(p.salary),
     weeks: num(p.weeks),
     stipends: Array.isArray(p.stipends)
-      ? p.stipends.map((x) => ({
-          type: (x?.type ?? "").toString(),
-          amount: num(x?.amount),
-        }))
+      ? p.stipends.map(x => ({ type: (x?.type ?? "").toString(), amount: num(x?.amount) }))
       : [],
     fees: Array.isArray(p.fees)
-      ? p.fees.map((x) => ({
-          type: (x?.type ?? "").toString(),
-          amount: num(x?.amount),
-        }))
+      ? p.fees.map(x => ({ type: (x?.type ?? "").toString(), amount: num(x?.amount) }))
       : [],
   };
 }
@@ -317,13 +263,12 @@ function num(v) {
   return Number.isFinite(n) ? n : 0;
 }
 
+// === REVERT: function App (no localStorage / no useEffect) ===
 function App() {
   const [plans, setPlans] = useState(() => loadPlansFromStorage());
-
   useEffect(() => {
     localStorage.setItem("sunny_plans", JSON.stringify(plans));
   }, [plans]);
-
   const addPlan = (newPlan) => {
     const id = Date.now();
     setPlans((prevPlans) => [...prevPlans, { id, ...newPlan }]);
@@ -343,46 +288,41 @@ function App() {
 
   return (
     <Router>
-
-      <div className="app-wrapper">
-        <Routes>
-          <Route
-            path="/"
-            element={<Home plans={plans} deletePlan={deletePlan} />}
-          />
-          <Route
-            path="/create"
-            element={
-              <CreatePlanPage addPlan={addPlan} plans={plans} updatePlan={updatePlan} />
-            }
-          />
-          <Route
-            path="/categories"
-            element={
-              <SelectBudgetCategoriesPage plans={plans} setPlans={setPlans} />
-            }
-          />
-          <Route
-            path="/set-budget"
-            element={<SetBudgetPage plans={plans} setPlans={setPlans} />}
-          />
-          <Route path="/plan/:id" element={<PlanDetails plans={plans} />} />
-          <Route
-            path="/fees"
-            element={<AddFeesPage plans={plans} setPlans={setPlans} />}
-          />
-          <Route
-            path="/compare"
-            element={<ComparePlansPage plans={plans} />}
-          />
-          <Route
-            path="/track/:id"
-            element={<TrackSavingsPage plans={plans} setPlans={setPlans} />}
-          />
-        </Routes>
+      <div className="app-wrapper"> 
+      <Routes>
+        <Route
+          path="/"
+          element={<Home plans={plans} deletePlan={deletePlan} />}
+        />
+        <Route
+          path="/create"
+          element={<CreatePlanPage addPlan={addPlan} plans={plans} updatePlan={updatePlan} />}
+        />
+        <Route
+          path="/categories"
+          element={<SelectBudgetCategoriesPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/set-budget"
+          element={<SetBudgetPage plans={plans} setPlans={setPlans} />}
+        />
+        <Route
+          path="/plan/:id"
+          element={<PlanDetails plans={plans} />}
+        />
+        <Route
+          path="/compare"
+          element={<ComparePlansPage plans={plans} />}
+        />
+        <Route
+          path="/track/:id"
+          element={<TrackSavingsPage plans={plans} setPlans={setPlans} />}
+        />
+      </Routes>
       </div>
     </Router>
   );
 }
+
 
 export default App;
