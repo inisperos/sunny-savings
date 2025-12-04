@@ -9,10 +9,9 @@ export default function StepIndicator() {
   const planId = location.state?.planId;
 
   const steps = [
-    { path: "/create", label: "Create Plan", number: 1 },
-    { path: "/fees", label: "Fees & Stipends", number: 2 },
-    { path: "/categories", label: "Categories", number: 3 },
-    { path: "/set-budget", label: "Set Budget", number: 4 },
+    { path: "/create", label: "Offer Details", number: 1 },
+    { path: "/categories", label: "Budget Categories", number: 2 },
+    { path: "/set-budget", label: "Set Budget", number: 3 },
   ];
 
   const getCurrentStepIndex = () => {
@@ -52,7 +51,7 @@ export default function StepIndicator() {
             left: "20px",
             right: "20px",
             height: "2px",
-            backgroundColor: "#e5e7eb",
+            backgroundColor: "var(--color-accent-light)",
             zIndex: 0,
           }}
         />
@@ -75,7 +74,6 @@ export default function StepIndicator() {
         {steps.map((step, index) => {
           const isCompleted = index < currentStepIndex;
           const isCurrent = index === currentStepIndex;
-          const isUpcoming = index > currentStepIndex;
 
           const handleStepClick = () => {
             // Navigate to the step, preserving planId if it exists
@@ -109,8 +107,8 @@ export default function StepIndicator() {
                     ? "var(--color-accent-dark)"
                     : isCurrent
                     ? "var(--color-accent-dark)"
-                    : "#e5e7eb",
-                  color: isCompleted || isCurrent ? "white" : "#9ca3af",
+                    : "var(--color-accent-light)",
+                  color: isCompleted || isCurrent ? "white" : "var(--color-dark-text)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -163,7 +161,7 @@ export default function StepIndicator() {
                 }}
                 onMouseLeave={(e) => {
                   if (!isCurrent) {
-                    e.currentTarget.style.color = isCompleted ? "#6b7280" : "#9ca3af";
+                    e.currentTarget.style.color = isCompleted ? "#6b7280" : "var(--color-light-accent)";
                   }
                 }}
               >

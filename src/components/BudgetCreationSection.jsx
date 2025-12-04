@@ -7,7 +7,6 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
 
   const budgetTimeframeInWeeks = plan.budgetTimeframeInWeeks;
   const numberOfCategories = plan.budgets ? plan.budgets.length : 0;
-  const { totalDisposableIncome } = calculatePlanDetails(plan);
 
   return (
     <div>
@@ -19,23 +18,22 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
             padding: "1.5rem",
             borderRadius: "8px",
             marginBottom: "1.5rem",
-            border: "2px solid var(--color-primary-dark)",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-            <h2 style={{ marginTop: 0, marginBottom: 0 }}>
-              Budget Allocation Summary
-            </h2>
+            <h3 style={{ marginTop: 0, marginBottom: 0 }}>
+              Budget Allocation
+            </h3>
             <button
               onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
               style={{
-                padding: "0.4rem 0.8rem",
-                borderRadius: "6px",
-                border: "1px solid var(--color-primary-dark)",
-                backgroundColor: "transparent",
-                color: "var(--color-primary-dark)",
+                padding: "0.5rem 1rem",
+                borderRadius: "8px",
+                border: "none",
+                backgroundColor: "var(--color-accent-dark)",
+                color: "white",
                 cursor: "pointer",
-                fontSize: "0.85rem",
+                fontSize: "0.9rem",
               }}
             >
               Edit Budget
@@ -112,19 +110,19 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-            <h2 style={{ marginTop: 0, marginBottom: 0 }}>
+            <h3 style={{ marginTop: 0, marginBottom: 0 }}>
               Savings Progress
-            </h2>
+            </h3>
             <button
               onClick={() => navigate(`/track/${plan.id}`)}
               style={{
-                padding: "0.4rem 0.8rem",
-                borderRadius: "6px",
-                border: "1px solid var(--color-primary-dark)",
-                backgroundColor: "transparent",
-                color: "var(--color-primary-dark)",
+                padding: "0.5rem 1rem",
+                borderRadius: "8px",
+                border: "none",
+                backgroundColor: "var(--color-accent-dark)",
+                color: "white",
                 cursor: "pointer",
-                fontSize: "0.85rem",
+                fontSize: "0.9rem",
               }}
             >
               Track Savings
@@ -149,7 +147,7 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
                     padding: "1rem",
                     backgroundColor: "white",
                     borderRadius: "8px",
-                    border: "1px solid var(--color-border)",
+                    border: "1px solid var(--color-primary-dark)",
                   }}
                 >
                   <div style={{ fontWeight: "600", marginBottom: "0.5rem" }}>
@@ -165,7 +163,7 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
                     style={{
                       width: "100%",
                       height: "8px",
-                      backgroundColor: "#e5e7eb",
+                      backgroundColor: "var(--color-light-grey)",
                       borderRadius: "4px",
                       overflow: "hidden",
                     }}
@@ -174,7 +172,7 @@ export default function BudgetCreationSection({ plan, formatCurrency, navigate }
                       style={{
                         width: `${percent}%`,
                         height: "100%",
-                        backgroundColor: percent >= 100 ? "#10b981" : "var(--color-primary-dark)",
+                        backgroundColor: percent >= 100 ? "var(--color-accent-light)" : "var(--color-primary-dark)",
                         transition: "width 0.3s ease",
                       }}
                     />

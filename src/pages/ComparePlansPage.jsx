@@ -68,7 +68,7 @@ export default function ComparePlansPage({ plans }) {
   return (
     <div style={{ maxWidth: 1200, margin: "3rem auto", padding: "0 16px" }}>
       <h1 style={{ textAlign: "center" }}>Compare Plans</h1>
-      <p style={{ textAlign: "center", color: "var(--color-dark-grey)" }}>
+      <p style={{ textAlign: "center", color: "var(--color-light-text)" }}>
         Select up to <strong>{MAX_PLANS}</strong> plans to compare Salary, Stipends, and Fees.
       </p>
 

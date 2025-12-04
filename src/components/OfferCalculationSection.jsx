@@ -3,105 +3,106 @@ import React from "react";
 import { calculatePlanDetails } from "../utils/planDetails";
 
 export default function OfferCalculationSection({ plan, formatCurrency }) {
+  if (!plan) return null;
+
   const {
     totalIncome,
     totalReimbursements,
     totalFees,
-    totalRentCost = 0,
-    totalTransportationCost = 0,
-    totalGroceriesCost = 0,
-    totalUtilitiesCost = 0,
+    totalRentCost,
+    totalTransportationCost,
     totalDisposableIncome,
   } = calculatePlanDetails(plan);
 
-  const otherLivingExpenses =
-    (totalGroceriesCost || 0) + (totalUtilitiesCost || 0);
-
-  const sectionCardStyle = {
-    backgroundColor: "var(--color-background-accent)",
-    padding: "1.5rem",
-    borderRadius: "8px",
-    marginBottom: "1.5rem",
-  };
-
-  const gridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "1rem",
-  };
-
-  const tableStyle = {
-    width: "100%",
-    borderCollapse: "collapse",
-    marginBottom: "0.5rem",
-  };
-
-  const thStyle = {
-    border: "1px solid #dee2e6",
-    padding: "0.75rem",
-    textAlign: "left",
-    backgroundColor: "#e9ecef",
-  };
-
-  const tdStyle = {
-    border: "1px solid #dee2e6",
-    padding: "0.75rem",
-  };
-
   return (
-    <>
-      {/* Offer Details */}
-      <div style={sectionCardStyle}>
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Details</h2>
-        <div style={gridStyle}>
+    <div>
+      {/* Offer Details Section */}
+      <div
+        style={{
+          backgroundColor: "var(--color-background-accent)",
+          padding: "1.5rem",
+          borderRadius: "8px",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Details</h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "1rem",
+          }}
+        >
           <div>
-            <strong>Salary:</strong>{" "}
-            {formatCurrency(plan.salary || 0)} ({plan.salaryFrequency})
+            <strong>Salary:</strong> {formatCurrency(plan.salary)} (
+            {plan.salaryFrequency})
           </div>
           <div>
             <strong>Number of Weeks:</strong> {plan.weeks || 0}
           </div>
           <div>
-            <strong>Total Earnings:</strong>{" "}
-            {formatCurrency(totalIncome || 0)}
+            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
         </div>
-      </div>
 
-      {/* Location Info */}
-      <div style={sectionCardStyle}>
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Location Info</h2>
-        <div style={gridStyle}>
+      {/* Location Info Section */}
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Location Info</h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "1rem",
+          }}
+        >
           <div>
             <strong>Location:</strong> {plan.location || "N/A"}
           </div>
           <div>
-            <strong>Rent:</strong>{" "}
-            {formatCurrency(plan.rent || 0)} (
+            <strong>Rent:</strong> {formatCurrency(plan.rent || 0)} (
             {plan.rentFrequency || "monthly"})
           </div>
           <div>
-            <strong>Transportation:</strong>{" "}
-            {formatCurrency(plan.transportation || 0)} (
+            <strong>Transportation:</strong> {formatCurrency(plan.transportation || 0)} (
             {plan.transportFrequency || "monthly"})
           </div>
         </div>
       </div>
 
-      {/* Reimbursements / Stipends */}
-      <div style={sectionCardStyle}>
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
-          Reimbursements / Stipends
-        </h2>
+    {/* Stipends Section */}
+    <div>
+      <div
+        style={{
+          backgroundColor: "var(--color-background-accent)",
+          padding: "1.5rem",
+          borderRadius: "8px",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}> Stipends </h3>
         {plan.stipends && plan.stipends.length > 0 ? (
           <>
-            <table style={tableStyle}>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginBottom: "0.5rem",
+              }}
+            >
               <thead>
-                <tr>
-                  <th style={thStyle}>Type</th>
+                <tr style={{ backgroundColor: "#e9ecef" }}>
                   <th
                     style={{
-                      ...thStyle,
+                      border: "1px solid #dee2e6",
+                      padding: "0.75rem",
+                      textAlign: "left",
+                    }}
+                  >
+                    Type
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dee2e6",
+                      padding: "0.75rem",
                       textAlign: "right",
                     }}
                   >
@@ -112,10 +113,18 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
               <tbody>
                 {plan.stipends.map((s, i) => (
                   <tr key={i}>
-                    <td style={tdStyle}>{s.type || "N/A"}</td>
                     <td
                       style={{
-                        ...tdStyle,
+                        border: "1px solid #dee2e6",
+                        padding: "0.75rem",
+                      }}
+                    >
+                      {s.type || "N/A"}
+                    </td>
+                    <td
+                      style={{
+                        border: "1px solid #dee2e6",
+                        padding: "0.75rem",
                         textAlign: "right",
                       }}
                     >
@@ -125,29 +134,40 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
                 ))}
               </tbody>
             </table>
-            <div style={{ textAlign: "right", fontWeight: 600 }}>
-              Total: {formatCurrency(totalReimbursements || 0)}
+            <div style={{ textAlign: "right", fontWeight: "600" }}>
+              Total: {formatCurrency(totalReimbursements)}
             </div>
           </>
         ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>
-            No reimbursements / stipends
-          </p>
+          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No stipends</p>
         )}
-      </div>
 
-      {/* Fees */}
-      <div style={sectionCardStyle}>
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>Fees</h2>
+    {/* Fees Section */}
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Fees</h3>
         {plan.fees && plan.fees.length > 0 ? (
           <>
-            <table style={tableStyle}>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginBottom: "0.5rem",
+              }}
+            >
               <thead>
-                <tr>
-                  <th style={thStyle}>Type</th>
+                <tr style={{ backgroundColor: "#e9ecef" }}>
                   <th
                     style={{
-                      ...thStyle,
+                      border: "1px solid #dee2e6",
+                      padding: "0.75rem",
+                      textAlign: "left",
+                    }}
+                  >
+                    Type
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dee2e6",
+                      padding: "0.75rem",
                       textAlign: "right",
                     }}
                   >
@@ -158,10 +178,18 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
               <tbody>
                 {plan.fees.map((f, i) => (
                   <tr key={i}>
-                    <td style={tdStyle}>{f.type || "N/A"}</td>
                     <td
                       style={{
-                        ...tdStyle,
+                        border: "1px solid #dee2e6",
+                        padding: "0.75rem",
+                      }}
+                    >
+                      {f.type || "N/A"}
+                    </td>
+                    <td
+                      style={{
+                        border: "1px solid #dee2e6",
+                        padding: "0.75rem",
                         textAlign: "right",
                       }}
                     >
@@ -171,26 +199,27 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
                 ))}
               </tbody>
             </table>
-            <div style={{ textAlign: "right", fontWeight: 600 }}>
-              Total: {formatCurrency(totalFees || 0)}
+            <div style={{ textAlign: "right", fontWeight: "600" }}>
+              Total: {formatCurrency(totalFees)}
             </div>
           </>
         ) : (
           <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No fees</p>
         )}
       </div>
+    </div>
 
-      {/* Summary */}
       <div
         style={{
-          backgroundColor: "var(--color-accent-light)",
+          backgroundColor: "var(--color-background-accent)",
           padding: "1.5rem",
           borderRadius: "8px",
           marginBottom: "1.5rem",
-          border: "2px solid var(--color-accent-dark)",
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>💰 Offer Summary</h2>
+
+      {/* Summary Section */}
+        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Summary</h3>
         <div
           style={{
             display: "grid",
@@ -199,35 +228,26 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           }}
         >
           <div>
-            <strong>Total Earnings:</strong>{" "}
-            {formatCurrency(totalIncome || 0)}
+            <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
           <div>
-            <strong>Total Reimbursements:</strong>{" "}
-            {formatCurrency(totalReimbursements || 0)}
+            <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
           </div>
           <div>
-            <strong>Total Fees:</strong> {formatCurrency(totalFees || 0)}
+            <strong>Total Fees:</strong> {formatCurrency(totalFees)}
           </div>
           <div>
-            <strong>Total Rent Cost:</strong>{" "}
-            {formatCurrency(totalRentCost || 0)}
+            <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
           </div>
           <div>
-            <strong>Total Transportation Cost:</strong>{" "}
-            {formatCurrency(totalTransportationCost || 0)}
+            <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
           </div>
           <div>
-            <strong>Other Living (Groceries &amp; Utilities):</strong>{" "}
-            {formatCurrency(otherLivingExpenses || 0)}
-          </div>
-          <div style={{ fontWeight: 600, fontSize: "1.05rem" }}>
-            <strong>Total Disposable Income:</strong>{" "}
-            {formatCurrency(totalDisposableIncome || 0)}
+            <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
           </div>
         </div>
       </div>
-    </>
+      </div>
   );
 }
 

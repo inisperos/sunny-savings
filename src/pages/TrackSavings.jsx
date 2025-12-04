@@ -105,7 +105,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
 
     if (newSaved >= goal && goal > 0) {
       setPopupMessage(
-        `🎉 Congrats! You completed your savings goal for ${category}!`
+        `Congratulations! You completed your savings goal for ${category}!`
       );
     } else {
       setPopupMessage(
@@ -146,7 +146,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#ddd"
+            stroke="var(--color-dark-grey)"
             strokeWidth="20"
             fill="none"
           />
@@ -179,7 +179,13 @@ export default function TrackSavingsPage({ plans, setPlans }) {
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        style={{ padding: "0.5rem", marginRight: "0.5rem" }}
+        style={{ 
+          padding: "0.5rem", 
+          marginRight: "0.5rem", 
+          backgroundColor: "#fff",
+          color: "var(--color-dark-text)",
+          border: "1px solid var(--color-dark-text)"
+        }}
       >
         <option value="">Select Category</option>
         {plan.budgets?.map((b, i) => (
@@ -194,7 +200,13 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         placeholder="$"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        style={{ padding: "0.5rem", width: "100px", marginRight: "0.5rem" }}
+        style={{
+          padding: "0.5rem", 
+          marginRight: "0.5rem", 
+          backgroundColor: "#fff",
+          color: "var(--color-dark-text)",
+          border: "1px solid var(--color-dark-text)"
+        }}
       />
 
       <button
@@ -225,20 +237,13 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         )}
       </div>
 
-      {/* ✅ COLLAPSIBLE EDIT PLAN */}
+      {/* EDIT PLAN */}
       <button
-        onClick={() => setShowEdit((prev) => !prev)}
-        style={{
-          marginTop: "3rem",
-          backgroundColor: "var(--color-accent-dark)",
-          padding: "0.75rem 1.25rem",
-          borderRadius: "10px",
-          border:"none",
-          color:"white",
-          cursor: "pointer",
-        }}
+        onClick={() => navigate("/set-budget", { state: { planId: plan.id } })}
+        className="btn btn-edit"
+        style={{ marginTop: "3rem", padding: "0.5rem 1rem" }}
       >
-        {showEdit ? "Close Edit Plan" : "Edit Plan"}
+        Edit Plan
       </button>
 
       {showEdit && (
@@ -247,7 +252,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
 
           <h3
             style={{
-              color: isOverBudget ? "#dc2626" : "#16a34a",
+              color: isOverBudget ? "var(--color-accent-dark)" : "var(--color-light-text)",
             }}
           >
             {isOverBudget
@@ -381,7 +386,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
         onClick={() => navigate(`/plan/${plan.id}`)}
         style={{
             marginTop: "3rem",
-            backgroundColor: "var(--color-accent-dark)",
+            backgroundColor: "var(--color-primary-light)",
             padding: "0.75rem 1.25rem",
             borderRadius: "10px",
             border:"none",
@@ -389,7 +394,7 @@ export default function TrackSavingsPage({ plans, setPlans }) {
             cursor: "pointer"
         }}
         >
-        ← Back to Plan
+        Back to Plan
         </button>
       </div>
     </div>
