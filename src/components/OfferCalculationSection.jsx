@@ -11,8 +11,14 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
     totalFees,
     totalRentCost,
     totalTransportationCost,
+    totalGroceriesCost,
+    totalUtilitiesCost,
+    totalLivingExpenses, // already calculated but not required for display if you don't want
     totalDisposableIncome,
   } = calculatePlanDetails(plan);
+
+  // Groceries + Utilities for summary display
+  const totalOtherLiving = totalGroceriesCost + totalUtilitiesCost;
 
   return (
     <div>
@@ -45,8 +51,10 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
           </div>
         </div>
 
-      {/* Location Info Section */}
-        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Location Info</h3>
+        {/* Location Info Section */}
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+          Location Info
+        </h3>
         <div
           style={{
             display: "grid",
@@ -62,163 +70,167 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
             {plan.rentFrequency || "monthly"})
           </div>
           <div>
-            <strong>Transportation:</strong> {formatCurrency(plan.transportation || 0)} (
+            <strong>Transportation:</strong>{" "}
+            {formatCurrency(plan.transportation || 0)} (
             {plan.transportFrequency || "monthly"})
           </div>
         </div>
       </div>
 
-    {/* Stipends Section */}
-    <div>
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h3 style={{ marginTop: 0, marginBottom: "1rem" }}> Stipends </h3>
-        {plan.stipends && plan.stipends.length > 0 ? (
-          <>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <thead>
-                <tr style={{ backgroundColor: "#e9ecef" }}>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "left",
-                    }}
-                  >
-                    Type
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "right",
-                    }}
-                  >
-                    Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan.stipends.map((s, i) => (
-                  <tr key={i}>
-                    <td
+      {/* Stipends + Fees Section */}
+      <div>
+        <div
+          style={{
+            backgroundColor: "var(--color-background-accent)",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Stipends</h3>
+          {plan.stipends && plan.stipends.length > 0 ? (
+            <>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
                       style={{
                         border: "1px solid #dee2e6",
                         padding: "0.75rem",
+                        textAlign: "left",
                       }}
                     >
-                      {s.type || "N/A"}
-                    </td>
-                    <td
+                      Type
+                    </th>
+                    <th
                       style={{
                         border: "1px solid #dee2e6",
                         padding: "0.75rem",
                         textAlign: "right",
                       }}
                     >
-                      {formatCurrency(s.amount || 0)}
-                    </td>
+                      Amount
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ textAlign: "right", fontWeight: "600" }}>
-              Total: {formatCurrency(totalReimbursements)}
-            </div>
-          </>
-        ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No stipends</p>
-        )}
+                </thead>
+                <tbody>
+                  {plan.stipends.map((s, i) => (
+                    <tr key={i}>
+                      <td
+                        style={{
+                          border: "1px solid #dee2e6",
+                          padding: "0.75rem",
+                        }}
+                      >
+                        {s.type || "N/A"}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dee2e6",
+                          padding: "0.75rem",
+                          textAlign: "right",
+                        }}
+                      >
+                        {formatCurrency(s.amount || 0)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ textAlign: "right", fontWeight: 600 }}>
+                Total: {formatCurrency(totalReimbursements)}
+              </div>
+            </>
+          ) : (
+            <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>
+              No stipends
+            </p>
+          )}
 
-    {/* Fees Section */}
-        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Fees</h3>
-        {plan.fees && plan.fees.length > 0 ? (
-          <>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <thead>
-                <tr style={{ backgroundColor: "#e9ecef" }}>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "left",
-                    }}
-                  >
-                    Type
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dee2e6",
-                      padding: "0.75rem",
-                      textAlign: "right",
-                    }}
-                  >
-                    Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan.fees.map((f, i) => (
-                  <tr key={i}>
-                    <td
+          {/* Fees Section */}
+          <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Fees</h3>
+          {plan.fees && plan.fees.length > 0 ? (
+            <>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
                       style={{
                         border: "1px solid #dee2e6",
                         padding: "0.75rem",
+                        textAlign: "left",
                       }}
                     >
-                      {f.type || "N/A"}
-                    </td>
-                    <td
+                      Type
+                    </th>
+                    <th
                       style={{
                         border: "1px solid #dee2e6",
                         padding: "0.75rem",
                         textAlign: "right",
                       }}
                     >
-                      {formatCurrency(f.amount || 0)}
-                    </td>
+                      Amount
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ textAlign: "right", fontWeight: "600" }}>
-              Total: {formatCurrency(totalFees)}
-            </div>
-          </>
-        ) : (
-          <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>No fees</p>
-        )}
+                </thead>
+                <tbody>
+                  {plan.fees.map((f, i) => (
+                    <tr key={i}>
+                      <td
+                        style={{
+                          border: "1px solid #dee2e6",
+                          padding: "0.75rem",
+                        }}
+                      >
+                        {f.type || "N/A"}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dee2e6",
+                          padding: "0.75rem",
+                          textAlign: "right",
+                        }}
+                      >
+                        {formatCurrency(f.amount || 0)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ textAlign: "right", fontWeight: 600 }}>
+                Total: {formatCurrency(totalFees)}
+              </div>
+            </>
+          ) : (
+            <p style={{ color: "var(--color-dark-grey)", margin: 0 }}>
+              No fees
+            </p>
+          )}
+        </div>
       </div>
-    </div>
-
-      <div
-        style={{
-          backgroundColor: "var(--color-background-accent)",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          marginBottom: "1.5rem",
-        }}
-      >
 
       {/* Summary Section */}
+      <div
+        style={{
+          backgroundColor: "var(--color-background-accent)",
+          padding: "1.5rem",
+          borderRadius: "8px",
+          marginBottom: "1.5rem",
+        }}
+      >
         <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Offer Summary</h3>
         <div
           style={{
@@ -231,7 +243,8 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
             <strong>Total Earnings:</strong> {formatCurrency(totalIncome)}
           </div>
           <div>
-            <strong>Total Reimbursements:</strong> {formatCurrency(totalReimbursements)}
+            <strong>Total Reimbursements:</strong>{" "}
+            {formatCurrency(totalReimbursements)}
           </div>
           <div>
             <strong>Total Fees:</strong> {formatCurrency(totalFees)}
@@ -240,14 +253,21 @@ export default function OfferCalculationSection({ plan, formatCurrency }) {
             <strong>Total Rent Cost:</strong> {formatCurrency(totalRentCost)}
           </div>
           <div>
-            <strong>Total Transportation Cost:</strong> {formatCurrency(totalTransportationCost)}
+            <strong>Total Transportation Cost:</strong>{" "}
+            {formatCurrency(totalTransportationCost)}
           </div>
           <div>
-            <strong>Total Disposable Income:</strong> {formatCurrency(totalDisposableIncome)}
+            <strong>
+              Total Living Expenses:
+            </strong>{" "}
+            {formatCurrency(totalOtherLiving)}
+          </div>
+          <div>
+            <strong>Total Disposable Income:</strong>{" "}
+            {formatCurrency(totalDisposableIncome)}
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
-

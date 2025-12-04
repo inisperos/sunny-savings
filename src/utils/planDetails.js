@@ -70,16 +70,37 @@ export const calculatePlanDetails = (plan) => {
     }
   };
 
-  const totalRentCost = weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
+  // Base living expenses: rent and transportation
+  const totalRentCost =
+    weeks * weeklyCostFromFrequency(plan.rent, plan.rentFrequency);
   const totalTransportationCost =
-    weeks * weeklyCostFromFrequency(plan.transportation, plan.transportFrequency);
+    weeks * weeklyCostFromFrequency(
+      plan.transportation,
+      plan.transportFrequency
+    );
+
+  // Additional living expenses: groceries and utilities
+  const totalGroceriesCost =
+    weeks * weeklyCostFromFrequency(
+      plan.groceries,
+      plan.groceriesFrequency
+    );
+
+  const totalUtilitiesCost =
+    weeks * weeklyCostFromFrequency(
+      plan.utilities,
+      plan.utilitiesFrequency
+    );
+
+  // Aggregate all living expenses
+  const totalLivingExpenses =
+    totalRentCost +
+    totalTransportationCost +
+    totalGroceriesCost +
+    totalUtilitiesCost;
 
   const totalDisposableIncome =
-    totalIncome +
-    totalReimbursements -
-    totalFees -
-    totalRentCost -
-    totalTransportationCost;
+    totalIncome + totalReimbursements - totalFees - totalLivingExpenses;
 
   const numGoals = plan.goals ? plan.goals.length : 0;
   const suggestedPerGoal =
@@ -91,6 +112,9 @@ export const calculatePlanDetails = (plan) => {
     totalFees,
     totalRentCost,
     totalTransportationCost,
+    totalGroceriesCost,
+    totalUtilitiesCost,
+    totalLivingExpenses,
     totalDisposableIncome,
     suggestedPerGoal,
   };
@@ -98,14 +122,15 @@ export const calculatePlanDetails = (plan) => {
 
 // Helper function to determine plan status
 export const getPlanStatus = (plan) => {
-  const hasOfferInfo = plan.company && plan.salary && plan.weeks && plan.location;
+  const hasOfferInfo =
+    plan.company && plan.salary && plan.weeks && plan.location;
   const hasBudget = plan.budgets && plan.budgets.length > 0;
-  
+
   if (hasOfferInfo && hasBudget) {
-    return { status: "complete", label: "Complete"};
+    return { status: "complete", label: "Complete" };
   } else if (hasOfferInfo) {
     return { status: "offer-only", label: "Offer Entered" };
   } else {
-    return { status: "draft", label: "Draft"};
+    return { status: "draft", label: "Draft" };
   }
-}
+};
